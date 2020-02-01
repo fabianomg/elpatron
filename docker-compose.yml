@@ -1,0 +1,55 @@
+version: '3'
+services:
+  app:
+     build: ./
+     command: npm run dev
+     container_name: app
+     ports:
+       - "3333:3333"
+     depends_on:
+       - mysql
+       - redis
+     restart: always
+     environment:
+       - DATABASE_HOST=db
+     restart: always
+     volumes:
+       - .:/usr/app
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: useadminr
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: alpatron
+    volumes:
+       - .:/usr/mysql
+    ports:
+       - 3306:3306   
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: dev_pma
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8183:80 
+ 
+  # Redis
+  redis:
+    image: redis:latest
+    restart: always
+    hostname: redis
+    container_name: redis
+    ports:
+      - "6329:6329"
+    volumes:
+      - .:/usr/redis
+   
