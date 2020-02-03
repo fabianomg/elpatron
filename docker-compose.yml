@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 services:
   app:
      build: ./
@@ -16,14 +16,14 @@ services:
      volumes:
        - .:/usr/app
   mysql:
-    image: mysql:latest
+    image: mysql:5.7
     container_name: mysql
     restart: always
     environment:
       MYSQL_USER: admin
-      MYSQL_PASSWORD: useadminr
+      MYSQL_PASSWORD: admin
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: alpatron
+      MYSQL_DATABASE: elpatron
     volumes:
        - .:/usr/mysql
     ports:
@@ -52,4 +52,13 @@ services:
       - "6329:6329"
     volumes:
       - .:/usr/redis
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+    - REDIS_HOSTS=local:redis:6329
+    ports:
+    - "8081:8081"    
    

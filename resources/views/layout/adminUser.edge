@@ -1,0 +1,334 @@
+@if(auth.user.level == 2)
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+      <meta charset="utf-8" />
+      <title>El patron</title>
+      <meta name="description" content="top menu &amp; navigation" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+      <!-- bootstrap & fontawesome -->
+      <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+      <!-- page specific plugin styles -->
+      <!-- text fonts -->
+      <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+      <!-- ace styles -->
+      <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+      <!--[if lte IE 9]>
+      <link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+      <![endif]-->
+      <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+      <link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+      <!--[if lte IE 9]>
+      <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+      <![endif]-->
+      <!-- inline styles related to this page -->
+      <!-- ace settings handler -->
+      <script src="assets/js/ace-extra.min.js"></script>
+      <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+      <!--[if lte IE 8]>
+      <script src="assets/js/html5shiv.min.js"></script>
+      <script src="assets/js/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body class="no-skin" >
+      <div id="navbar" class="navbar navbar-default    navbar-collapse h-navbar ace-save-state">
+         <div class="navbar-container ace-save-state" id="navbar-container">
+            <div class="navbar-header pull-left">
+               <a href="/" class="navbar-brand">
+               <small>
+               El Patron
+               </small>
+               </a>
+            </div>
+            <div class="navbar-buttons navbar-header pull-right  collapse navbar-collapse" role="navigation">
+               <ul class="nav ace-nav">
+                
+                        <li>
+                           <a href="/logout">
+                           <i class="ace-icon fa fa-power-off"></i>
+                           Sair
+                           </a>
+                        </li>
+                        </ul >
+            </div>
+         </div>
+         <!-- /.navbar-container -->
+      </div>
+      <div class="main-container ace-save-state" id="main-container">
+         <script type="text/javascript">
+            try{ace.settings.loadState('main-container')}catch(e){}
+         </script>
+         <div id="sidebar" class="sidebar      h-sidebar  navbar-collapse collapse          ace-save-state">
+            <script type="text/javascript">
+               try{ace.settings.loadState('sidebar')}catch(e){}
+            </script>
+             
+            <div class="text-center" style="margin-top:10px;">
+             <div class="infobox infobox-green infobox-small infobox-dark">
+               <div class="infobox-progress">
+                  <div class="easy-pie-chart percentage" data-percent="30" data-size="39" style="height: 39px; width: 39px; line-height: 38px;">
+                     <span class="percent">30</span>%
+                  <canvas height="39" width="39"></canvas></div>
+               </div>
+
+               <div class="infobox-data">
+                  <div class="infobox-content text-center">Creditos</div>
+                  <div class="infobox-content text-center">000</div>
+               </div>
+            </div>
+
+            <div class="infobox infobox-green infobox-small infobox-dark">
+            
+               <div class="infobox-data">
+                  <div class="infobox-content text-center"  style="width: 70px;">Expiração</div>
+                  <div class="infobox-content text-center" style="width: 70px;">12-07-2020</div>
+               </div>
+            </div>
+         </div>
+
+         </div>
+         <div class="main-content" style="background-color:#868e96;">
+            <div class="main-content-inner">
+               <div class="page-content">
+                  <div class="page-content">
+                     <div class="row">
+                        <div class="col-xs-12">
+                           <!-- PAGE CONTENT BEGINS -->
+                           <div class="row">
+                              <div class="space-6"></div>
+                              <div class="col-sm-3 infobox-container">
+                                 <div class="col-md-2">
+                                    <div class="text-center">
+                                       <img style="width: 200px; height: auto;" src="assets/images/logotipo.png" class="rounded" alt="El Patron">
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="col-sm-6 infobox-container">
+                                 <textarea style="resize: none;text-align: center; height: 240px;" placeholder="000000000000000|00|0000|000" id="form-field-11" class="autosize-transition form-control" style="overflow: hidden; overflow-wrap: break-word; resize: horizontal; height: 152px;"></textarea>
+                              </div>
+                              <div class="vspace-12-sm"></div>
+                              <div class="col-sm-3">
+                                 <div class="widget-box transparent">
+                                    <div class="widget-header widget-header-flat">
+                                       <h3 class="widget-title lighter">
+                                          <i class="ace-icon fa fa-star orange"></i>
+                                          Status <span class="label label-success arrowed arrowed-right">Aguardando...</span>
+                                       </h3>
+                                       <div class="widget-toolbar">
+                                          <a href="#" data-action="collapse">
+                                          <i class="ace-icon fa fa-chevron-up"></i>
+                                          </a>
+                                       </div>
+                                    </div>
+                                    <div class="widget-body">
+                                       <div class="widget-main no-padding">
+                                          <table class="table table-bordered">
+                                             <tbody>
+                                                <tr>
+                                                   <td class="display-4">Aprovadas</td>
+                                                   <td class="hidden-480">
+                                                      <span class="label label-success arrowed-right arrowed-in">0</span>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td>Reprovadas</td>
+                                                   <td class="hidden-480">
+                                                      <span class="label label-danger arrowed-right arrowed-in">0</span>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td>Testadas</td>
+                                                   <td class="hidden-480">
+                                                      <span class="label label-warning arrowed-right arrowed-in">0</span>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td>Total de Carregadas</td>
+                                                   <td class="hidden-480">
+                                                      <span class="label label-info arrowed-right arrowed-in">0</span>
+                                                   </td>
+                                                </tr>
+                                             </tbody>
+                                          </table>
+                                       </div>
+                                       <!-- /.widget-main -->
+                                    </div>
+                                    <!-- /.widget-body -->
+                                 </div>
+                                 <!-- /.widget-box -->
+                              </div>
+                              <!-- /.col -->
+                           </div>
+                           <!-- /.row -->
+                           <div class="row text-center">
+                              <button style="margin-top:10px;" class="btn btn-success">
+                              <i class="ace-icon fa fa-play align-top bigger-125"></i>
+                              Começar
+                              </button>
+                              <button style="margin-top:10px;" class="btn btn-danger">
+                              <i class="ace-icon fa fa-stop align-top bigger-125"></i>
+                              Parar
+                              </button>
+                              <a style="margin-top:10px;"  href="javascript: history.go(-1)" type="button" class="btn btn-primary">
+                              <i class="ace-icon fa fa-home  align-top bigger-125 icon-on-right"></i>
+                              Home
+                              </a>
+                           </div>
+                           <div class="hr hr32 hr-dotted"></div>
+                         
+                           <div class="row">
+                              <div class="col-lg-8 col-lg-offset-2">
+                                 <div class="widget-box widget-color-green">
+                                    <div class="widget-header">
+                                       <h4 class="widget-title lighter smaller">Aprovadas</h4>
+                                    </div>
+                                    <div class="widget-body">
+                                       <div class="widget-main padding-8">
+                                          <b class="badge badge-primary">#Aprovada</b> <b class="badge badge-light">34646346</b> <b class="badge badge-info">Retorno: Válido</b> <b class="badge badge-success">#el-patron</b><br>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- /.row -->
+                           <div class="row">
+                              <div class="col-lg-8 col-lg-offset-2 ">
+                                 <div class="widget-box widget-color-red">
+                                    <div class="widget-header">
+                                       <h4 class="widget-title lighter smaller  text-center">Reprovadas</h4>
+                                    </div>
+                                    <div class="widget-body">
+                                       <div class="widget-main padding-10" id="listreprovados">
+                                          <b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">56456546546546</b> <b class="badge badge-danger">Retorno: Inválido</b><br>
+                                          <b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">56456546546546</b> <b class="badge badge-danger">Retorno: Inválido</b><br>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           
+                        </div>
+                           <!-- /.row -->
+                           <!-- PAGE CONTENT ENDS -->
+                        </div>
+                        <!-- /.col -->
+                     </div>
+                     <!-- /.row -->
+                  </div>
+                  <!-- /.page-content -->
+               </div>
+               <!-- /.page-content -->
+            </div>
+         </div>
+         <!-- /.main-content -->
+         <div class="footer">
+            <div class="footer-inner">
+               <div class="footer-content">
+                  <span class="bigger-120">
+                  Elpatron &copy; 2020
+                  </span>
+               </div>
+            </div>
+         </div>
+         <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+         <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+         </a>
+      </div>
+      <!-- /.main-container -->
+      <!-- basic scripts -->
+      <!--[if !IE]> -->
+      <script src="assets/js/jquery-2.1.4.min.js"></script>
+      <!-- <![endif]-->
+      <!--[if IE]>
+      <script src="assets/js/jquery-1.11.3.min.js"></script>
+      <![endif]-->
+      <script type="text/javascript">
+         if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+      </script>
+      <script src="assets/js/bootstrap.min.js"></script>
+      <!-- page specific plugin scripts -->
+      <!-- ace scripts -->
+      <script src="assets/js/ace-elements.min.js"></script>
+      <script src="assets/js/ace.min.js"></script>
+      <script src="assets/js/jquery.easypiechart.min.js"></script>
+      <!-- inline scripts related to this page -->
+      <script type="text/javascript">
+    $('body').scrollspy({ target: '#listreprovados' })
+         jQuery(function($) {
+            $('.easy-pie-chart.percentage').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+					var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+					var size = parseInt($(this).data('size')) || 100;
+					$(this).easyPieChart({
+						barColor: barColor,
+						trackColor: trackColor,
+						scaleColor: false,
+						lineCap: 'butt',
+						lineWidth: parseInt(size/10),
+						animate: ace.vars['old_ie'] ? false : 1000,
+						size: size
+					});
+				})
+          var $sidebar = $('.sidebar').eq(0);
+          if( !$sidebar.hasClass('h-sidebar') ) return;
+         
+          $(document).on('settings.ace.top_menu' , function(ev, event_name, fixed) {
+         	if( event_name !== 'sidebar_fixed' ) return;
+         
+         	var sidebar = $sidebar.get(0);
+         	var $window = $(window);
+         
+         	//return if sidebar is not fixed or in mobile view mode
+         	var sidebar_vars = $sidebar.ace_sidebar('vars');
+         	if( !fixed || ( sidebar_vars['mobile_view'] || sidebar_vars['collapsible'] ) ) {
+         		$sidebar.removeClass('lower-highlight');
+         		//restore original, default marginTop
+         		sidebar.style.marginTop = '';
+         
+         		$window.off('scroll.ace.top_menu')
+         		return;
+         	}
+         
+         
+         	 var done = false;
+         	 $window.on('scroll.ace.top_menu', function(e) {
+         
+         		var scroll = $window.scrollTop();
+         		scroll = parseInt(scroll / 4);//move the menu up 1px for every 4px of document scrolling
+         		if (scroll > 17) scroll = 17;
+         
+         
+         		if (scroll > 16) {			
+         			if(!done) {
+         				$sidebar.addClass('lower-highlight');
+         				done = true;
+         			}
+         		}
+         		else {
+         			if(done) {
+         				$sidebar.removeClass('lower-highlight');
+         				done = false;
+         			}
+         		}
+         
+         		sidebar.style['marginTop'] = (17-scroll)+'px';
+         	 }).triggerHandler('scroll.ace.top_menu');
+         
+          }).triggerHandler('settings.ace.top_menu', ['sidebar_fixed' , $sidebar.hasClass('sidebar-fixed')]);
+         
+          $(window).on('resize.ace.top_menu', function() {
+         	$(document).triggerHandler('settings.ace.top_menu', ['sidebar_fixed' , $sidebar.hasClass('sidebar-fixed')]);
+          });
+         
+         
+         });
+      </script>
+   </body>
+</html>
+@else
+  <script type="text/javascript">
+window.location ='/logout'
+	</script>
+@endif
