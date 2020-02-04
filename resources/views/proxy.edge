@@ -201,14 +201,15 @@
 						<div class="row">
 							<div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
-                                
-                                <form>
+                                @include('includes.notification')
+								<form action="{{ route('cadproxy') }}" method="post">
+									{{ csrfField() }}
                                     <fieldset>
                                         <label class="block clearfix">
                                             <label class="text-center" for="creditos">Url Proxy</label>
                                             
                                             <span class="block input-icon input-icon-right">
-                                                <input type="text" id="proxy" name="creditos" class="form-control" placeholder="Proxy">
+                                                <input type="text" id="proxy" name="proxy" class="form-control" placeholder="Proxy">
                                                 <i class="ace-icon fa fa-keyboard-o"></i>
                                                 
                                             </span>
@@ -222,7 +223,7 @@
 
                                         <div class="clearfix">
                                             
-                                          <button style="margin-top:20px;" type="button" class="btn-block btn btn-sm btn-success">
+                                          <button style="margin-top:20px;" type="submit" class="btn-block btn btn-sm btn-success">
                                                 <span class="bigger-110">Salvar</span>
 
                                                 <i class="ace-icon fa fa-arrow-right icon-on-right"></i>

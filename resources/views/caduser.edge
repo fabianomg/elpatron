@@ -208,51 +208,63 @@
 								<form action="{{ route('register') }}" method="post">
 								  {{ csrfField() }}
                                     <fieldset>
+										<label for="factive">Username</label>
                                         <label class="block clearfix">
                                             <span class="block input-icon input-icon-right">
-                                                <input type="text" class="form-control" id="username" placeholder="Username">
+                                                <input type="text" class="form-control" id="username" name="username" required placeholder="Username">
                                                 <i class="ace-icon fa fa-user"></i>
                                             </span>
                                         </label>
-
+										<label for="factive">Fullname</label>
                                         <label class="block clearfix">
                                             <span class="block input-icon input-icon-right">
-                                                <input type="text" class="form-control" id="name" placeholder="Nome completo">
+                                                <input type="text" class="form-control" id="fullname" id="fullname" required placeholder="Nome completo">
                                                 <i class="ace-icon fa fa-align-justify"></i>
                                             </span>
                                         </label>
-
+										<label for="factive">Password</label>
                                         <label class="block clearfix">
                                             <span class="block input-icon input-icon-right">
-                                                <input type="text" class="form-control" id="password" placeholder="Password">
+                                                <input type="text" class="form-control" id="password" name="password" required placeholder="Password">
                                                 <i class="ace-icon fa fa-lock"></i>
                                             </span>
                                         </label>
                                         
-
+										<label for="factive">Créditos</label>
                                         <label class="block clearfix">
-                                            <select class="form-control" id="creditos">
-                                                <option value="">Adicionar Créditos</option>
+                                            <select class="form-control" id="creditos" required name="creditos">
+												
+												@if(result =='')
+												<option value="">A quantidade de creditos precisar ser configurada em  'Configurações' => 'elpatron'  </option>
+												@else
+												<option value="">Selecione</option>
+												@each(user in result)
+												<option value="{{ user.creditos }}">{{ user.creditos }}</option>
+											   @endeach
+												@endif
+												
                                             </select>
-                                        </label>
+										</label>
+										<label for="factive">Data de Inicio</label>
                                         <div class=" bootstrap-timepicker">
 											<span class="block input-icon input-icon-right">
-                                            <input placeholder="Data de inico" id="start" type="text" class="form-control dateuser">
+                                            <input placeholder="Data de inico" id="start" required name="start" type="text" class="form-control dateuser">
 											<i class=" ace-icon  fa fa-calendar" ></i>
 										</span>
                                         </div>
-                                        
-										<div style="margin-top:5px;" class=" bootstrap-timepicker">
+                                        <label for="factive">Data de Expiração</label>
+										<div  class=" bootstrap-timepicker">
 											<span class="block input-icon input-icon-right">
-                                            <input placeholder="data de expiração" id="end" type="text" class="form-control dateuser">
+                                            <input placeholder="data de expiração" id="end" name="end" type="text" class="form-control dateuser">
 											<i class="ace-icon  fa fa-calendar" ></i>
 										</span>
                                         </div>
                                        
                                         <div>
-											<label for="form-field-select-1">Selecione Usuário</label>
+											<label for="factive">Ativar Usuário</label>
 
-											<select class="form-control" id="active">
+											<select class="form-control" id="active" name="active">
+												<option value="">Selecione</option>
 												<option value="1">Ativo</option>
 												<option value="0">Inativo</option>
 											
@@ -263,13 +275,15 @@
                                         <div class="space-24"></div>
 
                                         <div class="clearfix">
-                                            
-
-                                            <button type="submit" class="btn-block btn btn-sm btn-success">
-                                                <span class="bigger-110">Cadastrar</span>
+                                          
+											<button {{Bdisable}}  type="submit" class="btn-block btn btn-sm btn-success">
+											<span class="bigger-110">{{Btext}}</span>
 
                                                 <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                                             </button>
+												
+									
+												
                                         </div>
                                     </fieldset>
                                 </form>

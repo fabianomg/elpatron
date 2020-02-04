@@ -1,5 +1,6 @@
 'use strict'
 const Database = use('Database')
+const Config = use('App/Models/Config')
 class PageviewController {
     async  showAdmin({ view }) {
 
@@ -15,13 +16,26 @@ class PageviewController {
             }
 
         }
-        
+
         return view.render('layout.admin', { ativos, inativos })
 
     }
     showUser({ view }) {
 
         return view.render('layout.adminUser')
+
+
+    }
+    async showCaduser({ view }) {
+        const result = await Database.select('creditos').from('configs')
+        let Bdisable = ''
+        let Btext = 'Cadastrar'
+        if (result == '') {
+            Bdisable = 'disabled'
+            Btext = 'Cadastro Desativado Configure a quantidae de Créditos Primeiro!'
+        }
+
+        return view.render('caduser', { result, Bdisable,Btext })
 
 
     }

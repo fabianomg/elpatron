@@ -5,7 +5,7 @@ Route.get('/', 'PageviewController.showUser').middleware('auth')
 
 //Route.on('/login').render('login')
 Route.get('/admin', 'PageviewController.showAdmin').middleware('auth')
-Route.on('/caduser').render('caduser').middleware('auth')
+Route.get('/caduser','PageviewController.showCaduser')
 Route.on('/viewusers').render('viewusers').middleware('auth')
 Route.on('/cadcaptcha').render('captcha').middleware('auth')
 Route.on('/cadproxy').render('proxy').middleware('auth')
@@ -26,5 +26,8 @@ Route.post('password/email', 'Auth/PasswordResetController.sendResetLinkEmail')
 Route.get('password/reset/:token', 'Auth/PasswordResetController.showResetForm')
 Route.post('password/reset', 'Auth/PasswordResetController.reset').as('resetpass')
 
+Route.post('/config', 'ConfigController.store').as('config')
+Route.post('/cadproxy', 'ConfigController.cadProxy').as('cadproxy')
 
-Route.get('gettable', 'UserController.ReturnUsers')
+
+Route.get('/gettable', 'UserController.ReturnUsers')

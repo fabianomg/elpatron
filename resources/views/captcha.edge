@@ -201,13 +201,15 @@
 						<div class="row">
 							<div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
-                                
-                                <form>
+								@include('includes.notification')
+
+								<form action="{{ route('cadcaptcha') }}" method="post">
+								  {{ csrfField() }}
                                     <fieldset>
                                         <label class="block clearfix">
-                                            <label class="text-center" for="api">2captcha <small><a target="_blank" href="https://2captcha.com?from=2724718">ir ao site</a></small></label>
+                                            <label class="text-center" for="apikey">2captcha <small><a target="_blank" href="https://2captcha.com?from=2724718">ir ao site</a></small></label>
                                             <span class="block input-icon input-icon-right">
-                                                <input type="text" id="apikey" class="form-control" placeholder="API KEY">
+                                                <input type="text" id="apikey" name="apikey" class="form-control" placeholder="API KEY">
                                                 <i class="ace-icon fa fa-key"></i>
                                             </span>
                                         </label>
@@ -216,13 +218,13 @@
                                         <label class="" for="login">Dea th by captcha <small><a target="_blank" href="https://www.deathbycaptcha.com">ir ao site</a></small></label>
                                         <label class="block clearfix">
                                             <span class="block input-icon input-icon-right">
-                                                <input type="text" id="user" class="form-control" placeholder="usuario">
+                                                <input type="text" id="userdea" name="userdea" class="form-control" placeholder="usuario">
                                                 <i class="ace-icon fa fa-user"></i>
                                             </span>
                                         </label>
                                         <label class="block clearfix">
                                             <span class="block input-icon input-icon-right">
-                                                <input type="text" id="password" class="form-control" placeholder="Password">
+                                                <input type="text" id="passworddea" name="passworddea" class="form-control" placeholder="Password">
                                                 <i class="ace-icon fa fa-lock"></i>
                                             </span>
                                         </label>
@@ -232,7 +234,7 @@
 
                                             <div class="radio">
                                                 <label>
-                                                    <input name="2captcha"id="twocaptcha" value="twocatcha" type="radio" class="ace">
+                                                    <input name="twocaptcha"id="twocaptcha" value="twocaptcha" type="radio" class="ace">
                                                     <span class="lbl"> 2captcha</span>
                                                 </label>
                                             </div>
@@ -253,7 +255,7 @@
 
                                         <div class="clearfix">
                                             
-                                          <button type="button" class="btn-block btn btn-sm btn-success">
+                                          <button type="submit" class="btn-block btn btn-sm btn-success">
                                                 <span class="bigger-110">Salvar</span>
 
                                                 <i class="ace-icon fa fa-arrow-right icon-on-right"></i>

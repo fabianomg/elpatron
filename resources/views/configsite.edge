@@ -4,7 +4,7 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>Configurações captcha</title>
+		<title>Configurações site</title>
 
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -202,11 +202,14 @@
 							<div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
                                 
-                                <form>
+								@include('includes.notification')
+
+								<form action="{{ route('config') }}" method="post">
+								  {{ csrfField() }}
                                     <fieldset>
                                         <label class="block clearfix">
                                             <label class="text-center" for="creditos">Quantidade de Créditos</label>
-                                            <small class="text-muted">     *separar cada valor por vírgula ex: 10,100,35</small>
+                                            <small class="text-muted">     *para mais de um valor, separar cada valor por vírgula ex: 10,100,35</small>
                                             <span class="block input-icon input-icon-right">
                                                 <input type="text" id="creditos" name="creditos" class="form-control" placeholder="Digite a quantidade de crédito que ficará disponível no  dropdown de creditos do cadUser">
                                                 <i class="ace-icon fa fa-keyboard-o"></i>
@@ -222,8 +225,8 @@
 
                                         <div class="clearfix">
                                             
-                                          <button style="margin-top:20px;" type="button" class="btn-block btn btn-sm btn-success">
-                                                <span class="bigger-110">Cadastrar</span>
+                                          <button style="margin-top:20px;" type="submit" class="btn-block btn btn-sm btn-success">
+                                                <span class="bigger-110">Salvar</span>
 
                                                 <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
                                             </button>
