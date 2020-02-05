@@ -3,11 +3,26 @@ const { Curl } = require('node-libcurl');
 const Database = use('Database')
 const User = use('App/Models/User')
 const querystring = require('querystring');
-
+const axios = require('axios').default;
 class VadateCardController {
 
     async GetId(user_id) {
-        await this.GetViews('C2080731-1D7F-4127-9096-2BC2FA6D21CF')
+       
+        const curl3 = new Curl();
+        curl3.setOpt('URL', 'https://127.0.0.1/index.php');
+      
+        curl3.setOpt('HEADER', 1);
+        curl3.setOpt(Curl.option.HTTPHEADER, [
+            'Host: amarithcafe.revelup.com',
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+            'Accept: /',
+            'Content-Type: application/x-www-form-urlencoded',
+            'Connection: keep-alive']
+        );
+        let ResCurl = await curl3.on('end', async (statusCode, data) => {
+            console.log(statusCode)
+        })
+       // await this.GetViews('C2080731-1D7F-4127-9096-2BC2FA6D21CF')
         return
         let token;
         let time;

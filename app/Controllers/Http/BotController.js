@@ -7,7 +7,7 @@ class BotController {
        
         const validator = new ID()
         const c = new C();
-        //const resultCaptcha = await c.GetCaptcha(auth.user.id);
+        const resultCaptcha = await c.GetCaptcha(auth.user.id);
         const resultValidator = await validator.GetId(auth.user.id);
         return resultValidator
     }

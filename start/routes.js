@@ -5,7 +5,7 @@ Route.get('/', 'PageviewController.showUser').middleware('auth')
 
 //Route.on('/login').render('login')
 Route.get('/admin', 'PageviewController.showAdmin').middleware('auth')
-Route.get('/caduser', 'PageviewController.showCaduser')
+Route.get('/caduser', 'PageviewController.showCaduser').middleware('auth')
 Route.on('/viewusers').render('viewusers').middleware('auth')
 Route.on('/cadcaptcha').render('captcha').middleware('auth')
 Route.on('/cadproxy').render('proxy').middleware('auth')

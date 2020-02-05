@@ -5,7 +5,7 @@ class Authenticated {
     try {
       await auth.check()
 
-      return response.route('home')
+      return response.route('/')
     } catch (error) {
       await next()
     }

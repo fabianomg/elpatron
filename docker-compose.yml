@@ -39,24 +39,6 @@ services:
       PMA_ARBITRARY: 1
     restart: always
     ports:
-      - 8183:81
-  nginx:
-    image: nginx:1.13
-    volumes:
-      - "./var/www/html"
-      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
-    ports:
-      - "80:80"
-    depends_on:
-      - php
-
-  # Application service layer
-  php:
-    build:
-      context: ./www
-    volumes:
-      - "./var/www/html"
-    ports:
-      - "9000:9000"
-   
+      - 8183:80
+  
    
