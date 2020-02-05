@@ -5,7 +5,7 @@ Route.get('/', 'PageviewController.showUser').middleware('auth')
 
 //Route.on('/login').render('login')
 Route.get('/admin', 'PageviewController.showAdmin').middleware('auth')
-Route.get('/caduser','PageviewController.showCaduser')
+Route.get('/caduser', 'PageviewController.showCaduser')
 Route.on('/viewusers').render('viewusers').middleware('auth')
 Route.on('/cadcaptcha').render('captcha').middleware('auth')
 Route.on('/cadproxy').render('proxy').middleware('auth')
@@ -27,7 +27,11 @@ Route.get('password/reset/:token', 'Auth/PasswordResetController.showResetForm')
 Route.post('password/reset', 'Auth/PasswordResetController.reset').as('resetpass')
 
 Route.post('/config', 'ConfigController.store').as('config')
+
+Route.post('/cadcaptcha', 'ConfigController.cadCaptcha').as('cadcaptcha')
 Route.post('/cadproxy', 'ConfigController.cadProxy').as('cadproxy')
 
-
+//d20eab822faf0d858c62d43d002148b4
 Route.get('/gettable', 'UserController.ReturnUsers')
+
+Route.get('/teste', 'BotController.start')

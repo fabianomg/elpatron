@@ -8,7 +8,6 @@ services:
        - "3333:3333"
      depends_on:
        - mysql
-       - redis
      restart: always
      environment:
        - DATABASE_HOST=db
@@ -40,25 +39,24 @@ services:
       PMA_ARBITRARY: 1
     restart: always
     ports:
-      - 8183:80 
- 
-  # Redis
-  redis:
-    image: redis:latest
-    restart: always
-    hostname: redis
-    container_name: redis
-    ports:
-      - "6329:6329"
+      - 8183:81
+  nginx:
+    image: nginx:1.13
     volumes:
-      - .:/usr/redis
-  redis-commander:
-    container_name: redis-commander
-    hostname: redis-commander
-    image: rediscommander/redis-commander:latest
-    restart: always
-    environment:
-    - REDIS_HOSTS=local:redis:6329
+      - "./var/www/html"
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
     ports:
-    - "8081:8081"    
+      - "80:80"
+    depends_on:
+      - php
+
+  # Application service layer
+  php:
+    build:
+      context: ./www
+    volumes:
+      - "./var/www/html"
+    ports:
+      - "9000:9000"
+   
    
