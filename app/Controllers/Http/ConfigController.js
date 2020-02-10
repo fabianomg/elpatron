@@ -81,44 +81,60 @@ class ConfigController {
     return response.redirect('back')
   }
   async cadCaptcha({ request, session, response }) {
-    let c = await Captcha.query()
-      .where('name', 'twocaptcha')
-      .first()
-    let d = await Captcha.query()
-      .where('name', 'deathbycaptcha')
-      .first()
     let campos = request.all();
-    let twocaptcha = campos.twocaptcha;
-    let deathbycaptcha = campos.deathbycaptcha;
-
     try {
-      if (!c || c == null && request.input('twocaptcha') != undefined) {
 
-        const captcha = await Captcha.create({
-          name: campos.twocaptcha,
-          api: campos.apikey,
-          active: 1
-        })
-
-      }
-      if (!d || d == null && request.input('deathbycaptcha') != undefined) {
-
-        const captcha = await Captcha.create({
-          name: campos.deathbycaptcha,
-          login: campos.userdea,
-          password: campos.passworddea,
-          active: 1
-        })
-
-      }
-
-
-      session.flash({
-        notification: {
-          type: 'success',
-          message: `Cadastro Realizado com sucesso!.`
+      if (campos.deathbycaptcha && campos.userdea && campos.passworddea) {
+        let Deathbycaptcha = await Captcha.query()
+          .where('name', 'deathbycaptcha')
+          .first()
+        if (!Deathbycaptcha) {
+          const dea = await Captcha.create({
+            name: campos.deathbycaptcha,
+            login: campos.userdea,
+            password: campos.passworddea,
+            active: 1
+          })
+          session.flash({
+            notification: {
+              type: 'success',
+              message: `Login e Password do Deathbycaptcha cadastrados com sucesso!.`
+            }
+          })
+        } else {
+          session.flash({
+            notification: {
+              type: 'warning',
+              message: `Já existe dados cadastrados para o Deathbycaptcha.`
+            }
+          })
         }
-      })
+      }
+      if (campos.twocaptcha) {
+        let twoCaptcha = await Captcha.query()
+          .where('name', 'twocaptcha')
+          .first()
+        if (!twoCaptcha) {
+          const captcha = await Captcha.create({
+            name: campos.twocaptcha,
+            api: campos.apikey,
+            active: 1
+          })
+          session.flash({
+            notification: {
+              type: 'success',
+              message: `API 2captcha cadastrada com sucesso!.`
+            }
+          })
+        } else {
+          session.flash({
+            notification: {
+              type: 'warning',
+              message: `Já existe dados cadastrados para o 2captcha.`
+            }
+          })
+        }
+      }
 
     } catch (error) {
       session.flash({
@@ -128,6 +144,8 @@ class ConfigController {
         }
       })
     }
+
+
     return response.redirect('back')
   }
   async cadProxy({ request, session, response }) {

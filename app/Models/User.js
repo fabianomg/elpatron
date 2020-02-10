@@ -5,7 +5,6 @@ const Model = use('Model')
 class User extends Model {
   static boot () {
     super.boot()
-    this.addTrait('NoTimestamp')
     /**
      * A hook to bash the user password before saving
      * it to the database.
@@ -30,8 +29,11 @@ class User extends Model {
     return this.hasMany('App/Models/Token')
   }
   url_token () {
-    return this.hasMany('App/Models/UrlToken')
+    return this.hasOne('App/Models/UrlToken')
  }
+ cards () {
+  return this.hasMany('App/Models/Card')
+}
   
 }
 

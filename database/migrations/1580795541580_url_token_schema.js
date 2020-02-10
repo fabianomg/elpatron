@@ -7,12 +7,12 @@ class UrlTokenSchema extends Schema {
   up () {
     this.create('url_tokens', (table) => {
       table.increments()
-      table.string('url_id', 250)
+      table.string('link_url', 250)
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.string('token_recaptcha', 3000)
-      table.string('state', 5000)
-      table.string('generaton', 5000)
-      table.string('validaton', 5000)
+      table.string('erro_token', 1000)
+      table.boolean('is_restart').defaultTo(false)
+     
       table.timestamps()
     })
   }

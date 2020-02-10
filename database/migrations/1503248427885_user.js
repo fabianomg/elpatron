@@ -3,23 +3,22 @@
 const Schema = use('Schema')
 
 class UserSchema extends Schema {
-  up () {
+  up() {
     this.create('users', table => {
       table.increments()
       table.string('username', 80).notNullable().unique()
-      table.string('fullname', 1000).notNullable()
-      table.string('password', 60).notNullable()
-      table.string('balance', 60).notNullable()
-      table.string('start', 60).notNullable()
-      table.string('end', 60).notNullable()
-     // table.string('confirmation_token')
+      table.string('fullname', 100)
+      table.string('password', 60)
+      table.string('balance', 60)
+      table.string('start', 60)
+      table.string('end', 60)
       table.boolean('level').defaultTo(2)
       table.boolean('active').defaultTo(1)
-     
+
     })
   }
 
-  down () {
+  down() {
     this.drop('users')
   }
 }

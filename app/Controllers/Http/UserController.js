@@ -5,7 +5,7 @@ class UserController {
     async ReturnUsers({ request, response }) {
 
         const user = await Database.select('*').from('users')
-        
+
         var result = [];
         for (let index = 0; index < user.length; index++) {
 
@@ -19,7 +19,7 @@ class UserController {
             })
 
         }
-      
+
         var dados = { data: result };
         return response.json(dados);
     }
@@ -29,7 +29,7 @@ class UserController {
             let d = await User.query()
                 .where('username', request.input('username'))
                 .first()
-            console.log(d)
+
             if (!d) {
                 const u = await User.create({
                     username: request.input('username'),

@@ -4,7 +4,7 @@ const User = use('App/Models/User')
 const Hash = use('Hash')
 
 class LoginController {
-  async showLoginForm({ auth, view,response }) {
+  async showLoginForm({ auth, view, response }) {
 
     try {
       let logado = await auth.check()
@@ -47,14 +47,33 @@ class LoginController {
       const passwordVerified = await Hash.verify(password, user.password)
 
       if (passwordVerified) {
-        if (user.level == 1) {
-          await auth.remember(!!remember).login(user)
-          return response.route('/admin')
+        try {
+          await auth.check()
+          if (user.level == 1) {
+            //await auth.remember(!!remember).login(user)
+            return response.route('/admin')
+          }
+
+        } catch (error) {
+          if (user.level == 1) {
+            await auth.remember(!!remember).login(user)
+            return response.route('/admin')
+          }
         }
-        if (user.level == 2) {
-          await auth.remember(!!remember).login(user)
-          return response.route('/')
+        try {
+          await auth.check()
+          if (user.level == 2) {
+            //await auth.remember(!!remember).login(user)
+            return response.route('/')
+          }
+
+        } catch (error) {
+          if (user.level == 2) {
+            await auth.remember(!!remember).login(user)
+            return response.route('/')
+          }
         }
+
 
       }
     }

@@ -2,12 +2,11 @@
 const Ws = use("Ws");
 const Database = use('Database')
 const Client = require('@infosimples/node_two_captcha');
-
+const User = use('App/Models/User')
 class Captcha {
 
     async GetBalance() {
         let apikey = await Database.select('api').from('captchas')
-        // 'd20eab822faf0d858c62d43d002148b4
         var b = new Client(apikey, {
             timeout: 600000,
             polling: 5000,
@@ -27,38 +26,53 @@ class Captcha {
             .where('name', 'twocaptcha')
             .first()
 
-
-        // 'd20eab822faf0d858c62d43d002148b4
         var client = new Client(apikey.api, {
             timeout: 600000,
             polling: 5000,
             throwErrors: true
         });
-
+        let result = await Database
+            .table('url_tokens')
+            .where('user_id', user_id)
+            .first()
         try {
+            
             console.log('aguarde...')
             client.decodeRecaptchaV2({
                 googlekey: '6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq',
                 pageurl: 'https://amarithcafe.revelup.com'
             }).then(async (response) => {
 
-                const token_recaptcha = await Database
-                    .table('url_tokens')
-                    .insert({ 'user_id': user_id, 'token_recaptcha': response['_text'] })
-
+                if (result) {
+                    const use = await User.find(user_id)
+                    const userI = await use
+                        .url_token()
+                        .update({ token_recaptcha: response['_text'] })
+                } else {
+                    const token_recaptcha = await Database
+                        .table('url_tokens')
+                        .insert({ 'user_id': user_id, 'token_recaptcha': response['_text'] })
+                }
 
             }).catch(async (erro) => {
-                console.log(erro)
-                const token_recaptcha = await Database
-                    .table('url_tokens')
-                    .insert({ 'erro_token': erro })
+
+                if (result) {
+                    const use = await User.find(user_id)
+                    const userI = await use
+                        .url_token()
+                        .update({ user_id, erro_token: erro.message })
+                } else {
+                    const token_recaptcha = await Database
+                        .table('url_tokens')
+                        .insert({ 'user_id': user_id, 'erro_token': erro.message })
+                }
             })
 
         } catch (error) {
             return error
 
         }
-
+        return
     }
 
 

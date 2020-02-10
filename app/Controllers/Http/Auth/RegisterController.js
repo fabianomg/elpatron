@@ -14,7 +14,6 @@ class RegisterController {
     // validate form inputs
     const validation = await validateAll(request.all(), {
       username: 'required|unique:users,username',
-      email: 'required|email|unique:users,email',
       password: 'required'
     })
 
@@ -27,24 +26,17 @@ class RegisterController {
     // create user
     const user = await User.create({
       username: request.input('username'),
-      email: request.input('email'),
-      password: request.input('password'),
-      confirmation_token: randomString({ length: 40 })
+      fullname: request.input('fullname'),
+      password: request.input('password')
     })
 
-    // send confirmation email
-    await Mail.send('auth.emails.confirm_email', user.toJSON(), message => {
-      message
-        .to(user.email)
-        .from('hello@adonisjs.com')
-        .subject('Please confirm your email address')
-    })
+   
 
     // display success message
     session.flash({
       notification: {
         type: 'success',
-        message: 'Registration successful! A mail has been sent to your email address, please confirm your email address.'
+        message: 'Cadastro realizado com sucesso!.'
       }
     })
 
