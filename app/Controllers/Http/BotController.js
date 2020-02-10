@@ -3,6 +3,7 @@ const Ws = use('Ws')
 const C = require('../../class/GetCaptcha.class');
 const ID = require('./VadateCardController');
 const User = use('App/Models/User')
+
 const Database = use('Database')
 const cron = require("node-cron");
 class BotController {
@@ -15,7 +16,7 @@ class BotController {
         if (status) {
             status.broadcastToAll('message', { s: 'start', msg: 'Processando dados...' })
         }
-    
+
 
         /*
                 const user = await User.find(auth.user.id)
@@ -93,6 +94,22 @@ class BotController {
 
 
         let taskRestart = setInterval(async () => {
+            const card = await User.find(auth.user.id)
+            await card.loadMany({
+                cards: (builder) => builder.where('is_tested', false)
+            })
+            let stopRestart = card.toJSON().cards.length
+            if (stopRestart == 0) {
+                clearInterval(taskRestart)
+                const use = await User.find(auth.user.id)
+                const userI = await use
+                    .url_token()
+                    .update({ is_restart: 0 })
+                    if (status) {
+                        status.broadcastToAll('message', { s: 'end', msg: 'Processamento OK!!...' })
+                    }
+                return;
+            }
 
             let result = await Database
                 .table('url_tokens')

@@ -81,7 +81,7 @@
 
                <div class="infobox-data">
                   <div class="infobox-content text-center">Creditos</div>
-               <div class="infobox-content text-center">{{auth.user.balance}}</div>
+               <div id="creditos" class="infobox-content text-center">{{auth.user.balance}}</div>
                </div>
             </div>
 
@@ -155,6 +155,12 @@
                                                    <td>Testadas</td>
                                                    <td class="hidden-480">
                                                       <span id="testadas" class="label label-warning arrowed-right arrowed-in">0</span>
+                                                   </td>
+                                                </tr>
+                                                <tr>
+                                                   <td>Recusadas</td>
+                                                   <td class="hidden-480">
+                                                      <span id="recusadas" class="label label-secondary arrowed-right arrowed-in">0</span>
                                                    </td>
                                                 </tr>
                                                 <tr>
@@ -361,8 +367,17 @@
            })
      
            ws.on('close', () => {
+              
              isConnected = false
+             alert(' Websocket Desconectado, por favor reinicie a página')
            })
+           // ###########creditos################
+           const creditos = ws.subscribe('status:creditos'+{{auth.user.id}})
+         
+           creditos.on('message', (creditos) => {
+             
+             $('#creditos').text(creditos)
+            });
            // ###########carregadas################
            const status = ws.subscribe('status:s'+{{auth.user.id}})
          
@@ -387,25 +402,28 @@
             // ###########testadas################
             const testadas = ws.subscribe('status:t'+{{auth.user.id}})
           
-           carregadas.on('message', (t) => {
-              let valor = $('#testadas').val();
-             $('#testadas').text(valor+t)
+            testadas.on('message', (t) => {
+             $('#testadas').text(t)
             });
             // ###########reprovadas################
             const reprovadas = ws.subscribe('status:r'+{{auth.user.id}})
            
            reprovadas.on('message', (r) => {
-            let valor = $('#reprovadas').val();
              $('#resultReprovadas').append(r.msg)
-             $('#reprovadas').text(valor + r.cont)
+             $('#reprovadas').text(r.cont)
+            });
+            // ###########recusadas################
+            const recusadas = ws.subscribe('status:rr'+{{auth.user.id}})
+           
+            recusadas.on('message', (rr) => {
+             $('#recusadas').text(rr)
             });
             // ###########aprovadas################
             const aprovadas = ws.subscribe('status:a'+{{auth.user.id}})
          
            aprovadas.on('message', (a) => {
-            let valor = $('#aprovadas').val();
             $('#resultAprovadas').append(a.msg)
-             $('#aprovadas').text(valor + a.cont)
+             $('#aprovadas').text(a.cont)
             });
      
        </script>
