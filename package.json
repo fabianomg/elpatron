@@ -29,16 +29,11 @@
     "@adonisjs/shield": "^1.0.8",
     "@adonisjs/websocket": "^1.0.12",
     "@infosimples/node_two_captcha": "^1.0.2",
-    "axios": "^0.19.2",
-    "faker": "^4.1.0",
-    "moment": "^2.24.0",
+    "date-fns": "^2.9.0",
+    "date-fns-tz": "^1.0.10",
     "mysql": "^2.18.1",
-    "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.0",
     "node-libcurl": "^2.0.3",
-    "random-string": "^0.2.0",
-    "request": "^2.88.0",
-    "selenium-webdriver": "^4.0.0-alpha.5"
+    "random-string": "^0.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

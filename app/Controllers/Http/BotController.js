@@ -3,13 +3,14 @@ const Ws = use('Ws')
 const C = require('../../class/GetCaptcha.class');
 const ID = require('./VadateCardController');
 const User = use('App/Models/User')
-
+const Card = use('App/Models/Card')
 const Database = use('Database')
-const cron = require("node-cron");
-class BotController {
 
+class BotController {
+   
     async  start({ auth, request }) {
 
+       
         const status = await Ws.getChannel('status:*').topic('status:s' + auth.user.id)
         const carregadas = await Ws.getChannel('status:*').topic('status:c' + auth.user.id)
 
@@ -34,14 +35,7 @@ class BotController {
                 let cont = 0
                 for (const items of tt) {
                     let t = items.split("|")
-                    /*
-                    await cards.push({
-                        n: t[0].trim(),
-                        m: t[1].trim(),
-                        a: t[2].substr(2, 2),
-                        v: t[3].trim()
-                    })
-                    */
+
 
                     const userI = await Database
                         .table('cards')
@@ -59,15 +53,6 @@ class BotController {
                 }
             } else {
                 let t = txt.txtstart.split("|")
-
-                /*
-                await cards.push({
-                    n: t[0].trim(),
-                    m: t[1].trim(),
-                    a: t[2].substr(2, 2),
-                    v: t[3].trim()
-                })
-                */
 
                 const userI = await Database
                     .table('cards')
@@ -105,10 +90,20 @@ class BotController {
                 const userI = await use
                     .url_token()
                     .update({ is_restart: 0 })
-                    if (status) {
-                        status.broadcastToAll('message', { s: 'end', msg: 'Processamento OK!!...' })
-                    }
-                return;
+                if (status) {
+                    status.broadcastToAll('message', { s: 'end', msg: 'Processamento OK!!...' })
+                }
+
+                ///deletar todos  os cartoes referente ao user
+                const user = await User.find(auth.user.id)
+                await user
+                    .cards()
+                    .delete()
+                await use
+                    .url_token()
+                    .delete()
+                return
+
             }
 
             let result = await Database
