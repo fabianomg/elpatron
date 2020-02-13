@@ -14,6 +14,7 @@ class UserSchema extends Schema {
       table.string('end', 60)
       table.boolean('level').defaultTo(2)
       table.boolean('active').defaultTo(1)
+      table.timestamps()
 
     })
   }

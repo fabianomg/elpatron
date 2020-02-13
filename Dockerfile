@@ -15,6 +15,8 @@ RUN npm install
 
 # Bundle app source
 COPY . .
+#RUN adonis migration:run
 
 EXPOSE 3333
-CMD [ "npm", "run","dev" ]
+EXPOSE 9229
+CMD [ "npm", "start"]

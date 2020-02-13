@@ -369,7 +369,7 @@
            ws.on('close', () => {
               
              isConnected = false
-             alert(' Websocket Desconectado, por favor reinicie a página')
+            // alert(' Websocket Desconectado, por favor reinicie a página')
            })
            // ###########creditos################
            const creditos = ws.subscribe('status:creditos'+{{auth.user.id}})
@@ -403,7 +403,12 @@
             const testadas = ws.subscribe('status:t'+{{auth.user.id}})
           
             testadas.on('message', (t) => {
-             $('#testadas').text(t)
+               if (t=='') {
+                  $('#testadas').text(0)
+               } else {
+                  $('#recusadas').text(t)
+               }
+            
             });
             // ###########reprovadas################
             const reprovadas = ws.subscribe('status:r'+{{auth.user.id}})
@@ -416,7 +421,12 @@
             const recusadas = ws.subscribe('status:rr'+{{auth.user.id}})
            
             recusadas.on('message', (rr) => {
-             $('#recusadas').text(rr)
+               if (rr=='') {
+                  $('#recusadas').text(0)
+               } else {
+                  $('#recusadas').text(rr)
+               }
+             
             });
             // ###########aprovadas################
             const aprovadas = ws.subscribe('status:a'+{{auth.user.id}})
