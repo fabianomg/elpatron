@@ -1,20 +1,20 @@
-version: '3.1'
+version: "3.1"
 services:
   app:
-     build: ./
-     command: npm start
-     container_name: app
-     ports:
-       - "3333:3333"
-       - "9229:9229"
-     depends_on:
-       - mysql
-     restart: always
-     environment:
-       - DATABASE_HOST=db
-     volumes:
-       - .:/usr/app
-       
+    build: ./
+    command: npm start
+    container_name: app
+    ports:
+      - "3333:8080"
+      - "9229:9229"
+    depends_on:
+      - mysql
+    restart: always
+    environment:
+      - DATABASE_HOST=db
+    volumes:
+      - .:/usr/app
+
   mysql:
     image: mysql:5.7
     container_name: mysql
@@ -25,9 +25,9 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: elpatron
     volumes:
-       - .:/usr/mysql
+      - .:/usr/mysql
     ports:
-       - 3306:3306   
+      - 3306:3306
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -48,7 +48,7 @@ services:
     image: redis
     ports:
       - "6380:6379"
-    links: 
+    links:
       - redis-commander
 
   redis-commander:
@@ -57,10 +57,17 @@ services:
     image: rediscommander/redis-commander:latest
     restart: always
     environment:
-        - REDIS_HOSTS=local:redis:6379
+      - REDIS_HOSTS=local:redis:6379
     ports:
-      - 8081:8081     
-  
-        
-  
-   
+      - 8081:8081
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./usr/app/public:/usr/app/www
+      - ./default.conf:/etc/nginx/conf/default.conf
+    depends_on:
+      - app
+      - phpmyadmin
+      - redis-commander
