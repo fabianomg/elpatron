@@ -4,7 +4,7 @@ const Config = use('App/Models/Config')
 const User = use('App/Models/User')
 class PageviewController {
     async  showAdmin({ view }) {
-
+        let err;
 
         const user = await Database.select('active').from('users')
         let ativos = 0;
@@ -19,11 +19,13 @@ class PageviewController {
 
         }
 
+
+
         return view.render('layout.admin', { ativos, inativos })
 
     }
     async showUser({ view, auth }) {
-        
+
         return view.render('layout.adminUser')
 
 
@@ -36,10 +38,25 @@ class PageviewController {
         let Btext = 'Cadastrar'
         if (result == '') {
             Bdisable = 'disabled'
-            Btext = 'Cadastro Desativado Configure a quantidae de Créditos Primeiro!'
+            Btext = 'Cadastro desativado configure a quantidade de créditos primeiro!'
         }
 
         return view.render('caduser', { result, Bdisable, Btext })
+
+
+    }
+    async showUsers({ view }) {
+
+
+        const result = await Database.select('creditos').from('configs')
+        let Bdisable = ''
+        let Btext = 'Salvar Dados'
+        if (result == '') {
+            Bdisable = "disabled"
+            Btext = 'Cadastro desativado configure os créditos!'
+        }
+
+        return view.render('viewusers', { result, Bdisable, Btext })
 
 
     }

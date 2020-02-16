@@ -131,10 +131,9 @@
                   </li>
                   <li class="">
                      <a href="/cadProxy">
-                        <i class="menu-icon fa fa-caret-right"></i>
-                        Proxy
+                     <i class="menu-icon fa fa-caret-right"></i>
+                     Proxy
                      </a>
-
                      <b class="arrow"></b>
                   </li>
                </ul>
@@ -153,7 +152,6 @@
                      <h3 class="header smaller lighter blue">Usuários Cadastrados</h3>
                      <div class="clearfix">
                         <div class="pull-right tableTools-container">
-                           
                         </div>
                      </div>
                      <div class="table-header">
@@ -164,35 +162,86 @@
                      <div>
                         <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
                            <div class="row">
-                          
                            </div>
                            <div class="table-responsive">
                               <table class="table table-hover table-bordered table-reponsive"
-                                  id="dynamic-table">
-                                  <thead>
-                                      <tr>
-
-                                          <th>Username</th>
-                                          <th>fullname</th>
-                                          <th>balance</th>
-                                          <th>start</th>
-                                          <th>end</th>
-                                          <th>active</th>
-
-
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-
-                                  </tbody>
+                                 id="dynamic-table">
+                                 <thead>
+                                    <tr>
+                                       <th>Username</th>
+                                       <th>fullname</th>
+                                       <th>balance</th>
+                                       <th>date start</th>
+                                       <th>date end</th>
+                                       <th>is_active</th>
+                                       <th></th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                 </tbody>
                               </table>
-                          </div>
+                           </div>
                         </div>
                      </div>
                   </div>
                </div>
             </div>
          </div>
+         <div id="dialog-confirm" class="hide">
+            <div  id="user" class="alert alert-info bigger-110">
+            </div>
+            <div class="space-6"></div>
+            <p class="bigger-110 bolder center grey">
+               <i class="ace-icon fa fa-hand-o-right blue bigger-120"></i>
+               Deseja Realmente Excluir?
+            </p>
+         </div>
+         <!-- #dialog-confirm -->
+        
+         <div class="form-content" style="display:none;">
+          @include('includes.notification')
+         <form id="target" action="{{ route('updateuser') }}" method="post">
+               {{ csrfField() }}
+               <div class="form-group">
+                  <input type="text" class="form-control" id="username" name="username" placeholder="Username" >
+               </div>
+               <div class="form-group">
+                  <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Nome completo">
+               </div>
+               <div class="form-group">
+                  <select class="form-control" id="form-field-select-1">
+                     @if(result =='')
+                     <option value="">A quantidade de creditos precisar ser configurada em  'Configurações' => 'elpatron'  </option>
+                     @else
+                     <option value="">Selecione a Quantidade de Créditos</option>
+                     @each(user in result)
+                     <option value="{{ user.creditos }}">{{ user.creditos }}</option>
+                     @endeach
+                     @endif        
+                  </select>
+               </div>
+               <div class="form-group">
+                  <div class=" bootstrap-timepicker">
+                     <span class="block input-icon input-icon-right">
+                     <input placeholder="Data de inicio ex:12/02/2020 12:00" id="start" required name="start" type="text" class="form-control dateuser">
+                     <i class=" ace-icon  fa fa-calendar" ></i>
+                     </span>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <div class=" bootstrap-timepicker">
+                     <span class="block input-icon input-icon-right">
+                     <input placeholder="Data de final ex:12/02/2020 12:00" id="end" required name="end" type="text" class="form-control dateuser">
+                     <i class=" ace-icon  fa fa-calendar" ></i>
+                     </span>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <input type="text" class="form-control" required id="active" name="active" placeholder="ativar usuário  ex:1 ativo ou 0 desativado">			
+               </div>
+              </form>
+         </div>
+    
          <!-- /.main-content -->
          <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
          <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
@@ -201,9 +250,7 @@
       <!-- /.main-container -->
       <!-- basic scripts -->
       <!--[if !IE]> -->
-      <script
-  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-     
+      <script src="assets/js/jquery-2.1.4.min.js"></script>
       <!-- <![endif]-->
       <!--[if IE]>
       <script src="assets/js/jquery-1.11.3.min.js"></script>
@@ -222,325 +269,459 @@
       <script src="assets/js/dataTables.select.min.js"></script>
       <script src="assets/js/ace-elements.min.js"></script>
       <script src="assets/js/ace.min.js"></script>
+      <script src="assets/js/jquery-ui.min.js"></script>
+      <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+      <script src="assets/js/bootbox.js"></script>
+      <script src="assets/js/moment.min.js"></script>
+      <script src="assets/js/bootstrap-datetimepicker.min.js "></script>
       <!-- inline scripts related to this page -->
       <script type="text/javascript">
-$(document).ready(function() {
-
-$('#dynamic-table').DataTable({
-
-"language": {
-    lengthMenu: "Mostrando _MENU_ registros por página",
-    zeroRecords: "Não foram encontrados registros de api's",
-    info: "Mostrando página _PAGE_ de _PAGES_",
-    infoEmpty: "Nenhum registro disponível",
-    infoFiltered: "(filtrado de _MAX_ registros no total)",
-    search: "Pesquisar:",
-    processing: "Aguarde! Carregando Dados...",
-    paginate: {
-        first: "Primeiro",
-        last: "Ultimo",
-        next: "Próximo",
-        previous: "Anterior"
-    }
-},
-
-destroy: true,
-processing: true,
-responsive: true,
-ajax: window.location + '/gettable',
-
-columns: [
-    {
-        data: "username"
-    },
-    {
-        data: "fullname"
-    },
-    {
-        data: "balance"
-    },
-    {
-        data: "start"
-    },
-    {
-        data: "end"
-    },
-    {
-        data: "active"
-    }
-    
-    
-
-]
-});
-
-
-} );
-/*
-         jQuery(function($) {
-         	//initiate dataTables plugin
-         	var myTable = 
-         	$('#dynamic-table')
-         	//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
-         	.DataTable( {
-         		bAutoWidth: false,
-
-         		"aoColumns": [
-         		  { "bSortable": false },
-         		  null, null,null, null, null,
-         		  { "bSortable": false }
-         		],
-                 "aaSorting": [],
-                 responsive: true,
-                 "language": {
-                    lengthMenu: "Mostrando _MENU_ registros por página",
-                    zeroRecords: "Não foram encontrados registros de Trades",
-                    info: "Mostrando página _PAGE_ de _PAGES_",
-                    infoEmpty: "Nenhum registro disponível",
-                    infoFiltered: "(filtrado de _MAX_ registros no total)",
-                    search: "Pesquisar:",
-                    processing: "Aguarde! Carregando Dados...",
-                    paginate: {
-                        first: "Primeiro",
-                        last: "Ultimo",
-                        next: "Próximo",
-                        previous: "Anterior"
-                    }
-                },
-                destroy: true,
-                processing: true,
-                responsive: true,
+         $(document).ready(function() {
+         
+         $('#dynamic-table').DataTable({
+         
+         "language": {
+             lengthMenu: "Mostrando _MENU_ registros por página",
+             zeroRecords: "Não foram encontrados registros de usuários",
+             info: "Mostrando página _PAGE_ de _PAGES_",
+             infoEmpty: "Nenhum registro disponível",
+             infoFiltered: "(filtrado de _MAX_ registros no total)",
+             search: "Pesquisar:",
+             processing: "Aguarde! Carregando Dados...",
+             paginate: {
+                 first: "Primeiro",
+                 last: "Ultimo",
+                 next: "Próximo",
+                 previous: "Anterior"
+             }
+         },
+         
+         destroy: true,
+         processing: true,
+         responsive: true,
+         ajax: window.location.protocol+'//'+window.location .host+ '/gettable',
+         
+         columns: [
+             {
+                 data: "username"
+             },
+             {
+                 data: "fullname"
+             },
+             {
+                 data: "balance"
+             },
+             {
+                 data: "start"
+             },
+             {
+                 data: "end"
+             },
+             {
+                 data: "active"
+             },
+           
+               
+             {
+                 data: null,
+                 className: "center",
+                 defaultContent:
+                   '<a href="javascript:edit();" id="edit"  class="editor_edit"><button class="btn btn-xs btn-info"><i class="ace-icon fa fa-pencil bigger-120"></i></button></a>  <a href="javascript:delet();"class="editor_remove"> <button id="delete" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></button></a>'
+               }
+          
+         ]
+         });
+         
+         
+         } );
+         var username;
+         function edit(e) {
+       
+            var modal = bootbox.dialog({
+              
+                 message: $(".form-content").html(),
+                 title: "você está editando o usuário: #"+username+'# ',
+                 buttons: [
+                   {
+                     label: "{{Btext}}",
+                     className: "btn btn-primary pull-left btn-save",
+                     id:"teste",
+                     callback: function() {
+                    
+                     console.log($('input[name="username"]').val());
+                       //alert(t)
+         
+                     }
+                   },
+                   {
+                     label: "Cancelar",
+                     className: "btn btn-default pull-left",
+                     callback: function() {
+                       console.log("just do something on close");
+                     }
+                   }
+                 ],
+                 show: false,
+                 onEscape: function() {
+                   modal.modal("hide");
+                 }
+             });
              
-         		//"bProcessing": true,
-                 //"bServerSide": true,
-                 "sAjaxSource": window.location+'/gettable'	,
-                 
-                 //ajax: window.location + '/gettable',
-
-                 
+             modal.modal("show");
+            
+             $(".btn-save").attr("type", "submit");
+             $('.btn-save').prop("{{Bdisable}}",true);
+           
+         				
+         }
+         function delet(e) {
+                  $('#user').text('O usuário #'+username+'# será excluído permanentemente!')
+                     $( "#dialog-confirm" ).removeClass('hide').dialog({
+                       
+                        buttons: [
+                           {
+                              html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Delete User",
+                              "class" : "btn btn-danger btn-minier",
+                        click: function() {
+                           $( this ).dialog( "close" );
+                           $( this ).selector('username')
+                              }
+                           }
+                           ,
+                           {
+                              html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancel",
+                              "class" : "btn btn-minier",
+                              "style":"float:right",
+                              click: function() {
+                                 $( this ).dialog( "close" );
+                              }
+                           }
+                        ]
+                     });
+         }
+         $(document).on("click", "#dynamic-table td", function() {
+           linha = $(this)
+             .parent()
+             .index();
+          let texto = document.querySelectorAll("#dynamic-table td:nth-child(1)");
+          username = texto[linha].textContent
+           
          
-         		//,]
-         		//"sScrollY": "200px",
-         		//"bPaginate": false,
+         });
+         $( "#delete" ).on('click', function(e) {
+            e.preventDefault();
+         					e.preventDefault();
+         				
+         					$( "#dialog-confirm" ).removeClass('hide').dialog({
+         						resizable: false,
+         						width: '320',
+         						modal: true,
+         						title: "<div class='widget-header'><h4 class='smaller'><i class='ace-icon fa fa-exclamation-triangle red'></i> Empty the recycle bin?</h4></div>",
+         						title_html: true,
+         						buttons: [
+         							{
+         								html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Delete User",
+         								"class" : "btn btn-danger btn-minier",
+         								click: function() {
+         									$( this ).dialog( "close" );
+         								}
+         							}
+         							,
+         							{
+         								html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancel",
+         								"class" : "btn btn-minier",
+         								click: function() {
+         									$( this ).dialog( "close" );
+         								}
+         							}
+         						]
+         					});
+                     });
+                     if(!ace.vars['old_ie'])$('.dateuser').datetimepicker({
+         				 format: 'DD/MM/YYYY h:mm',//use this option to display seconds
+         				 icons: {
+         					time: 'fa fa-clock-o',
+         					date: 'fa fa-calendar',
+         					up: 'fa fa-chevron-up',
+         					down: 'fa fa-chevron-down',
+         					previous: 'fa fa-chevron-left',
+         					next: 'fa fa-chevron-right',
+         					today: 'fa fa-arrows ',
+         					clear: 'fa fa-trash',
+         					close: 'fa fa-times'
+         				 }
+         				}).next().on(ace.click_event, function(){
+         					$(this).prev().focus();
+                     });
+              
          
-         		//"sScrollX": "100%",
-         		//"sScrollXInner": "120%",
-         		//"bScrollCollapse": true,
-         		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
-         		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+         /*
+                  jQuery(function($) {
+                  	//initiate dataTables plugin
+                  	var myTable = 
+                  	$('#dynamic-table')
+                  	//.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+                  	.DataTable( {
+                  		bAutoWidth: false,
          
-         		//"iDisplayLength": 50
+                  		"aoColumns": [
+                  		  { "bSortable": false },
+                  		  null, null,null, null, null,
+                  		  { "bSortable": false }
+                  		],
+                          "aaSorting": [],
+                          responsive: true,
+                          "language": {
+                             lengthMenu: "Mostrando _MENU_ registros por página",
+                             zeroRecords: "Não foram encontrados registros de Trades",
+                             info: "Mostrando página _PAGE_ de _PAGES_",
+                             infoEmpty: "Nenhum registro disponível",
+                             infoFiltered: "(filtrado de _MAX_ registros no total)",
+                             search: "Pesquisar:",
+                             processing: "Aguarde! Carregando Dados...",
+                             paginate: {
+                                 first: "Primeiro",
+                                 last: "Ultimo",
+                                 next: "Próximo",
+                                 previous: "Anterior"
+                             }
+                         },
+                         destroy: true,
+                         processing: true,
+                         responsive: true,
+                      
+                  		//"bProcessing": true,
+                          //"bServerSide": true,
+                          "sAjaxSource": window.location+'/gettable'	,
+                          
+                          //ajax: window.location + '/gettable',
          
-         
-         		select: {
-         			style: 'multi'
-         		}
-             } );
-         
-         	
-         	
-         	$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
-         	
-         	new $.fn.dataTable.Buttons( myTable, {
-         		buttons: [
+                          
                   
-         		  {
-         			"extend": "colvis",
-         			"text": "<i class='fa fa-ban bigger-110 blue'></i> <span class='hidden'>Mostrar/Ocultar colunas</span>",
-         			"className": "btn btn-white btn-primary btn-bold",
-         			columns: ':not(:first):not(:last)'
-         		  },
-         		  {
-         			"extend": "copy",
-         			"text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copiar para área de transferência</span>",
-         			"className": "btn btn-white btn-primary btn-bold"
-         		  },
-         		  {
-         			"extend": "csv",
-         			"text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Exportar para CSV</span>",
-         			"className": "btn btn-white btn-primary btn-bold"
-         		  },
-         		  {
-         			"extend": "excel",
-         			"text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Exportar para Excel</span>",
-         			"className": "btn btn-white btn-primary btn-bold"
-         		  },
-         		  {
-         			"extend": "pdf",
-         			"text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>ocultar colunas PDF</span>",
-         			"className": "btn btn-white btn-primary btn-bold"
-         		  },
-         		  {
-         			"extend": "print",
-         			"text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Impressão</span>",
-         			"className": "btn btn-white btn-primary btn-bold",
-         			autoPrint: true,
-         			//message: 'This print was produced using the Print button for DataTables'
-         		  }		  
-         		]
-         	} );
-         	myTable.buttons().container().appendTo( $('.tableTools-container') );
-         	
-         	//style the message box
-         	var defaultCopyAction = myTable.button(1).action();
-         	myTable.button(1).action(function (e, dt, button, config) {
-         		defaultCopyAction(e, dt, button, config);
-         		$('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
-         	});
-         	
-         	
-         	var defaultColvisAction = myTable.button(0).action();
-         	myTable.button(0).action(function (e, dt, button, config) {
-         		
-         		defaultColvisAction(e, dt, button, config);
-         		
-         		
-         		if($('.dt-button-collection > .dropdown-menu').length == 0) {
-         			$('.dt-button-collection')
-         			.wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
-         			.find('a').attr('href', '#').wrap("<li />")
-         		}
-         		$('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
-         	});
-         
-         	////
-         
-         	setTimeout(function() {
-         		$($('.tableTools-container')).find('a.dt-button').each(function() {
-         			var div = $(this).find(' > div').first();
-         			if(div.length == 1) div.tooltip({container: 'body', title: div.parent().text()});
-         			else $(this).tooltip({container: 'body', title: $(this).text()});
-         		});
-         	}, 500);
-         	
-         	
-         	
-         	
-         	
-         	myTable.on( 'select', function ( e, dt, type, index ) {
-         		if ( type === 'row' ) {
-         			$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', true);
-         		}
-         	} );
-         	myTable.on( 'deselect', function ( e, dt, type, index ) {
-         		if ( type === 'row' ) {
-         			$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', false);
-         		}
-         	} );
-         
-         
-         
-         
-         	/////////////////////////////////
-         	//table checkboxes
-         	$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
-         	
-         	//select/deselect all rows according to table header checkbox
-         	$('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function(){
-         		var th_checked = this.checked;//checkbox inside "TH" table header
-         		
-         		$('#dynamic-table').find('tbody > tr').each(function(){
-         			var row = this;
-         			if(th_checked) myTable.row(row).select();
-         			else  myTable.row(row).deselect();
-         		});
-         	});
-         	
-         	//select/deselect a row when the checkbox is checked/unchecked
-         	$('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
-         		var row = $(this).closest('tr').get(0);
-         		if(this.checked) myTable.row(row).deselect();
-         		else myTable.row(row).select();
-         	});
-         
-         
-         
-         	$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
-         		e.stopImmediatePropagation();
-         		e.stopPropagation();
-         		e.preventDefault();
-         	});
-         	
-         	
-         	
-         	//And for the first simple table, which doesn't have TableTools or dataTables
-         	//select/deselect all rows according to table header checkbox
-         	var active_class = 'active';
-         	$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-         		var th_checked = this.checked;//checkbox inside "TH" table header
-         		
-         		$(this).closest('table').find('tbody > tr').each(function(){
-         			var row = this;
-         			if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-         			else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-         		});
-         	});
-         	
-         	//select/deselect a row when the checkbox is checked/unchecked
-         	$('#simple-table').on('click', 'td input[type=checkbox]' , function(){
-         		var $row = $(this).closest('tr');
-         		if($row.is('.detail-row ')) return;
-         		if(this.checked) $row.addClass(active_class);
-         		else $row.removeClass(active_class);
-         	});
-         
-         	
-         
-         	/********************************/
-         	//add tooltip for small view action buttons in dropdown menu
-            /*
-         	$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-         	
-         	//tooltip placement on right or left
-         	function tooltip_placement(context, source) {
-         		var $source = $(source);
-         		var $parent = $source.closest('table')
-         		var off1 = $parent.offset();
-         		var w1 = $parent.width();
-         
-         		var off2 = $source.offset();
-         		//var w2 = $source.width();
-         
-         		if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-         		return 'left';
-         	}
-         	
-         	
-         	
-         	
-         	/***************/
-            /*
-         	$('.show-details-btn').on('click', function(e) {
-         		e.preventDefault();
-         		$(this).closest('tr').next().toggleClass('open');
-         		$(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
-         	});
-         	/***************/
-         	
-         	
-         	
-         	
-         	
-         	/**
-         	//add horizontal scrollbars to a simple table
-         	$('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
-         	  {
-         		horizontal: true,
-         		styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
-         		size: 2000,
-         		mouseWheelLock: true
-         	  }
-         	).css('padding-top', '12px');
-         	*/
-         
-         
-        // })
-         
+                  		//,]
+                  		//"sScrollY": "200px",
+                  		//"bPaginate": false,
+                  
+                  		//"sScrollX": "100%",
+                  		//"sScrollXInner": "120%",
+                  		//"bScrollCollapse": true,
+                  		//Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+                  		//you may want to wrap the table inside a "div.dataTables_borderWrap" element
+                  
+                  		//"iDisplayLength": 50
+                  
+                  
+                  		select: {
+                  			style: 'multi'
+                  		}
+                      } );
+                  
+                  	
+                  	
+                  	$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+                  	
+                  	new $.fn.dataTable.Buttons( myTable, {
+                  		buttons: [
+                           
+                  		  {
+                  			"extend": "colvis",
+                  			"text": "<i class='fa fa-ban bigger-110 blue'></i> <span class='hidden'>Mostrar/Ocultar colunas</span>",
+                  			"className": "btn btn-white btn-primary btn-bold",
+                  			columns: ':not(:first):not(:last)'
+                  		  },
+                  		  {
+                  			"extend": "copy",
+                  			"text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copiar para área de transferência</span>",
+                  			"className": "btn btn-white btn-primary btn-bold"
+                  		  },
+                  		  {
+                  			"extend": "csv",
+                  			"text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Exportar para CSV</span>",
+                  			"className": "btn btn-white btn-primary btn-bold"
+                  		  },
+                  		  {
+                  			"extend": "excel",
+                  			"text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Exportar para Excel</span>",
+                  			"className": "btn btn-white btn-primary btn-bold"
+                  		  },
+                  		  {
+                  			"extend": "pdf",
+                  			"text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>ocultar colunas PDF</span>",
+                  			"className": "btn btn-white btn-primary btn-bold"
+                  		  },
+                  		  {
+                  			"extend": "print",
+                  			"text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Impressão</span>",
+                  			"className": "btn btn-white btn-primary btn-bold",
+                  			autoPrint: true,
+                  			//message: 'This print was produced using the Print button for DataTables'
+                  		  }		  
+                  		]
+                  	} );
+                  	myTable.buttons().container().appendTo( $('.tableTools-container') );
+                  	
+                  	//style the message box
+                  	var defaultCopyAction = myTable.button(1).action();
+                  	myTable.button(1).action(function (e, dt, button, config) {
+                  		defaultCopyAction(e, dt, button, config);
+                  		$('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
+                  	});
+                  	
+                  	
+                  	var defaultColvisAction = myTable.button(0).action();
+                  	myTable.button(0).action(function (e, dt, button, config) {
+                  		
+                  		defaultColvisAction(e, dt, button, config);
+                  		
+                  		
+                  		if($('.dt-button-collection > .dropdown-menu').length == 0) {
+                  			$('.dt-button-collection')
+                  			.wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
+                  			.find('a').attr('href', '#').wrap("<li />")
+                  		}
+                  		$('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
+                  	});
+                  
+                  	////
+                  
+                  	setTimeout(function() {
+                  		$($('.tableTools-container')).find('a.dt-button').each(function() {
+                  			var div = $(this).find(' > div').first();
+                  			if(div.length == 1) div.tooltip({container: 'body', title: div.parent().text()});
+                  			else $(this).tooltip({container: 'body', title: $(this).text()});
+                  		});
+                  	}, 500);
+                  	
+                  	
+                  	
+                  	
+                  	
+                  	myTable.on( 'select', function ( e, dt, type, index ) {
+                  		if ( type === 'row' ) {
+                  			$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', true);
+                  		}
+                  	} );
+                  	myTable.on( 'deselect', function ( e, dt, type, index ) {
+                  		if ( type === 'row' ) {
+                  			$( myTable.row( index ).node() ).find('input:checkbox').prop('checked', false);
+                  		}
+                  	} );
+                  
+                  
+                  
+                  
+                  	/////////////////////////////////
+                  	//table checkboxes
+                  	$('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+                  	
+                  	//select/deselect all rows according to table header checkbox
+                  	$('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function(){
+                  		var th_checked = this.checked;//checkbox inside "TH" table header
+                  		
+                  		$('#dynamic-table').find('tbody > tr').each(function(){
+                  			var row = this;
+                  			if(th_checked) myTable.row(row).select();
+                  			else  myTable.row(row).deselect();
+                  		});
+                  	});
+                  	
+                  	//select/deselect a row when the checkbox is checked/unchecked
+                  	$('#dynamic-table').on('click', 'td input[type=checkbox]' , function(){
+                  		var row = $(this).closest('tr').get(0);
+                  		if(this.checked) myTable.row(row).deselect();
+                  		else myTable.row(row).select();
+                  	});
+                  
+                  
+                  
+                  	$(document).on('click', '#dynamic-table .dropdown-toggle', function(e) {
+                  		e.stopImmediatePropagation();
+                  		e.stopPropagation();
+                  		e.preventDefault();
+                  	});
+                  	
+                  	
+                  	
+                  	//And for the first simple table, which doesn't have TableTools or dataTables
+                  	//select/deselect all rows according to table header checkbox
+                  	var active_class = 'active';
+                  	$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
+                  		var th_checked = this.checked;//checkbox inside "TH" table header
+                  		
+                  		$(this).closest('table').find('tbody > tr').each(function(){
+                  			var row = this;
+                  			if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+                  			else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+                  		});
+                  	});
+                  	
+                  	//select/deselect a row when the checkbox is checked/unchecked
+                  	$('#simple-table').on('click', 'td input[type=checkbox]' , function(){
+                  		var $row = $(this).closest('tr');
+                  		if($row.is('.detail-row ')) return;
+                  		if(this.checked) $row.addClass(active_class);
+                  		else $row.removeClass(active_class);
+                  	});
+                  
+                  	
+                  
+                  	/********************************/
+                  	//add tooltip for small view action buttons in dropdown menu
+                     /*
+                  	$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+                  	
+                  	//tooltip placement on right or left
+                  	function tooltip_placement(context, source) {
+                  		var $source = $(source);
+                  		var $parent = $source.closest('table')
+                  		var off1 = $parent.offset();
+                  		var w1 = $parent.width();
+                  
+                  		var off2 = $source.offset();
+                  		//var w2 = $source.width();
+                  
+                  		if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+                  		return 'left';
+                  	}
+                  	
+                  	
+                  	
+                  	
+                  	/***************/
+                     /*
+                  	$('.show-details-btn').on('click', function(e) {
+                  		e.preventDefault();
+                  		$(this).closest('tr').next().toggleClass('open');
+                  		$(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
+                  	});
+                  	/***************/
+                  	
+                  	
+                  	
+                  	
+                  	
+                  	/**
+                  	//add horizontal scrollbars to a simple table
+                  	$('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
+                  	  {
+                  		horizontal: true,
+                  		styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
+                  		size: 2000,
+                  		mouseWheelLock: true
+                  	  }
+                  	).css('padding-top', '12px');
+                  	*/
+                  
+                  
+                 // })
+                  
+               
       </script>
    </body>
 </html>
 @else
-  <script type="text/javascript">
-window.location ='/logout'
-	</script>
+<script type="text/javascript">
+   window.location ='/logout'
+   	
+</script>
 @endif

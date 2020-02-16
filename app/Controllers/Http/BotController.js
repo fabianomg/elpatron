@@ -5,10 +5,19 @@ const ID = require('./VadateCardController');
 const User = use('App/Models/User')
 const Card = use('App/Models/Card')
 const Database = use('Database')
+const Cache = use('Cache')
 
 class BotController {
 
     async  start({ auth, request }) {
+        await this.resetCache(auth.user.id);
+        // essa variavel vai guardar os cartões resolvidos la no metodo Validat do 'VadateCardController'
+        await Cache.forever('user_id:' + auth.user.id + '#resolvecards#', 0)
+
+        await Cache.forever('user_id:' + auth.user.id + '#aprovadas#', 0)
+        await Cache.forever('user_id:' + auth.user.id + '#reprovadas#', 0)
+        await Cache.forever('user_id:' + auth.user.id + '#recusadas#', 0)
+        await Cache.forever('user_id:' + auth.user.id + '#testadas#', 0)
 
         const status = await Ws.getChannel('status:*').topic('status:s' + auth.user.id)
         const carregadas = await Ws.getChannel('status:*').topic('status:c' + auth.user.id)
@@ -20,104 +29,60 @@ class BotController {
         try {
 
             let txt = await request.only('txtstart')
-            let cards = []
-            if (txt.txtstart.length > 30) {
-                let tt = txt.txtstart.split("\r\n")
-                let cont = 0
-                for (const items of tt) {
-                    let t = items.split("|")
 
+            let tt = txt.txtstart.split("\r\n")
+            let cont = 0
+            for (const items of tt) {
+                let t = items.split("|")
+                let arr = {
+                    user_id: auth.user.id,
+                    n: t[0].trim(),
+                    m: t[1].trim(),
+                    a: t[2].substr(2, 2),
+                    v: Math.floor(Math.random() * (999 - 100 + 1)) + 100
+                }
+                await Cache.forever('user_id:' + auth.user.id + '#card#' + 'card_id:' + cont, JSON.stringify(arr))
 
-                    const userI = await Database
-                        .table('cards')
-                        .insert({
-                            user_id: auth.user.id,
-                            n: t[0].trim(),
-                            m: t[1].trim(),
-                            a: t[2].substr(2, 2),
-                            v: Math.floor(Math.random() * (999 - 100 + 1)) + 100
-                        })
-                    cont++;
-                }
-                if (carregadas) {
-                    await carregadas.broadcastToAll('message', cont)
-                }
-            } else {
-                let t = txt.txtstart.split("|")
-
-                const userI = await Database
-                    .table('cards')
-                    .insert({
-                        user_id: auth.user.id,
-                        n: t[0].trim(),
-                        m: t[1].trim(),
-                        a: t[2].substr(2, 2),
-                        v: Math.floor(Math.random() * (999 - 100 + 1)) + 100
-                    })
-                if (carregadas) {
-                    carregadas.broadcastToAll('message', 1)
-                }
+                cont++;
+                await Cache.increment('user_id:' + auth.user.id + '#contadorcard#')
             }
+
+            if (carregadas) {
+                await carregadas.broadcastToAll('message', cont)
+            }
+
 
         } catch (error) {
             console.log(error.message);
         }
 
-        const c = new C();
-        await c.GetCaptcha(auth.user.id);
-        const validator = new ID()
-        await validator.GetId(auth.user.id);
+        if (!await Cache.has('user_id:' + auth.user.id + '#restart#')) {
 
+
+            const c = new C();
+            await c.GetCaptcha(auth.user.id);
+
+            const validator = new ID()
+            await validator.GetId(auth.user.id);
+
+        }
 
         let taskRestart = setInterval(async () => {
-            const card = await User.find(auth.user.id)
-            await card.loadMany({
-                cards: (builder) => builder.where('is_tested', false)
-            })
-            let stopRestart = card.toJSON().cards.length
 
-            if (stopRestart == 0) {
+            if (await Cache.get('user_id:' + auth.user.id + '#resolvecards#') == await Cache.get('user_id:' + auth.user.id + '#contadorcard#')) {
                 clearInterval(taskRestart)
-
-                const use = await User.find(auth.user.id)
-                const userI = await use
-                    .url_token()
-                    .update({ is_restart: 0 })
-                if (status) {
-                    await status.broadcastToAll('message', { s: 'end', msg: 'Processamento OK!!...' })
-                }
-
-                ///deletar todos  os cartoes referente ao user
-                console.log('parado')
-                console.log(stopRestart)
-                const user = await User.find(auth.user.id)
-                await user
-                    .cards()
-                    .delete()
-                const userD = await User.find(auth.user.id)
-                await userD
-                    .url_token()
-                    .delete()
+                await Cache.forever('user_id:' + auth.user.id + '#restart#', 0)
+                await status.broadcastToAll('message', { s: 'end', msg: 'Processamento OK!!...' })
+                //deletar todos  os cartoes referente ao user
+                await this.resetCache(auth.user.id);
+                console.log('Terminado........')
                 return
 
             }
-
-            let result = await Database
-                .table('url_tokens')
-                .where('user_id', auth.user.id)
-                .first()
-            if (result) {
-
-                if (result.is_restart) {
-
-                    const use = await User.find(auth.user.id)
-                    const userI = await use
-                        .url_token()
-                        .update({ is_restart: 0 })
-                    await this.restart(auth.user.id);
-
-                }
-
+            let restart = await Cache.get('user_id:' + auth.user.id + '#restart#')
+            if (restart == 1) {
+                await Cache.forever('user_id:' + auth.user.id + '#restart#', 0)
+                await this.restart(auth.user.id);
             }
 
 
@@ -131,6 +96,20 @@ class BotController {
         await cc.GetCaptcha(id);
         const validatorr = new ID()
         await validatorr.GetId(id);
+    }
+    async resetCache(id) {
+        await Cache.forget('user_id:' + id + '#restart#')
+        await Cache.forget('user_id:' + id + '#resolvecards#')
+
+        await Cache.forget('user_id:' + id + '#aprovadas#')
+        await Cache.forget('user_id:' + id + '#reprovadas#')
+        await Cache.forget('user_id:' + id + '#recusadas#')
+        await Cache.forget('user_id:' + id + '#testadas#')
+        await Cache.forget('user_id:' + id + '#campos_form#state#')
+        await Cache.forget('user_id:' + id + '#campos_form#generator#')
+        await Cache.forget('user_id:' + id + '#campos_form#validation#')
+        await Cache.forget('user_id:' + id + '#codigo_url#')
+        await Cache.forget('user_id:' + id + '#contadorcard#')
     }
 }
 

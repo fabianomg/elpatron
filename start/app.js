@@ -19,7 +19,9 @@ const providers = [
   '@adonisjs/shield/providers/ShieldProvider',
   '@adonisjs/session/providers/SessionProvider',
   '@adonisjs/auth/providers/AuthProvider',
-  '@adonisjs/websocket/providers/WsProvider'
+  '@adonisjs/websocket/providers/WsProvider',
+  'adonis-cache/providers/CacheProvider',
+  '@adonisjs/redis/providers/RedisProvider'
 ]
 
 /*
@@ -32,7 +34,8 @@ const providers = [
 |
 */
 const aceProviders = [
-  '@adonisjs/lucid/providers/MigrationsProvider'
+  '@adonisjs/lucid/providers/MigrationsProvider',
+  'adonis-cache/providers/CommandsProvider'
 ]
 
 /*
@@ -47,7 +50,9 @@ const aceProviders = [
 |   { Route: 'Adonis/Src/Route' }
 |
 */
-const aliases = {}
+const aliases = {
+  Cache: 'Adonis/Addons/Cache'
+}
 
 /*
 |--------------------------------------------------------------------------

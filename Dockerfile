@@ -15,7 +15,6 @@ RUN npm install
 
 # Bundle app source
 COPY . .
-#RUN adonis migration:run
 
 EXPOSE 3333
 EXPOSE 9229

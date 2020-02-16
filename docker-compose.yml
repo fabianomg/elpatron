@@ -41,6 +41,25 @@ services:
     restart: always
     ports:
       - 8183:80
+  # Redis
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis
+    ports:
+      - "6380:6379"
+    links: 
+      - redis-commander
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+        - REDIS_HOSTS=local:redis:6379
+    ports:
+      - 8081:8081     
   
         
   

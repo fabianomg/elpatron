@@ -39,6 +39,16 @@ class LoginController {
     const user = await User.query()
       .where('username', username)
       .first()
+    if (!user.active) {
+      session.flash({
+        notification: {
+          type: 'warning',
+          message: `${user.username} Você não está ativo ou está sem créditos por favor  entre em conato com o administrador.`
+        }
+      })
+      return response.redirect('back')
+    }
+    
     //const safePassword = await Hash.make('123')
     //console.log(safePassword)
 
