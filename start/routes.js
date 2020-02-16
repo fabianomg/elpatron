@@ -35,4 +35,4 @@ Route.post('/cadproxy', 'ConfigController.cadProxy').as('cadproxy')
 //d20eab822faf0d858c62d43d002148b4
 Route.get('/gettable', 'UserController.ReturnUsers')
 
-Route.post('/teste/:', 'BotController.start').as('start')
+Route.post('/teste', 'BotController.start').as('start')
