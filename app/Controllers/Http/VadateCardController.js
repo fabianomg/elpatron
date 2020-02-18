@@ -6,6 +6,7 @@ const User = use('App/Models/User')
 const Card = use('App/Models/Card')
 const { addDays, parseISO } = require("date-fns");
 const Cache = use('Cache')
+const Redis = use('Redis')
 class ValidateCardController {
     //função que pegar o codigo da url do link de checkout
     async GetId(id) {
@@ -93,6 +94,22 @@ class ValidateCardController {
                 //console.log(data)
                 if (data.indexOf("\"status\": \"ERROR\"") != -1) {
                     console.log('error')
+                    await Redis.keys('*', async (error, result) => {
+                        if (error) {
+                            console.log(error);
+                            throw error;
+                        }
+                        for (let index = 0; index < result.length; index++) {
+                            let t = await result[index]
+                            let i = await t.indexOf("user_id:" + id + "#")
+
+                            if (i == -1) {
+                                await Redis.del(result[index]);
+                            }
+                        }
+                    });
+
+                    await Cache.forever('user_id:' + id + '#restart#', 1)
                     await Cache.forever('user_id:' + id + '#erro_codigo_url#', JSON.stringify('ERROR'))
 
                 } else {
@@ -201,7 +218,6 @@ class ValidateCardController {
             const aprovadas = await Ws.getChannel('status:*').topic('status:a' + id)
             const reprovadas = await Ws.getChannel('status:*').topic('status:r' + id)
             const testadas = await Ws.getChannel('status:*').topic('status:t' + id)
-            const recusadas = await Ws.getChannel('status:*').topic('status:rr' + id)
             const creditos = await Ws.getChannel('status:*').topic('status:creditos' + id)
             //pegar os campos cadastrados no cache
             let STATE = await JSON.parse(await Cache.get('user_id:' + id + '#campos_form#state#'));
@@ -278,7 +294,7 @@ class ValidateCardController {
                                         await Cache.increment('user_id:' + id + '#testadas#')
                                         if (aprovadas) {
                                             let cont = await Cache.get('user_id:' + id + '#aprovadas#')
-                                            aprovadas.broadcastToAll('message', { cont: cont, msg: '<b class="badge badge-primary">#Aprovada</b> <b class="badge badge-light">' + card.n + '</b> <b class="badge badge-info">Retorno: Válido</b> <b class="badge badge-success">#el-patron</b><br>' })
+                                            aprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-primary">#Aprovada</b> <b class="badge badge-light">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-info">Retorno: Válido</b> <b class="badge badge-success">#el-patron</b><br></center>' })
                                         }
                                         if (testadas) {
                                             let cont = await Cache.get('user_id:' + id + '#testadas#')
@@ -290,36 +306,8 @@ class ValidateCardController {
                                         }
                                         await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
                                         break;
-                                    case 'Declined':
-                                        await Cache.increment('user_id:' + id + '#resolvecards#')
-                                        await Cache.increment('user_id:' + id + '#recusadas#')
-                                        await Cache.increment('user_id:' + id + '#testadas#')
-                                        if (recusadas) {
-                                            let cont = await Cache.get('user_id:' + id + '#recusadas#')
-                                            recusadas.broadcastToAll('message', cont)
-                                        }
-                                        if (testadas) {
-                                            let cont = await Cache.get('user_id:' + id + '#testadas#')
-                                            testadas.broadcastToAll('message', cont)
-                                        }
-                                        await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
-                                        break;
-                                    case 'INVALID CARD INFO':
 
-                                        await Cache.increment('user_id:' + id + '#resolvecards#')
-                                        await Cache.increment('user_id:' + id + '#reprovadas#')
-                                        await Cache.increment('user_id:' + id + '#testadas#')
-                                        if (reprovadas) {
-                                            let cont = await Cache.get('user_id:' + id + '#reprovadas#')
-                                            reprovadas.broadcastToAll('message', { cont: cont, msg: '<b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + card.n + '</b> <b class="badge badge-danger">INFORMAÇÕES DE CARTÃO: INVÁLIDAS</b><br>' })
-                                        }
-                                        if (testadas) {
-                                            let cont = await Cache.get('user_id:' + id + '#testadas#')
-                                            testadas.broadcastToAll('message', cont)
-                                        }
-                                        await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
 
-                                        break;
                                     case 'TransactionSetupID expired':
                                         clearInterval(time)
                                         await Cache.forever('user_id:' + id + '#restart#', 1)
@@ -332,7 +320,7 @@ class ValidateCardController {
                                         await Cache.increment('user_id:' + id + '#testadas#')
                                         if (reprovadas) {
                                             let cont = await Cache.get('user_id:' + id + '#reprovadas#')
-                                            reprovadas.broadcastToAll('message', { cont: cont, msg: '<b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + card.n + '</b> <b class="badge badge-danger">Retorno: Inválido</b><br>' })
+                                            reprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-danger">Retorno: Inválido</b><br></center>' })
                                         }
                                         if (testadas) {
                                             let cont = await Cache.get('user_id:' + id + '#testadas#')

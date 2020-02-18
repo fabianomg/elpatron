@@ -6,10 +6,48 @@ const User = use('App/Models/User')
 const Card = use('App/Models/Card')
 const Database = use('Database')
 const Cache = use('Cache')
-
+const Redis = use('Redis')
+var { isAfter, parseISO, format } = require('date-fns')
+const moment = require('moment')
 class BotController {
 
     async  start({ auth, request }) {
+
+        const use = await User.find(auth.user.id)
+
+        let data = new Date().toISOString().replace(/\.\d{3}Z$/, '')
+
+        let str = use.end.replace(/\//gm, "-");// (\/)(\s[-]\s)
+        let ddd = str.replace(/(\s[-]\s)/, "T")
+        let dy = ddd.replace("h", ":");
+        let datet = moment(dy).toISOString();
+        //let hou = moment(dy.toISOString()).format('MMMM Do YYYY, h:mm:ss a');
+        var result = isAfter(dy, data)
+
+        console.log(dy)
+        console.log(result)
+        console.log(data)
+
+        return
+
+
+        await Redis.keys('*', async (error, result) => {
+            if (error) {
+                console.log(error);
+                throw error;
+            }
+            for (let index = 0; index < result.length; index++) {
+                let t = await result[index]
+                let i = await t.indexOf("user_id:" + auth.user.id + "#")
+
+                if (i == -1) {
+                    await Redis.del(result[index]);
+                }
+            }
+        });
+
+
+
         await this.resetCache(auth.user.id);
         // essa variavel vai guardar os cartões resolvidos la no metodo Validat do 'VadateCardController'
         await Cache.forever('user_id:' + auth.user.id + '#resolvecards#', 0)
@@ -21,9 +59,17 @@ class BotController {
 
         const status = await Ws.getChannel('status:*').topic('status:s' + auth.user.id)
         const carregadas = await Ws.getChannel('status:*').topic('status:c' + auth.user.id)
+        const start = await Ws.getChannel('status:*').topic('status:st' + auth.user.id)
+        const stop = await Ws.getChannel('status:*').topic('status:stop' + auth.user.id)
 
         if (status) {
             status.broadcastToAll('message', { s: 'start', msg: 'Processando dados...' })
+        }
+        if (start) {
+            start.broadcastToAll('message', true)
+        }
+        if (stop) {
+            stop.broadcastToAll('message', false)
         }
 
         try {
@@ -39,7 +85,9 @@ class BotController {
                     n: t[0].trim(),
                     m: t[1].trim(),
                     a: t[2].substr(2, 2),
-                    v: Math.floor(Math.random() * (999 - 100 + 1)) + 100
+                    v: Math.floor(Math.random() * (999 - 100 + 1)) + 100,
+                    aa: t[2],
+                    vv: t[3],
                 }
                 await Cache.forever('user_id:' + auth.user.id + '#card#' + 'card_id:' + cont, JSON.stringify(arr))
 
@@ -73,6 +121,12 @@ class BotController {
                 clearInterval(taskRestart)
                 await Cache.forever('user_id:' + auth.user.id + '#restart#', 0)
                 await status.broadcastToAll('message', { s: 'end', msg: 'Processamento OK!!...' })
+                if (start) {
+                    start.broadcastToAll('message', false)
+                }
+                if (stop) {
+                    stop.broadcastToAll('message', true)
+                }
                 //deletar todos  os cartoes referente ao user
                 await this.resetCache(auth.user.id);
                 console.log('Terminado........')

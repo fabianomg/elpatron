@@ -33,6 +33,7 @@
     "adonis-cache": "^0.3.4",
     "date-fns": "^2.9.0",
     "date-fns-tz": "^1.0.10",
+    "moment": "^2.24.0",
     "mysql": "^2.18.1",
     "node-libcurl": "^2.0.3",
     "random-string": "^0.2.0"
