@@ -60,14 +60,3 @@ services:
       - REDIS_HOSTS=local:redis:6379
     ports:
       - 8081:8081
-  nginx:
-    image: nginx:latest
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./usr/app/public:/usr/app/www
-      - ./default.conf:/etc/nginx/conf/default.conf
-    depends_on:
-      - app
-      - phpmyadmin
-      - redis-commander

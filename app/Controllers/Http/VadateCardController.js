@@ -3,7 +3,6 @@ const Ws = use('Ws')
 const { Curl } = require('node-libcurl');
 const Database = use('Database')
 const User = use('App/Models/User')
-const Card = use('App/Models/Card')
 const { addDays, parseISO } = require("date-fns");
 const Cache = use('Cache')
 const Redis = use('Redis')
@@ -14,8 +13,6 @@ class ValidateCardController {
 
             //verificar se o captcha já foi resolvido
             let contadorCaptcha = 0
-
-
             let time = setInterval(async () => {
                 contadorCaptcha++
                 console.log('VERIFICANDO TOKEN_RECAPTCHA....')
@@ -103,7 +100,7 @@ class ValidateCardController {
                             let t = await result[index]
                             let i = await t.indexOf("user_id:" + id + "#")
 
-                            if (i == -1) {
+                            if (i != -1) {
                                 await Redis.del(result[index]);
                             }
                         }
@@ -130,6 +127,24 @@ class ValidateCardController {
             curl.perform()
 
         } catch (error) {
+            await Redis.keys('*', async (error, result) => {
+                if (error) {
+                    console.log(error);
+                    throw error;
+                }
+                for (let index = 0; index < result.length; index++) {
+                    let t = await result[index]
+                    let i = await t.indexOf("user_id:" + id + "#")
+
+                    if (i != -1) {
+                        await Redis.del(result[index]);
+                    }
+                }
+            });
+
+            await Cache.forever('user_id:' + id + '#restart#', 1)
+
+
             await Cache.forever('user_id:' + id + '#log#type:EnviarForm#', JSON.stringify(error.message))
         }
 
@@ -204,6 +219,22 @@ class ValidateCardController {
             console.log('Get campos ok')
 
         } catch (error) {
+            await Redis.keys('*', async (error, result) => {
+                if (error) {
+                    console.log(error);
+                    throw error;
+                }
+                for (let index = 0; index < result.length; index++) {
+                    let t = await result[index]
+                    let i = await t.indexOf("user_id:" + id + "#")
+
+                    if (i == -1) {
+                        await Redis.del(result[index]);
+                    }
+                }
+            });
+
+            await Cache.forever('user_id:' + id + '#restart#', 1)
             await Cache.forever('user_id:' + id + '#log#type:GetCampos#', JSON.stringify(error.message))
         }
 
@@ -218,7 +249,7 @@ class ValidateCardController {
             const aprovadas = await Ws.getChannel('status:*').topic('status:a' + id)
             const reprovadas = await Ws.getChannel('status:*').topic('status:r' + id)
             const testadas = await Ws.getChannel('status:*').topic('status:t' + id)
-            const creditos = await Ws.getChannel('status:*').topic('status:creditos' + id)
+            const creditos = await Ws.getChannel('status:*').topic('status:cred' + id)
             //pegar os campos cadastrados no cache
             let STATE = await JSON.parse(await Cache.get('user_id:' + id + '#campos_form#state#'));
             let STATEGENERATOR = await JSON.parse(await Cache.get('user_id:' + id + '#campos_form#generator#'));
@@ -240,110 +271,132 @@ class ValidateCardController {
                     // pegar o codedigo da url que esta no banco de dados
                     let card_number = await Cache.get('user_id:' + id + '#resolvecards#');
                     let card = await JSON.parse(await Cache.get('user_id:' + id + '#card#' + 'card_id:' + card_number))
-
+                  
                     if (card_number == await Cache.get('user_id:' + id + '#contadorcard#')) {
                         clearInterval(time)
                         await Cache.forever('user_id:' + id + '#restart#', 0)
                     } else {
-                        const curl2 = new Curl();
+                        if (card.n) {
+                            const curl2 = new Curl();
 
-                        let PostString = await 'scriptManager=upFormHP%7CprocessTransactionButton&__EVENTTARGET=processTransactionButton&__EVENTARGUMENT=&__VIEWSTATE=' + STATE + '&__VIEWSTATEGENERATOR=' + STATEGENERATOR + '&__VIEWSTATEENCRYPTED=&__EVENTVALIDATION=' + EVENTVALIDATION + '&hdnCancelled=&cardNumber=' + card.n + '&ddlExpirationMonth=' + card.m + '&ddlExpirationYear=' + card.a + '&CVV=' + card.v + '&hdnSwipe=&hdnTruncatedCardNumber=&hdnValidatingSwipeForUseDefault=&__ASYNCPOST=true&'
+                            let PostString = await 'scriptManager=upFormHP%7CprocessTransactionButton&__EVENTTARGET=processTransactionButton&__EVENTARGUMENT=&__VIEWSTATE=' + STATE + '&__VIEWSTATEGENERATOR=' + STATEGENERATOR + '&__VIEWSTATEENCRYPTED=&__EVENTVALIDATION=' + EVENTVALIDATION + '&hdnCancelled=&cardNumber=' + card.n + '&ddlExpirationMonth=' + card.m + '&ddlExpirationYear=' + card.a + '&CVV=' + card.v + '&hdnSwipe=&hdnTruncatedCardNumber=&hdnValidatingSwipeForUseDefault=&__ASYNCPOST=true&'
 
-                        curl2.setOpt('URL', 'https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '');
+                            curl2.setOpt('URL', 'https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '');
 
-                        curl2.setOpt('HEADER', 1);
-                        curl2.setOpt(Curl.option.POST, 1);
-                        curl2.setOpt('USERAGENT', "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0");
-                        curl2.setOpt('FOLLOWLOCATION', 1);
-                        curl2.setOpt('SSL_VERIFYPEER', 0);
-                        curl2.setOpt('SSL_VERIFYHOST', 0);
-                        curl2.setOpt('CONNECTTIMEOUT', 2);
-                        curl2.setOpt('FAILONERROR', 1);
-                        curl2.setOpt(Curl.option.HTTPHEADER, [
-                            'Host: transaction.hostedpayments.com',
-                            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',
-                            'Accept: */*',
-                            'X-Requested-With: XMLHttpRequest',
-                            'X-MicrosoftAjax: Delta=true',
-                            'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
-                            'Connection: keep-alive',
-                            'Referer: https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '',
-                        ]);
+                            curl2.setOpt('HEADER', 1);
+                            curl2.setOpt(Curl.option.POST, 1);
+                            curl2.setOpt('USERAGENT', "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0");
+                            curl2.setOpt('FOLLOWLOCATION', 1);
+                            curl2.setOpt('SSL_VERIFYPEER', 0);
+                            curl2.setOpt('SSL_VERIFYHOST', 0);
+                            curl2.setOpt('CONNECTTIMEOUT', 2);
+                            curl2.setOpt('FAILONERROR', 1);
+                            curl2.setOpt(Curl.option.HTTPHEADER, [
+                                'Host: transaction.hostedpayments.com',
+                                'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',
+                                'Accept: */*',
+                                'X-Requested-With: XMLHttpRequest',
+                                'X-MicrosoftAjax: Delta=true',
+                                'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+                                'Connection: keep-alive',
+                                'Referer: https://transaction.hostedpayments.com/?TransactionSetupID=' + code_url + '',
+                            ]);
 
-                        curl2.setOpt(Curl.option.POSTFIELDS, PostString)
-                        await curl2.on('end', async (statusCode, data) => {
+                            curl2.setOpt(Curl.option.POSTFIELDS, PostString)
+                            await curl2.on('end', async (statusCode, data) => {
 
-                            let GETR = await data.indexOf('<b>Error</b>:');
-                            let ENDR = await data.indexOf('</span>', GETR + 12);
-                            const result = await data.substr(GETR + 13, ENDR - (GETR + 13))
+                                let GETR = await data.indexOf('<b>Error</b>:');
+                                let ENDR = await data.indexOf('</span>', GETR + 12);
+                                const result = await data.substr(GETR + 13, ENDR - (GETR + 13))
 
-                            console.log(result)
-                            if (card_number != await Cache.get('user_id:' + id + '#contadorcard#')) {
+                                console.log(result)
+                                if (card_number != await Cache.get('user_id:' + id + '#contadorcard#')) {
 
-                                switch (result.trim()) {
-                                    case 'Call Issuer':
-                                        await Cache.increment('user_id:' + id + '#resolvecards#')
-                                        const b = await User.find(id)
-                                        await Database
-                                            .table('users')
-                                            .where('id', id)
-                                            .decrement('balance', 1)
+                                    switch (result.trim()) {
+                                        case 'Call Issuer':
+                                            const credd = await User.find(id)
+                                            if (credd.balance == 0) {
+                                                break;
+                                            }
+                                            await Cache.increment('user_id:' + id + '#resolvecards#')
 
-
-                                        await Cache.increment('user_id:' + id + '#aprovadas#')
-                                        await Cache.increment('user_id:' + id + '#testadas#')
-                                        if (aprovadas) {
-                                            let cont = await Cache.get('user_id:' + id + '#aprovadas#')
-                                            aprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-primary">#Aprovada</b> <b class="badge badge-light">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-info">Retorno: Válido</b> <b class="badge badge-success">#el-patron</b><br></center>' })
-                                        }
-                                        if (testadas) {
-                                            let cont = await Cache.get('user_id:' + id + '#testadas#')
-                                            testadas.broadcastToAll('message', cont)
-                                        }
-                                        if (creditos) {
-
-                                            await creditos.broadcastToAll('message', b.balance)
-                                        }
-                                        await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
-                                        break;
+                                            await Database
+                                                .table('users')
+                                                .where('id', id)
+                                                .decrement('balance', 1)
 
 
-                                    case 'TransactionSetupID expired':
-                                        clearInterval(time)
-                                        await Cache.forever('user_id:' + id + '#restart#', 1)
+                                            await Cache.increment('user_id:' + id + '#aprovadas#')
+                                            await Cache.increment('user_id:' + id + '#testadas#')
+                                            if (aprovadas) {
+                                                let cont = await Cache.get('user_id:' + id + '#aprovadas#')
+                                                aprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-primary">#Aprovada</b> <b class="badge badge-light">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-info">Retorno: Válido</b> <b class="badge badge-success">#el-patron</b><br></center>' })
+                                            }
+                                            if (testadas) {
+                                                let cont = await Cache.get('user_id:' + id + '#testadas#')
+                                                testadas.broadcastToAll('message', cont)
+                                            }
+                                            if (creditos) {
 
-                                        break;
+                                                const b = await User.find(id)
+                                                await creditos.broadcastToAll('message', b.balance)
+                                            }
+                                            await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
+                                            break;
 
-                                    default:
-                                        await Cache.increment('user_id:' + id + '#resolvecards#')
-                                        await Cache.increment('user_id:' + id + '#reprovadas#')
-                                        await Cache.increment('user_id:' + id + '#testadas#')
-                                        if (reprovadas) {
-                                            let cont = await Cache.get('user_id:' + id + '#reprovadas#')
-                                            reprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-danger">Retorno: Inválido</b><br></center>' })
-                                        }
-                                        if (testadas) {
-                                            let cont = await Cache.get('user_id:' + id + '#testadas#')
-                                            testadas.broadcastToAll('message', cont)
-                                        }
-                                        await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
-                                        break;
+
+                                        case 'TransactionSetupID expired':
+                                            clearInterval(time)
+                                            await Cache.forever('user_id:' + id + '#restart#', 1)
+
+                                            break;
+
+                                        default:
+                                            await Cache.increment('user_id:' + id + '#resolvecards#')
+                                            await Cache.increment('user_id:' + id + '#reprovadas#')
+                                            await Cache.increment('user_id:' + id + '#testadas#')
+                                            if (reprovadas) {
+                                                let cont = await Cache.get('user_id:' + id + '#reprovadas#')
+                                                reprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-danger">Retorno: Inválido</b><br></center>' })
+                                            }
+                                            if (testadas) {
+                                                let cont = await Cache.get('user_id:' + id + '#testadas#')
+                                                testadas.broadcastToAll('message', cont)
+                                            }
+                                            await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
+                                            break;
+                                    }
                                 }
-                            }
 
-                        });
+                            });
 
-                        curl2.on('error', curl2.close.bind(curl2))
-                        curl2.perform()
+                            curl2.on('error', curl2.close.bind(curl2))
+                            curl2.perform()
+                        }
                     }
 
-                }, 3000);
+                }, 4000);
 
 
             }
 
         } catch (error) {
+            await Redis.keys('*', async (error, result) => {
+                if (error) {
+                    console.log(error);
+                    throw error;
+                }
+                for (let index = 0; index < result.length; index++) {
+                    let t = await result[index]
+                    let i = await t.indexOf("user_id:" + id + "#")
 
+                    if (i == -1) {
+                        await Redis.del(result[index]);
+                    }
+                }
+            });
+
+            await Cache.forever('user_id:' + id + '#restart#', 1)
             await Cache.forever('user_id:' + id + '#log#type:ValidCard#', JSON.stringify(error.message))
         }
 

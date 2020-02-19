@@ -14,6 +14,8 @@
     <!-- page specific plugin styles -->
     <!-- text fonts -->
     <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
     <!-- ace styles -->
     <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
     <!--[if lte IE 9]>
@@ -37,19 +39,20 @@
 </head>
 
 <body class="no-skin">
-   
+
     <div id="navbar" class="navbar navbar-default navbar-collapse h-navbar ace-save-state">
         <div class="navbar-container ace-save-state justify-content-between" id="navbar-container">
             <div class="navbar-header pull-left">
                 <a href="/" class="navbar-brand">
                     <small>
-               El Patron
-               </small>
+                        El Patron
+                    </small>
                 </a>
-                <button class=" pull-right navbar-toggle navbar-toggle-img collapsed" type="button" data-toggle="collapse" data-target=".navbar-buttons">
+                <button class=" pull-right navbar-toggle navbar-toggle-img collapsed" type="button"
+                    data-toggle="collapse" data-target=".navbar-buttons">
             </div>
 
-            <div class=" navbar-buttons navbar-header pull-right navbar" >
+            <div class=" navbar-buttons navbar-header pull-right navbar">
 
                 <ul class="nav ace-nav">
 
@@ -57,169 +60,231 @@
                         <a href="/logout">
                             <i class="ace-icon fa fa-power-off"></i> Sair
                         </a>
-                       
+
                     </li>
                 </ul>
-                
+
             </div>
         </div>
-        </div>
-        <!-- /.navbar-container -->
     </div>
-  
+    <!-- /.navbar-container -->
+    </div>
+
     <div class="main-container ace-save-state" id="main-container">
 
-        
-            <center>
-                <div class="row" style="margin-top:20px;">
-                    <div class="col-md-12 justify-content-center">
-                        <span class="label label-xlg label-info  arrowed-right">
-              Você tem: <span class="badge badge-success" id="creditos">{{auth.user.balance}}</span> Créditos
-                        </span>
-                        <span style="margin-top:10px;" class="label label-xlg label-info arrowed-in ">Seus 
-               créditos expiram em: <span class="badge badge-success">{{auth.user.end}}</span>
-                        </span>
-                    </div>
+
+        <center>
+            <div class="row" style="margin-top:20px;">
+                <div class="col-md-12 justify-content-center">
+                    <span class="label label-xlg label-info  arrowed-right">
+                        Você tem: <span class="badge badge-success" id="creditos">{{auth.user.balance}}</span> Créditos
+                    </span>
+                    <span style="margin-top:10px;" class="label label-xlg label-info arrowed-in ">Seus
+                        créditos expiram em: <span class="badge badge-success">{{auth.user.end}}</span>
+                    </span>
                 </div>
-            </center>
-        
+            </div>
+        </center>
+
 
     </div>
-   
+
     <div class="main-content" style="background-color:#868e96;">
         <div class="main-content-inner">
             <div class="page-content">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <!-- PAGE CONTENT BEGINS -->
-                            <div class="row">
-                                <div class="space-6"></div>
-                                <div class="col-sm-3 infobox-container">
-                                    <div class="col-md-2">
-                                        <div class="text-center">
-                                            <img style="width: 200px; height: auto;" src="assets/images/logotipo.png" class="rounded" alt="El Patron">
-                                        </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <div class="row">
+                            <div class="space-6"></div>
+                            <div class="col-sm-3 infobox-container">
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <img style="width: 200px; height: auto;" src="assets/images/logotipo.png"
+                                            class="rounded" alt="El Patron">
                                     </div>
                                 </div>
+                            </div>
 
-                                @include('includes.notification')
+                            <div id="msg" {{msg.h}} class=" col-md-6 alert alert-{{msg.c}}">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <i class="ace-icon fa fa-times"></i>
+                                </button>
+                                <strong id="emsgdestaque">{{msg.md}}</strong>
+                                {{msg.m}}
+                                <br>
+                            </div>
+                            @include('includes.notification')
+                            <form id="start" action="{{ route('start') }}" method="post">
+                                {{ csrfField() }}
 
-                                <form id="start" action="{{ route('start') }}" method="post">
-                                    {{ csrfField() }}
-                                    <div class="col-sm-6 infobox-container">
-                                        <textarea required form="start" style="resize: none;text-align: center; height: 240px;" placeholder="000000000000000|00|0000|000" id="txtstart" name="txtstart" class="autosize-transition form-control" style="overflow: hidden; overflow-wrap: break-word; resize: horizontal; height: 152px;"></textarea>
-                                    </div>
-                                </form>
-                                <div class="vspace-12-sm"></div>
-                                <div class="col-sm-3">
-                                    <div class="widget-box transparent">
-                                        <div class="widget-header widget-header-flat">
-                                            <h3 class="widget-title lighter">
+                                <div style="padding-left: 100px;"
+                                    class="col-md-4 col-md-offset-1 text-center infobox-container">
+                                    <textarea style="max-width: 266px;min-height: 300px;resize: none;" required
+                                        form="start" style="resize: none;text-align: center; height: 240px;"
+                                        placeholder="000000000000000|00|0000|000" id="txtstart" name="txtstart"
+                                        class="autosize-transition form-control"
+                                        style="overflow: hidden; overflow-wrap: break-word; resize: horizontal; height: 152px;"></textarea>
+                                </div>
 
-                                          <i id="cstatus" class="ace-icon fa fa-star orange "></i>
-                                          Status <span id="status" class="label label-success arrowed arrowed-right">Aguardando...</span>
-                                       </h3>
-                                            <div class="widget-toolbar">
-                                                <a href="#" data-action="collapse">
-                                                    <i class="ace-icon fa fa-chevron-up"></i>
-                                                </a>
-                                            </div>
+                            </form>
+                            <div class="vspace-12-sm"></div>
+                            <div class="col-sm-3">
+                                <div class="widget-box transparent">
+                                    <div class="widget-header widget-header-flat">
+                                        <h3 class="widget-title lighter">
+
+                                            <i id="cstatus" class="ace-icon fa fa-star orange "></i>
+                                            Status <span id="status"
+                                                class="label label-success arrowed arrowed-right">Aguardando...</span>
+                                        </h3>
+                                        <div class="widget-toolbar">
+                                            <a href="#" data-action="collapse">
+                                                <i class="ace-icon fa fa-chevron-up"></i>
+                                            </a>
                                         </div>
-                                        <div class="widget-body">
-                                            <div class="widget-main no-padding">
-                                             <div class="table-responsive-md">
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main no-padding">
+                                            <div class="table-responsive-md">
                                                 <table class="table table-bordered table-responsiv">
                                                     <tbody>
                                                         <tr>
                                                             <td class="display-4">Aprovadas</td>
                                                             <td class="hidden-380">
-                                                                <span id="aprovadas" class="label label-success arrowed-right arrowed-in">0</span>
+                                                                <span id="aprovadas"
+                                                                    class="label label-success arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Reprovadas</td>
                                                             <td class="hidden-380">
-                                                                <span id="reprovadas" class="label label-danger arrowed-right arrowed-in">0</span>
+                                                                <span id="reprovadas"
+                                                                    class="label label-danger arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Testadas</td>
                                                             <td class="hidden-380">
-                                                                <span id="testadas" class="label label-warning arrowed-right arrowed-in">0</span>
+                                                                <span id="testadas"
+                                                                    class="label label-warning arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
 
                                                         <tr>
                                                             <td>Total de Carregadas</td>
                                                             <td class="hidden-380">
-                                                                <span id="carregadas" class="label label-info arrowed-right arrowed-in">0</span>
+                                                                <span id="carregadas"
+                                                                    class="label label-info arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                             </div>
                                             </div>
-                                            <!-- /.widget-main -->
                                         </div>
-                                        <!-- /.widget-body -->
+                                        <!-- /.widget-main -->
                                     </div>
-                                    <!-- /.widget-box -->
+                                    <!-- /.widget-body -->
                                 </div>
-                                <!-- /.col -->
+                                <!-- /.widget-box -->
                             </div>
-                            <!-- /.row -->
-                            <div class="row text-center">
-                                <button onclick="salvarForm();" id="start" type="button" style="margin-top:10px;" class="btn btn-success">
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+                        <div class="row text-center">
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{msg.t}}">
+                                <button onclick="salvarForm();" {{msg.b}} id="start" type="button"
+                                    style="margin-top:10px;" class="btn btn-success">
                                     <i class="ace-icon fa fa-play align-top bigger-125"></i> Começar
                                 </button>
-                                <button id="stop" disabled="true" style="margin-top:10px;" class="btn btn-danger">
+                            </span>
+                            <!-- inicio button parar-->
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                title="inicie uma verificação para poder ativar o botão">
+                                <button type="button" id="stop" disabled="true" style="margin-top:10px;"
+                                    class="btn btn-danger">
                                     <i class="ace-icon fa fa-stop align-top bigger-125"></i> Parar
                                 </button>
-                                <a style="margin-top:10px;" href="javascript: history.go(-1)" type="button" class="btn btn-primary">
+                            </span>
+
+                            <!-- fim button parar-->
+                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                title="voltar página anterior">
+                                <a style="margin-top:10px;" href="javascript: history.go(-1)" type="button"
+                                    class="btn btn-primary">
                                     <i class="ace-icon fa fa-home  align-top bigger-125 icon-on-right"></i> Home
                                 </a>
-                            </div>
-                            <div class="hr hr32 hr-dotted"></div>
-
-                            <div class="row">
-                                <div class="col-lg-8 col-lg-offset-2">
-                                    <div class="widget-box widget-color-green">
-                                        <div class="widget-header">
-                                           <center> <h4 class="widget-title lighter smaller">Aprovadas</h4></center>
-                                        </div>
-                                        <div class="widget-body">
-                                            <div id="resultAprovadas" class="widget-main padding-8">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.row -->
-                            <div class="row">
-                                <div class="col-lg-8 col-lg-offset-2 ">
-                                    <div class="widget-box widget-color-red">
-                                        <div class="widget-header">
-                                           <center> <h4 class="widget-title lighter smaller  text-center">Reprovadas</h4></center>
-                                        </div>
-                                        <div class="widget-body">
-                                            <div class="widget-main padding-10" id="resultReprovadas">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <!-- /.row -->
-                            <!-- PAGE CONTENT ENDS -->
+                            </span>
                         </div>
-                        <!-- /.col -->
+                        <div class="hr hr32 hr-dotted"></div>
+
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <div class="widget-box widget-color-green">
+                                    <div class="widget-header">
+                                        <center>
+                                            <h4 class="widget-title lighter smaller">Aprovadas</h4>
+                                        </center>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div id="resultAprovadas" class="widget-main padding-8">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2 ">
+                                <div class="widget-box widget-color-red">
+                                    <div class="widget-header">
+                                        <center>
+                                            <h4 class="widget-title lighter smaller  text-center">Reprovadas</h4>
+                                        </center>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main padding-10" id="resultReprovadas">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="dialog-confirm" class="hide">
+                            <div class="alert alert-info bigger-110">
+                                todos os dados dos cartões seram excluídos permanentemente e não poderão ser
+                                recuperados.
+                            </div>
+
+                            <div class="space-6"></div>
+
+                            <p class="bigger-110 bolder center grey">
+                                <i class="ace-icon fa fa-hand-o-right blue bigger-120"></i>
+                                Deseja Proseguir?
+                            </p>
+                        </div><!-- #dialog-confirm -->
+                        <div id="dialog-message" class="hide">
+                            <p id="cex_te_msg">
+
+                            </p>
+
+                            <div class="hr hr-12 hr-double"></div>
+
+                            <p id="cex_te_pro">
+
+                            </p>
+                        </div><!-- #dialog-message -->
+                        <!-- /.row -->
+                        <!-- PAGE CONTENT ENDS -->
                     </div>
-                    <!-- /.row -->
+                    <!-- /.col -->
                 </div>
-                <!-- /.page-content -->
-            
+                <!-- /.row -->
+            </div>
+            <!-- /.page-content -->
+
         </div>
     </div>
     <!-- /.main-content -->
@@ -227,8 +292,8 @@
         <div class="footer-inner">
             <div class="footer-content">
                 <span class="bigger-120">
-                  Elpatron &copy; 2020
-                  </span>
+                    Elpatron &copy; 2020
+                </span>
             </div>
         </div>
     </div>
@@ -250,16 +315,19 @@
     <script src="assets/js/bootstrap.min.js"></script>
     <!-- page specific plugin scripts -->
     <!-- ace scripts -->
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
     <script src="assets/js/ace-elements.min.js"></script>
     <script src="assets/js/ace.min.js"></script>
     <script src="assets/js/jquery.easypiechart.min.js"></script>
+
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
         $('body').scrollspy({
             target: '#listreprovados'
         })
-        jQuery(function($) {
-            $('.easy-pie-chart.percentage').each(function() {
+        jQuery(function ($) {
+            $('.easy-pie-chart.percentage').each(function () {
                 var $box = $(this).closest('.infobox');
                 var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
                 var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
@@ -277,7 +345,7 @@
             var $sidebar = $('.sidebar').eq(0);
             if (!$sidebar.hasClass('h-sidebar')) return;
 
-            $(document).on('settings.ace.top_menu', function(ev, event_name, fixed) {
+            $(document).on('settings.ace.top_menu', function (ev, event_name, fixed) {
                 if (event_name !== 'sidebar_fixed') return;
 
                 var sidebar = $sidebar.get(0);
@@ -295,7 +363,7 @@
                 }
 
                 var done = false;
-                $window.on('scroll.ace.top_menu', function(e) {
+                $window.on('scroll.ace.top_menu', function (e) {
 
                     var scroll = $window.scrollTop();
                     scroll = parseInt(scroll / 4); //move the menu up 1px for every 4px of document scrolling
@@ -318,7 +386,7 @@
 
             }).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
 
-            $(window).on('resize.ace.top_menu', function() {
+            $(window).on('resize.ace.top_menu', function () {
                 $(document).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
             });
 
@@ -329,8 +397,18 @@
 
             $('#start').submit(); //usando jquery
         }
+        function parar() {
+            $.ajax({
+                type: "GET",
+                url: window.location + 'stop',
+                data: '',
+                dataType: ''
+            });
+
+        }
     </script>
     <script>
+        let id = {{ auth.user.id }};
         let url;
         let protrocol = window.location.protocol;
         if (protrocol == 'http:') {
@@ -348,18 +426,18 @@
 
         ws.on('close', () => {
 
-                isConnected = false
-                    // alert(' Websocket Desconectado, por favor reinicie a página')
-            })
-            // ###########creditos################
-        const creditos = ws.subscribe('status:creditos' + {{auth.user.i}})
+            isConnected = false
+            // alert(' Websocket Desconectado, por favor reinicie a página')
+        })
+        // ###########creditos################
+        const creditos = ws.subscribe('status:cred' + id)
 
         creditos.on('message', (creditos) => {
 
             $('#creditos').text(creditos)
         });
         // ###########carregadas################
-        const status = ws.subscribe('status:s' + {{auth.user.id}})
+        const status = ws.subscribe('status:s' + id)
 
         status.on('message', (s) => {
 
@@ -373,14 +451,14 @@
             $('#status').text(s.msg)
         });
         // ###########carregadas################
-        const carregadas = ws.subscribe('status:c' + {{auth.user.id}})
+        const carregadas = ws.subscribe('status:c' + id)
 
         carregadas.on('message', (c) => {
 
             $('#carregadas').text(c)
         });
         // ###########testadas################
-        const testadas = ws.subscribe('status:t' + {{auth.user.id}})
+        const testadas = ws.subscribe('status:t' + id)
 
         testadas.on('message', (t) => {
             if (t == '') {
@@ -391,20 +469,22 @@
 
         });
         // ###########reprovadas################
-        const reprovadas = ws.subscribe('status:r' + {{auth.user.id}})
+        const reprovadas = ws.subscribe('status:r' + id)
 
         reprovadas.on('message', (r) => {
             $('#resultReprovadas').append(r.msg)
             $('#reprovadas').text(r.cont)
         });
-
-        const start = ws.subscribe('status:st' + {{auth.user.id}})
+        // ###########button start################
+        const start = ws.subscribe('status:st' + id)
         start.on('message', (st) => {
             const buttons = $("button[id='start']");
             buttons.prop('disabled', st)
+            console.log(st)
 
         });
-        const stop = ws.subscribe('status:stop' + {{auth.user.id}})
+        // ###########button stop################
+        const stop = ws.subscribe('status:stop' + id)
         stop.on('message', (stop) => {
             const buttons2 = $("button[id='stop']");
             buttons2.prop('disabled', stop)
@@ -412,11 +492,77 @@
         });
 
         // ###########aprovadas################
-        const aprovadas = ws.subscribe('status:a' + {{auth.user.id}})
+        const aprovadas = ws.subscribe('status:a' + id)
 
         aprovadas.on('message', (a) => {
             $('#resultAprovadas').append(a.msg)
             $('#aprovadas').text(a.cont)
+        });
+        // ###########mensagem################
+        const mensagem = ws.subscribe('status:msg' + id)
+
+        mensagem.on('message', (a) => {
+            $('#resultAprovadas').append(a.msg)
+            $('#aprovadas').text(a.cont)
+        });
+
+        //#######expired##############
+
+        const credexpired = ws.subscribe('status:cex_te' + id)
+
+        credexpired.on('message', (tx) => {
+            $('#cex_te_msg').text(tx.msg);
+            $('#cex_te_pro').text(tx.pro);
+
+            var dialog = $("#dialog-message").removeClass('hide').dialog({
+                modal: true,
+                title_html: true,
+                buttons: [
+                  
+                    {
+                        text: "OK",
+                        "class": "btn btn-primary btn-minier",
+                        click: function () {
+                            //location.reload();
+                            $(this).dialog("close");
+                        }
+                    }
+                ]
+            });
+        });
+
+
+
+        $("#stop").on('click', function (e) {
+            e.preventDefault();
+
+            $("#dialog-confirm").removeClass('hide');
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                width: '320',
+                modal: true,
+
+                title_html: false,
+                buttons: [
+                    {
+                        html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Parar Agora",
+                        "class": "btn btn-danger btn-minier",
+                        "onClick": "parar();",
+                        click: function () {
+
+                            $(this).dialog("close");
+                        }
+                    }
+                    ,
+                    {
+                        html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancelar",
+                        "class": "btn btn-minier",
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                ]
+            });
         });
     </script>
 </body>

@@ -197,12 +197,13 @@
 								
 							</h1>
 						</div><!-- /.page-header -->
-
+						
 						<div class="row">
+							@include('includes.notification')
 							<div class="col-xs-12">
                                 <!-- PAGE CONTENT BEGINS -->
                                 
-								@include('includes.notification')
+								
 
 								<form action="{{ route('config') }}" method="post">
 								  {{ csrfField() }}

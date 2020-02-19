@@ -3,7 +3,7 @@
 const Model = use('Model')
 
 class User extends Model {
-  static boot () {
+  static boot() {
     super.boot()
     /**
      * A hook to bash the user password before saving
@@ -25,16 +25,11 @@ class User extends Model {
    *
    * @return {Object}
    */
-  tokens () {
+  tokens() {
     return this.hasMany('App/Models/Token')
   }
-  url_token () {
-    return this.hasOne('App/Models/UrlToken')
- }
- cards () {
-  return this.hasMany('App/Models/Card')
-}
-  
+
+
 }
 
 module.exports = User

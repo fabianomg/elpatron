@@ -11,7 +11,7 @@ class UserController {
             if (user[index].level != 1) {
                 result.push({
                     username: user[index].username,
-                    fullname: user[index].fullname,
+                    name: user[index].fullname,
                     balance: user[index].balance,
                     start: user[index].start,
                     end: user[index].end,
@@ -21,9 +21,7 @@ class UserController {
 
         }
 
-        var dados = { data: result };
-       
-        return response.json(dados);
+        return response.json(result);
     }
     async  register({ request, session, response }) {
         try {
@@ -73,9 +71,10 @@ class UserController {
 
     }
     async updateUser({ request, session, response }) {
-      let  t =  request.input('username')
-      console.log(t)
-      return response.redirect('back')
+        console.log(request.all())
+     // let  t =  request.input('username')
+     // console.log(t)
+      //return response.redirect('back')
      
     }
 

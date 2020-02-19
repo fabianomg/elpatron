@@ -2,9 +2,10 @@
 
 const User = use('App/Models/User')
 const Hash = use('Hash')
-
+const Database = use('Database')
 class LoginController {
   async showLoginForm({ auth, view, response }) {
+
 
     try {
       let logado = await auth.check()
@@ -39,13 +40,26 @@ class LoginController {
     const user = await User.query()
       .where('username', username)
       .first()
+    let captcha = await Database
+      .table('captchas')
+      .select('*')
+
+    if (captcha == '' && user.level == 2) {
+      session.flash({
+        notification: {
+          type: 'warning',
+          message: ` Sistema temporariamente indisponível, por favor entre em contato com o administrador.`
+        }
+      })
+      return response.redirect('back')
+    }
     if (user) {
 
       if (!user.active) {
         session.flash({
           notification: {
             type: 'warning',
-            message: `${user.username} Você não está ativo ou está sem créditos por favor  entre em conato com o administrador.`
+            message: `${user.username} Você não está ativo ou está sem créditos por favor  entre em contato com o administrador.`
           }
         })
         return response.redirect('back')
