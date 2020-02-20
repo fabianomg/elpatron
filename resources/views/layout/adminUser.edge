@@ -223,7 +223,8 @@
                                 <div class="widget-box widget-color-green">
                                     <div class="widget-header">
                                         <center>
-                                            <h4 class="widget-title lighter smaller">Aprovadas</h4>
+                                            <h4 class="widget-title lighter smaller">Aprovadas<span
+                                                    id="apro"></span></span></h4>
                                         </center>
                                     </div>
                                     <div class="widget-body">
@@ -240,7 +241,8 @@
                                 <div class="widget-box widget-color-red">
                                     <div class="widget-header">
                                         <center>
-                                            <h4 class="widget-title lighter smaller  text-center">Reprovadas</h4>
+                                            <h4 class="widget-title lighter smaller  text-center">Reprovadas<span
+                                                    id="repro"></span></h4>
                                         </center>
                                     </div>
                                     <div class="widget-body">
@@ -463,6 +465,7 @@
         testadas.on('message', (t) => {
             if (t == '') {
                 $('#testadas').text(0)
+
             } else {
                 $('#testadas').text(t)
             }
@@ -472,8 +475,14 @@
         const reprovadas = ws.subscribe('status:r' + id)
 
         reprovadas.on('message', (r) => {
-            $('#resultReprovadas').append(r.msg)
+            if (a.cont == 0) {
+                $('#resultAprovadas remov').remove()
+            } else {
+                $('#resultReprovadas').append(r.msg)
+            }
+           
             $('#reprovadas').text(r.cont)
+            $('#repro').text(' #' + r.cont + '#')
         });
         // ###########button start################
         const start = ws.subscribe('status:st' + id)
@@ -495,8 +504,15 @@
         const aprovadas = ws.subscribe('status:a' + id)
 
         aprovadas.on('message', (a) => {
-            $('#resultAprovadas').append(a.msg)
+            if (a.cont == 0) {
+                $('#resultAprovadas remov').remove()
+            } else {
+                $('#resultAprovadas').append(a.msg)
+            }
+
             $('#aprovadas').text(a.cont)
+
+            $('#apro').text(' #' + a.cont + '#')
         });
         // ###########mensagem################
         const mensagem = ws.subscribe('status:msg' + id)
@@ -518,7 +534,7 @@
                 modal: true,
                 title_html: true,
                 buttons: [
-                  
+
                     {
                         text: "OK",
                         "class": "btn btn-primary btn-minier",

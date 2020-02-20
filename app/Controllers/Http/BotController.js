@@ -13,8 +13,29 @@ class BotController {
     }
 
     async  start({ auth, request, session, response }) {
-        // esse trexo verificar se o textarea está vazio
+        
+        const status = await Ws.getChannel('status:*').topic('status:s' + auth.user.id)
+        const carregadas = await Ws.getChannel('status:*').topic('status:c' + auth.user.id)
+        const reprovadas = await Ws.getChannel('status:*').topic('status:r' + auth.user.id)
+        const testadas = await Ws.getChannel('status:*').topic('status:t' + auth.user.id)
+        const aprovadas = await Ws.getChannel('status:*').topic('status:a' + auth.user.id)
+        const start = await Ws.getChannel('status:*').topic('status:st' + auth.user.id)
+        const stop = await Ws.getChannel('status:*').topic('status:stop' + auth.user.id)
+        const expired = await Ws.getChannel('status:*').topic('status:cex_te' + auth.user.id)
 
+        if (carregadas) {
+            await carregadas.broadcastToAll('message', 0)
+
+        }
+        if (aprovadas) {
+            await aprovadas.broadcastToAll('message', 0)
+        }
+        if (reprovadas) {
+            await reprovadas.broadcastToAll('message', 0)
+        }
+        if (testadas) {
+            await testadas.broadcastToAll('message', 0)
+        }
 
         let textarea = request.input('txtstart')
         if (!textarea) {
@@ -71,11 +92,7 @@ class BotController {
         await Cache.forever('user_id:' + auth.user.id + '#recusadas#', 0)
         await Cache.forever('user_id:' + auth.user.id + '#testadas#', 0)
 
-        const status = await Ws.getChannel('status:*').topic('status:s' + auth.user.id)
-        const carregadas = await Ws.getChannel('status:*').topic('status:c' + auth.user.id)
-        const start = await Ws.getChannel('status:*').topic('status:st' + auth.user.id)
-        const stop = await Ws.getChannel('status:*').topic('status:stop' + auth.user.id)
-        const expired = await Ws.getChannel('status:*').topic('status:cex_te' + auth.user.id)
+
 
         if (status) {
             status.broadcastToAll('message', { s: 'start', msg: 'Processando dados...' })

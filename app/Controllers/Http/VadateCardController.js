@@ -330,7 +330,7 @@ class ValidateCardController {
                                             await Cache.increment('user_id:' + id + '#testadas#')
                                             if (aprovadas) {
                                                 let cont = await Cache.get('user_id:' + id + '#aprovadas#')
-                                                aprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-primary">#Aprovada</b> <b class="badge badge-light">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-info">Retorno: Válido</b> <b class="badge badge-success">#el-patron</b><br></center>' })
+                                                aprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-primary remov">#Aprovada</b> <b class="badge badge-light remov">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-info remov">Retorno: Válido</b> <b class="badge badge-success remov">#el-patron</b><br></center>' })
                                             }
                                             if (testadas) {
                                                 let cont = await Cache.get('user_id:' + id + '#testadas#')
@@ -357,7 +357,7 @@ class ValidateCardController {
                                             await Cache.increment('user_id:' + id + '#testadas#')
                                             if (reprovadas) {
                                                 let cont = await Cache.get('user_id:' + id + '#reprovadas#')
-                                                reprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-danger">#Reprovada</b> <b class="badge badge-light">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-danger">Retorno: Inválido</b><br></center>' })
+                                                reprovadas.broadcastToAll('message', { cont: cont, msg: '<center><b class="badge badge-danger remov">#Reprovada</b> <b class="badge badge-light remov">' + card.n + '|' + card.m + '|' + card.aa + '|' + card.vv + '</b> <b class="badge badge-danger remov">Retorno: Inválido</b><br></center>' })
                                             }
                                             if (testadas) {
                                                 let cont = await Cache.get('user_id:' + id + '#testadas#')
