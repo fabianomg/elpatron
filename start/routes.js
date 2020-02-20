@@ -35,6 +35,9 @@ Route.post('/cadproxy', 'ConfigController.cadProxy').as('cadproxy')
 //d20eab822faf0d858c62d43d002148b4
 Route.get('/gettable', 'UserController.ReturnUsers')
 Route.post('/updateusers', 'UserController.updateUser')
+Route.post('/deluser', 'UserController.delUser')
+Route.post('/ajax/status', 'UserController.status')
+Route.get('/ajax/getstatus', 'UserController.Getstatus')
 
 Route.post('/teste', 'BotController.start').as('start')
 Route.get('/stop', 'BotController.stop').as('stop')

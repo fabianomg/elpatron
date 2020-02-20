@@ -4,7 +4,7 @@ class ChatController {
   constructor({ socket, request, socket: { channel: { subscriptions } } }) {
     this.socket = socket
     this.request = request
-    var iterator1 = (subscriptions.get('on'))
+    var iterator1 = (subscriptions.get('online'))
     iterator1.forEach(function (value, key) {
       console.log(value.id)
     })

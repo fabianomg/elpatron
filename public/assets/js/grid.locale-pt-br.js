@@ -91,9 +91,9 @@
             editCaption: "Editar registro",
             bSubmit: "Enviar",
             bCancelar: "Cancelar",
-            bFeche: "Fechar",
+            bClose: "Fechar",
             saveData: "Os dados foram alterados! Salvar alterações?",
-            Sim: "Sim",
+            bYes: "Sim",
             bNo: "Não",
             bExit: "Cancelar",
             msg: {

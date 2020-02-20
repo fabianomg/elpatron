@@ -6,24 +6,30 @@ const User = use('App/Models/User')
 var { isAfter, parseISO, format } = require('date-fns')
 class PageviewController {
     async  showAdmin({ view }) {
+
+        const total = await Database
+            .from('users')
+            .sum('on as t')
+
+        Database.close()
+
+        let online = total[0].t
         let err;
 
-        const user = await Database.select('active').from('users')
+        const user = await Database.select('*').from('users')
         let ativos = 0;
         let inativos = 0;
         for (let index = 0; index < user.length; index++) {
 
-            if (user[index].active == 1) {
+            if (user[index].active == 1 && user[index].level != 1) {
                 ativos++
-            } else {
+            } if (user[index].active == 0 && user[index].level != 1) {
                 inativos++
             }
 
         }
 
-
-
-        return view.render('layout.admin', { ativos, inativos })
+        return view.render('layout.admin', { online, ativos, inativos })
 
     }
     async showUser({ view, auth, session }) {
@@ -53,7 +59,7 @@ class PageviewController {
             }
 
         }
-        if (use.balance < 10 && cred ==false) {
+        if (use.balance < 10 && cred == false) {
             msg = {
                 h: '',
                 c: 'info',
@@ -100,6 +106,7 @@ class PageviewController {
 
 
         const result = await Database.select('creditos').from('configs')
+
         let Bdisable = ''
         let Btext = 'Salvar Dados'
         if (result == '') {
@@ -107,7 +114,18 @@ class PageviewController {
             Btext = 'Cadastro desativado configure os créditos!'
         }
 
-        return view.render('viewusers', { result, Bdisable, Btext })
+        let items = ''
+
+        for (let index = 0; index < result.length; index++) {
+            if (result.length == index + 1) {
+                items += `${result[index].creditos}:${result[index].creditos}`
+            } else {
+                items += `${result[index].creditos}:${result[index].creditos};`
+            }
+
+        }
+
+        return view.render('viewusers', { items, result, Bdisable, Btext })
 
 
     }

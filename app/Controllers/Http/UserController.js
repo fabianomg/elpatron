@@ -71,11 +71,46 @@ class UserController {
 
     }
     async updateUser({ request, session, response }) {
-        console.log(request.all())
-     // let  t =  request.input('username')
-     // console.log(t)
-      //return response.redirect('back')
-     
+        let campos = request.all();
+        const affectedRows = await Database
+            .table('users')
+            .where('username', campos.username)
+            .update(
+                {
+                    username: campos.username,
+                    fullname: campos.name,
+                    balance: campos.balance,
+                    start: campos.start,
+                    end: campos.end,
+                    active: campos.active,
+                }
+            )
+        return { msg: 'user atualizado com sucesso' }
+    }
+    async delUser({ request, session, response }) {
+        let campos = request.all();
+        const affectedRows = await Database
+            .table('users')
+            .where('username', campos.id)
+            .delete()
+        return { msg: 'user deletado com sucesso' }
+    }
+    async status({ request, response, auth }) {
+        const r = request.all()
+        if (request.ajax()) {
+            await Database.table('users').where('id', auth.user.id).update({ on: r.status })
+            Database.close()
+        }
+    }
+    async Getstatus({ request }) {
+        if (request.ajax()) {
+            const total = await Database
+                .from('users')
+                .sum('on as t')
+
+            Database.close()
+            return total[0].t
+        }
     }
 
 
