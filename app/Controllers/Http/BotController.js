@@ -13,7 +13,7 @@ class BotController {
     }
 
     async  start({ auth, request, session, response }) {
-        
+
         const status = await Ws.getChannel('status:*').topic('status:s' + auth.user.id)
         const carregadas = await Ws.getChannel('status:*').topic('status:c' + auth.user.id)
         const reprovadas = await Ws.getChannel('status:*').topic('status:r' + auth.user.id)
@@ -28,10 +28,10 @@ class BotController {
 
         }
         if (aprovadas) {
-            await aprovadas.broadcastToAll('message', 0)
+            await aprovadas.broadcastToAll('message', { cont: 0, msg })
         }
         if (reprovadas) {
-            await reprovadas.broadcastToAll('message', 0)
+            await reprovadas.broadcastToAll('message', { cont: 0, msg })
         }
         if (testadas) {
             await testadas.broadcastToAll('message', 0)
