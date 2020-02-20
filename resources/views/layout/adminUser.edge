@@ -475,7 +475,7 @@
         const reprovadas = ws.subscribe('status:r' + id)
 
         reprovadas.on('message', (r) => {
-            if (a.cont == 0) {
+            if (r.cont == 0) {
                 $('#resultAprovadas remov').remove()
             } else {
                 $('#resultReprovadas').append(r.msg)
