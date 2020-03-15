@@ -68,7 +68,7 @@ class ValidateCardController {
             const date = await this.Pickup_time();
             const curl = new Curl();
             curl.setOpt('URL', 'https://amarithcafe.revelup.com/weborders/create_order_and_pay_v1/');
-            curl.setOpt('PROXY', 'http://f1ca55670d414417ad52b796e2242a4d:@proxy.crawlera.com:8010');
+            //curl.setOpt('PROXY', 'http://f1ca55670d414417ad52b796e2242a4d:@proxy.crawlera.com:8010');
             curl.setOpt('HEADER', 1);
             curl.setOpt('FOLLOWLOCATION', 1);
             curl.setOpt(Curl.option.POST, 1);
