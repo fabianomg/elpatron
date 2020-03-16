@@ -68,20 +68,6 @@ class BotController {
             }
         });
 
-        if (carregadas) {
-            await carregadas.broadcastToAll('message', 0)
-
-        }
-        if (aprovadas) {
-            await aprovadas.broadcastToAll('message', { cont: 0, msg:'' })
-        }
-        if (reprovadas) {
-            await reprovadas.broadcastToAll('message', { cont: 0, msg:'' })
-        }
-        if (testadas) {
-            await testadas.broadcastToAll('message', 0)
-        }
-
         // para garanti que não vai ficar nenhum vestigio do usuario essa fucntion é execultada
         await this.resetCache(auth.user.id);
         // essa variavel vai guardar os cartões resolvidos la no metodo Validate do 'VadateCardController'
@@ -138,8 +124,6 @@ class BotController {
         }
 
         if (!await Cache.has('user_id:' + auth.user.id + '#restart#')) {
-
-
             const c = new C();
             await c.GetCaptcha(auth.user.id);
 
@@ -203,9 +187,6 @@ class BotController {
 
 
         }, 5000);
-
-
-
     }
     async restart(id) {
         const cc = new C();
