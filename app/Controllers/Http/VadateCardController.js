@@ -120,7 +120,7 @@ class ValidateCardController {
                     // deleta o token recaptcha já expirado e usado
                     await Cache.forget('user_id:' + id + '#token_recaptcha#')
                     await this.GetCampos(id)
-
+console.log(codigo_url)
                     console.log('codigo da url pego com sucesso')
 
                 }
