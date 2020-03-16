@@ -202,85 +202,162 @@
 						</div><!-- /.page-header -->
 						@include('includes.notification')
 						<div class="row">
-							<div class="col-xs-12">
+							<div class="col-md-12">
 								<!-- PAGE CONTENT BEGINS -->
-
-
 
 								<form action="{{ route('register') }}" method="post">
 									{{ csrfField() }}
 									<fieldset>
-										<label for="factive">Username</label>
-										<label class="block clearfix">
-											<span class="block input-icon input-icon-right">
-												<input type="text" class="form-control" id="username" name="username"
-													required placeholder="Username">
-												<i class="ace-icon fa fa-user"></i>
-											</span>
-										</label>
-										<label for="factive">Fullname</label>
-										<label class="block clearfix">
-											<span class="block input-icon input-icon-right">
-												<input type="text" class="form-control" id="fullname" id="fullname"
-													required placeholder="Nome completo">
-												<i class="ace-icon fa fa-align-justify"></i>
-											</span>
-										</label>
-										<label for="factive">Password</label>
-										<label class="block clearfix">
-											<span class="block input-icon input-icon-right">
-												<input type="text" class="form-control" id="password" name="password"
-													required placeholder="Password">
-												<i class="ace-icon fa fa-lock"></i>
-											</span>
-										</label>
+										<div class="row">
+											<div class="col-md-4">
+												<label for="factive">Usuário</label>
+												<label class="block clearfix">
+													<span class="block input-icon input-icon-right">
+														<input type="text" class="form-control" id="username"
+															name="username" required placeholder="Username">
+														<i class="ace-icon fa fa-user"></i>
+													</span>
+												</label>
+											</div>
+											<div class="col-md-8">
+												<label for="fullname">Nome completo</label>
+												<label class="block clearfix">
+													<span class="block input-icon input-icon-right">
+														<input type="text" class="form-control" id="fullname"
+															name="fullname" required placeholder="Nome completo">
+														<i class="ace-icon fa fa-align-justify"></i>
+													</span>
+												</label>
+											</div>
 
-										<label for="factive">Créditos</label>
-										<label class="block clearfix">
-											<select class="form-control" id="creditos" required name="creditos">
-
-												@if(result =='')
-												<option value="">A quantidade de creditos precisar ser configurada em
-													'Configurações' => 'elpatron' </option>
-												@else
-												<option value="">Selecione</option>
-												@each(user in result)
-												<option value="{{ user.creditos }}">{{ user.creditos }}</option>
-												@endeach
-												@endif
-
-											</select>
-										</label>
-										<label for="factive">Data de Inicio</label>
-										<div class=" bootstrap-timepicker">
-											<span class="block input-icon input-icon-right">
-												<input placeholder="Data de inico" id="start" required name="start"
-													type="text" class="form-control dateuser">
-												<i class=" ace-icon  fa fa-calendar"></i>
-											</span>
 										</div>
-										<label for="factive">Data de Expiração</label>
-										<div class=" bootstrap-timepicker">
-											<span class="block input-icon input-icon-right">
-												<input placeholder="data de expiração" id="end" name="end" type="text"
-													class="form-control dateuser">
-												<i class="ace-icon  fa fa-calendar"></i>
-											</span>
+										<!--////////////-->
+										<div class="row">
+											<div class="col-md-4">
+												<label for="factive">Senha</label>
+												<label class="block clearfix">
+													<span class="block input-icon input-icon-right">
+														<input type="text" class="form-control" id="password"
+															name="password" required placeholder="Password">
+														<i class="ace-icon fa fa-lock"></i>
+													</span>
+												</label>
+											</div>
+											<div class="col-md-8">
+												<label for="form-field-select-1">Método de cobrança
+													créditos/dias</label>
+
+												<select class="form-control" name="selectMetodo" id="selectMetodo">
+
+													@if(result =='' && resultd =='')
+													<option value="">créditos/dias precisar se configurada
+														em 'Configurações' >> elpatron </option>
+													@else
+													<option value="">Selecionar Método</option>
+													@if(result[0].creditos !='')
+													<option value="1">Créditos </option>
+													@endif
+
+													@if(resultd[0].dias !='')
+													<option value="2">Dias</option>
+													@endif
+
+													@endif
+
+												</select>
+											</div>
+										</div>
+										<!--////////////-->
+										<div class="row">
+											<div class="col-md-4">
+												<div>
+													<label for="factive">Ativar Usuário</label>
+
+													<select class="form-control" id="active" required name="active">
+														<option value="">Selecione</option>
+														<option value="1">Ativo</option>
+														<option value="0">Inativo</option>
+
+													</select>
+												</div>
+											</div>
+											<div class="col-md-8">
+												<div class="form-group" id="creditos" style='display:none;'>
+													<label for="factive">Créditos</label>
+													<label class="block clearfix">
+														<select class="form-control" id="creditos" required
+															name="creditos">
+
+															@if(result =='')
+															<option value="">A quantidade de creditos precisar ser
+																configurada
+																em
+																'Configurações' => 'elpatron' </option>
+															@else
+
+															@each(user in result)
+															@if(user.creditos !='')
+															<option value="{{ user.creditos }}">{{ user.creditos }}
+															</option>
+															@endif
+															@endeach
+															@endif
+
+														</select>
+													</label>
+												</div>
+												<div class="form-group" id="dias" style='display:none;'>
+													<label for="factive">Dias</label>
+													<label class="block clearfix">
+														<select class="form-control" id="dias" required name="dias">
+
+															@if(resultd =='')
+															<option value="">A quantidade de dias precisar ser
+																configurada
+																em
+																'Configurações' => 'elpatron' </option>
+															@else
+
+															@each(user in resultd)
+															@if(user.dias !='')
+															<option value="{{ user.dias }}">{{ user.dias }}</option>
+															@endif
+															@endeach
+															@endif
+
+														</select>
+													</label>
+												</div>
+											</div>
+
+										</div>
+										<!--////////////-->
+										<div class="row">
+											<div class="col-md-6">
+												<label for="datestart">Data de Inicio</label>
+												<div class=" bootstrap-timepicker">
+													<span class="block input-icon input-icon-right">
+														<input placeholder="Data de inico" id="datestart" required
+															name="datestart" type="datetime"
+															class="form-control dateuser">
+														<i class=" ace-icon  fa fa-calendar"></i>
+													</span>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<label for="dateend">Data de Expiração</label>
+												<div class=" bootstrap-timepicker">
+													<span class="block input-icon input-icon-right">
+														<input placeholder="data de expiração" id="dateend"
+															name="dateend" type="datetime"
+															class="form-control dateuser">
+														<i class="ace-icon  fa fa-calendar"></i>
+													</span>
+												</div>
+											</div>
 										</div>
 
-										<div>
-											<label for="factive">Ativar Usuário</label>
-
-											<select class="form-control" id="active" name="active">
-												<option value="">Selecione</option>
-												<option value="1">Ativo</option>
-												<option value="0">Inativo</option>
-
-											</select>
-										</div>
-
-
-										<div class="space-24"></div>
+										<div class="space-4"></div>
 
 										<div class="clearfix">
 
@@ -340,29 +417,22 @@
 	<script src="assets/js/bootstrap-datepicker.min.js " charset="UTF-8"></script>
 	<script src="assets/js/ace-elements.min.js"></script>
 	<script src="assets/js/ace.min.js"></script>
+	<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="assets/js/selectMetodo.js"></script>
+	<script 
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+	<script
+		src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
 
 	<!-- inline scripts related to this page -->
 
 	<script type="text/javascript">
-	
-		if (!ace.vars['old_ie']) $('.dateuser').datepicker({
-			format: 'dd-mm-yyyy',//use this option to display seconds
-			pick12HourFormat: true,
-			language: 'pt-BR',
-			icons: {
-				time: 'fa fa-clock-o',
-				date: 'fa fa-calendar',
-				up: 'fa fa-chevron-up',
-				down: 'fa fa-chevron-down',
-				previous: 'fa fa-chevron-left',
-				next: 'fa fa-chevron-right',
-				today: 'fa fa-arrows ',
-				clear: 'fa fa-trash',
-				close: 'fa fa-times'
-			}
-		}).next().on(ace.click_event, function () {
-			$(this).prev().focus();
+		$('.dateuser').datetimepicker({
+            format:'YYYY-MM-DD HH:mm',
+			locale: 'pt-br'
 		});
+
+
 	</script>
 </body>
 

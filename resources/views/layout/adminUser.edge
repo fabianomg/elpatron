@@ -88,7 +88,22 @@
 
 
     </div>
-
+    
+    <div class="row justify-content-center">
+        <center>
+        <div id="msg" {{msg.h}} class=" col-md-8 col-md-offset-2 alert alert-{{msg.c}}">
+           
+            <button type="button" class="close" data-dismiss="alert">
+                <i class="ace-icon fa fa-times"></i>
+            </button>
+            <strong id="emsgdestaque">{{msg.md}}</strong>
+            {{msg.m}}
+            <br>
+        </div>
+        @include('includes.notification')
+    </center>
+    </div>
+    
     <div class="main-content" style="background-color:#868e96;">
         <div class="main-content-inner">
             <div class="page-content">
@@ -106,15 +121,7 @@
                                 </div>
                             </div>
 
-                            <div id="msg" {{msg.h}} class=" col-md-6 alert alert-{{msg.c}}">
-                                <button type="button" class="close" data-dismiss="alert">
-                                    <i class="ace-icon fa fa-times"></i>
-                                </button>
-                                <strong id="emsgdestaque">{{msg.md}}</strong>
-                                {{msg.m}}
-                                <br>
-                            </div>
-                            @include('includes.notification')
+
                             <form id="start" action="{{ route('start') }}" method="post">
                                 {{ csrfField() }}
 
@@ -475,14 +482,14 @@
         const reprovadas = ws.subscribe('status:r' + id)
 
         reprovadas.on('message', (r) => {
-            
+
             if (r.cont == 0) {
                 console.log(r.cont)
                 $('#resultAprovadas .remov').remove()
             } else {
                 $('#resultReprovadas').append(r.msg)
             }
-           
+
             $('#reprovadas').text(r.cont)
             $('#repro').text(' #' + r.cont + '#')
         });
@@ -506,7 +513,7 @@
         const aprovadas = ws.subscribe('status:a' + id)
 
         aprovadas.on('message', (a) => {
-            
+
             if (a.cont == 0) {
                 $('#resultAprovadas .remov').remove()
             } else {

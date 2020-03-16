@@ -1,329 +1,384 @@
 @if(auth.user.level == 1)
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta charset="utf-8" />
-		<title>Configurações captcha</title>
 
-		<meta name="description" content="" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<title>Configurações captcha</title>
 
-		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
-        <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css" />
-		<!-- page specific plugin styles -->
+	<meta name="description" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-		<!-- text fonts -->
-		<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+	<!-- bootstrap & fontawesome -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css" />
+	<!-- page specific plugin styles -->
 
-		<!-- ace styles -->
-		<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+	<!-- text fonts -->
+	<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
 
-		<!--[if lte IE 9]>
+	<!-- ace styles -->
+	<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+	<!--[if lte IE 9]>
 			<link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
 		<![endif]-->
-		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
-		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+	<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+	<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
 
-		<!--[if lte IE 9]>
+	<!--[if lte IE 9]>
 		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
 		<![endif]-->
 
-		<!-- inline styles related to this page -->
+	<!-- inline styles related to this page -->
 
-		<!-- ace settings handler -->
-		<script src="assets/js/ace-extra.min.js"></script>
+	<!-- ace settings handler -->
+	<script src="assets/js/ace-extra.min.js"></script>
 
-		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+	<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
-		<!--[if lte IE 8]>
+	<!--[if lte IE 8]>
 		<script src="assets/js/html5shiv.min.js"></script>
 		<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
-	</head>
+</head>
 
-	<body class="no-skin">
-		<div id="navbar" class="navbar navbar-default          ace-save-state">
-			<div class="navbar-container ace-save-state" id="navbar-container">
-				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
-					<span class="sr-only">Toggle sidebar</span>
+<body class="no-skin">
+	<div id="navbar" class="navbar navbar-default          ace-save-state">
+		<div class="navbar-container ace-save-state" id="navbar-container">
+			<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+				<span class="sr-only">Toggle sidebar</span>
 
-					<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
 
-					<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
 
-					<span class="icon-bar"></span>
-				</button>
+				<span class="icon-bar"></span>
+			</button>
 
-				<div class="navbar-header pull-left">
-					<a href="index.html" class="navbar-brand">
-						<small>
-							
-							El Patron Admin
-						</small>
-					</a>
-				</div>
+			<div class="navbar-header pull-left">
+				<a href="index.html" class="navbar-brand">
+					<small>
 
-				<div class="navbar-buttons navbar-header pull-right" role="navigation">
-					<ul class="nav ace-nav">
-						
-
-								<li>
-									<a href="/logout">
-										<i class="ace-icon fa fa-power-off"></i>
-										Sair
-									</a>
-								</li>
-							</ul>
-					
-				</div>
-			</div><!-- /.navbar-container -->
-		</div>
-
-		<div class="main-container ace-save-state" id="main-container">
-			<script type="text/javascript">
-				try{ace.settings.loadState('main-container')}catch(e){}
-			</script>
-
-			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
-				<script type="text/javascript">
-					try{ace.settings.loadState('sidebar')}catch(e){}
-                </script>
-                <div class="text-center">
-                    <img style="width: auto; height: auto;" src="assets/favicon.ico" class="rounded" alt="El Patron">
-			   </div>
-
-				<ul class="nav nav-list">
-					<li class="">
-						<a href="/admin">
-							<i class="menu-icon fa fa-tachometer"></i>
-							<span class="menu-text"> Dashboard </span>
-						</a>
-
-						<b class="arrow"></b>
-					</li>
-
-					
-					</li>
-
-					<li class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-users"></i>
-							<span class="menu-text"> Usuários </span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a href="/cadUser">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Cadastrar Usuário
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="/viewUsers">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Usuários Cadastrados
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
-                    </li>
-                    <li class="">
-						<a href="#" class="dropdown-toggle">
-							<i class="menu-icon fa fa-cogs"></i>
-							<span class="menu-text"> Configurações </span>
-
-							<b class="arrow fa fa-angle-down"></b>
-						</a>
-
-						<b class="arrow"></b>
-
-						<ul class="submenu">
-							<li class="">
-								<a href="/cadCaptcha">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Captcha
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="/cadSite">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Elpatron
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-							<li class="">
-								<a href="/cadProxy">
-									<i class="menu-icon fa fa-caret-right"></i>
-									Proxy
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-						</ul>
-					</li>
-
-
-					
-				</ul><!-- /.nav-list -->
-
-				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
-					<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
-				</div>
+						El Patron Admin
+					</small>
+				</a>
 			</div>
 
-			<div class="main-content">
-				<div class="main-content-inner">
-                    <div class="page-content">
-						
-                        <div class="col-lg-8 col-lg-offset-2">
+			<div class="navbar-buttons navbar-header pull-right" role="navigation">
+				<ul class="nav ace-nav">
+
+
+					<li>
+						<a href="/logout">
+							<i class="ace-icon fa fa-power-off"></i>
+							Sair
+						</a>
+					</li>
+				</ul>
+
+			</div>
+		</div><!-- /.navbar-container -->
+	</div>
+
+	<div class="main-container ace-save-state" id="main-container">
+		<script type="text/javascript">
+			try { ace.settings.loadState('main-container') } catch (e) { }
+		</script>
+
+		<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+			<script type="text/javascript">
+				try { ace.settings.loadState('sidebar') } catch (e) { }
+			</script>
+			<div class="text-center">
+				<img style="width: auto; height: auto;" src="assets/favicon.ico" class="rounded" alt="El Patron">
+			</div>
+
+			<ul class="nav nav-list">
+				<li class="">
+					<a href="/admin">
+						<i class="menu-icon fa fa-tachometer"></i>
+						<span class="menu-text"> Dashboard </span>
+					</a>
+
+					<b class="arrow"></b>
+				</li>
+
+
+				</li>
+
+				<li class="">
+					<a href="#" class="dropdown-toggle">
+						<i class="menu-icon fa fa-users"></i>
+						<span class="menu-text"> Usuários </span>
+
+						<b class="arrow fa fa-angle-down"></b>
+					</a>
+
+					<b class="arrow"></b>
+
+					<ul class="submenu">
+						<li class="">
+							<a href="/cadUser">
+								<i class="menu-icon fa fa-caret-right"></i>
+								Cadastrar Usuário
+							</a>
+
+							<b class="arrow"></b>
+						</li>
+
+						<li class="">
+							<a href="/viewUsers">
+								<i class="menu-icon fa fa-caret-right"></i>
+								Usuários Cadastrados
+							</a>
+
+							<b class="arrow"></b>
+						</li>
+					</ul>
+				</li>
+				<li class="">
+					<a href="#" class="dropdown-toggle">
+						<i class="menu-icon fa fa-cogs"></i>
+						<span class="menu-text"> Configurações </span>
+
+						<b class="arrow fa fa-angle-down"></b>
+					</a>
+
+					<b class="arrow"></b>
+
+					<ul class="submenu">
+						<li class="">
+							<a href="/cadCaptcha">
+								<i class="menu-icon fa fa-caret-right"></i>
+								Captcha
+							</a>
+
+							<b class="arrow"></b>
+						</li>
+
+						<li class="">
+							<a href="/cadSite">
+								<i class="menu-icon fa fa-caret-right"></i>
+								Elpatron
+							</a>
+
+							<b class="arrow"></b>
+						</li>
+						<li class="">
+							<a href="/cadProxy">
+								<i class="menu-icon fa fa-caret-right"></i>
+								Proxy
+							</a>
+
+							<b class="arrow"></b>
+						</li>
+					</ul>
+				</li>
+
+
+
+			</ul><!-- /.nav-list -->
+
+			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+				<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+					data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+			</div>
+		</div>
+
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="page-content">
+
+					<div class="col-lg-8 col-lg-offset-2">
 						<div class="page-header">
 							<h1>
-								Configurações de Captchas
-								
+								Configurações do site (Captchas)
+
 							</h1>
 						</div><!-- /.page-header -->
 
 						<div class="row">
 							@include('includes.notification')
 							<div class="col-xs-12">
-                                <!-- PAGE CONTENT BEGINS -->
-								
+								<!-- PAGE CONTENT BEGINS -->
+
 
 								<form action="{{ route('cadcaptcha') }}" method="post">
-								  {{ csrfField() }}
-                                    <fieldset>
-                                        <label class="block clearfix">
-                                            <label class="text-center" for="apikey">2captcha <small><a target="_blank" href="https://2captcha.com?from=2724718">ir ao site</a></small></label>
-                                            <span class="block input-icon input-icon-right">
-                                                <input type="text" id="apikey" name="apikey" class="form-control" placeholder="API KEY">
-                                                <i class="ace-icon fa fa-key"></i>
-                                            </span>
-                                        </label>
+									{{ csrfField() }}
+									<fieldset>
+										<div class="row">
 
-                                        
-                                        <label class="" for="login">Dea th by captcha <small><a target="_blank" href="https://www.deathbycaptcha.com">ir ao site</a></small></label>
-                                        <label class="block clearfix">
-                                            <span class="block input-icon input-icon-right">
-                                                <input type="text" id="userdea" name="userdea" class="form-control" placeholder="usuario">
-                                                <i class="ace-icon fa fa-user"></i>
-                                            </span>
-                                        </label>
-                                        <label class="block clearfix">
-                                            <span class="block input-icon input-icon-right">
-                                                <input type="text" id="passworddea" name="passworddea" class="form-control" placeholder="Password">
-                                                <i class="ace-icon fa fa-lock"></i>
-                                            </span>
-                                        </label>
-                                        
-                                        <div class="control-group">
-                                            <label class="control-label">Selecione o que ficará ativo</label>
+											<div class="col-md-12">
+												<label for="factive">Selecione um Captcha</label>
 
-                                            <div class="radio">
-                                                <label>
-                                                    <input name="twocaptcha"id="twocaptcha" value="twocaptcha" type="radio" class="ace">
-                                                    <span class="lbl"> 2captcha</span>
-                                                </label>
-                                            </div>
+												<select class="form-control" id="captcha" name="captcha">
+													<option value="">Selecione</option>
+													<option value="1">2captcha</option>
+													<option value="2">Death by captcha</option>
 
-                                            <div class="radio">
-                                                <label>
-                                                    <input name="deathbycaptcha" id="deathbycaptcha" value="deathbycaptcha" type="radio" class="ace">
-                                                    <span class="lbl"> Dea th by captcha</span>
-                                                </label>
-                                            </div>
+												</select>
+											</div>
 
-                   
-                                            </div>
-                                        </div>
+										</div>
+										<!--row 2captcha-->
+										<div class="row" id="twocaptcha" style='display:none;'>
+											<div class="row">
+												<div class="col-md-8 col-md-offset-4">
+													<label class="text-center" for="apikey">2captcha <small><a
+																target="_blank"
+																href="https://2captcha.com?from=2724718">ir
+																ao
+																site</a></small></label>
+												</div>
+											</div>
+											<div class="col-md-12" id="twocaptcha">
+												<label class="block clearfix">
+													<span class="block input-icon input-icon-right">
+														<input type="text" id="apikey" name="apikey"
+															class="form-control" placeholder="API KEY">
+														<i class="ace-icon fa fa-key"></i>
+													</span>
+												</label>
+											</div>
+										</div>
+										<!-- row de th by captcha-->
+										<div class="row" id="deathbycaptcha" style='display:none;'>
+											<div class="row">
+												<div class="col-md-8 col-md-offset-4">
+													<label class="" for="login">Dea th by captcha <small><a
+																target="_blank" href="https://www.deathbycaptcha.com">ir
+																ao
+																site</a></small></label>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<label class="" for="user">username</label>
+												<label class="block clearfix">
+													<span class="block input-icon input-icon-right">
+														<input type="text" id="user" name="user" class="form-control"
+															placeholder="usuário">
+														<i class="ace-icon fa fa-user"></i>
+													</span>
+												</label>
+											</div>
+											<div class="col-md-6">
+												<label class="" for="password">Senha</label>
+												<label class="block clearfix">
+													<span class="block input-icon input-icon-right">
+														<input type="text" id="password" name="password"
+															class="form-control" placeholder="Senha">
+														<i class="ace-icon fa fa-lock"></i>
+													</span>
+												</label>
+											</div>
+
+										</div>
+
+										<div class="control-group">
+											<label class="control-label">Selecione o que ficará ativo</label>
+											<div class="row">
+												<div class="col-md-2">
+													<div class="radio">
+														<label>
+															<input name="twocaptchaActive" id="twocaptchaActive"
+																value="twocaptcha" type="radio" class="ace">
+															<span class="lbl"> 2captcha</span>
+														</label>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="radio">
+														<label>
+															<input name="deathbycaptchaActive" id="deathbycaptchaActive"
+																value="deathbycaptcha" type="radio" class="ace">
+															<span class="lbl"> Dea th by captcha</span>
+														</label>
+													</div>
+												</div>
+											</div>
 
 
-                                        <div class="space-24"></div>
-
-                                        <div class="clearfix">
-                                            
-                                          <button type="submit" class="btn-block btn btn-sm btn-success">
-                                                <span class="bigger-110">Salvar</span>
-
-                                                <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                                            </button>
-                                        </div>
-                                    </fieldset>
-                                </form>
+										</div>
 							</div>
 
-						
-							</div><!-- /.col -->
-						</div><!-- /.row -->
-					</div>
-				</div>
-			</div><!-- /.main-content -->
 
-			<div class="footer">
-				<div class="footer-inner">
-					<div class="footer-content">
-						<span class="bigger-120">
-							<span class="blue bolder">El</span>
-							Patron &copy; 2020
-						</span>
+							<div class="space-24"></div>
 
-					</div>
-				</div>
+							<div class="clearfix">
+
+								<button type="submit" class="btn-block btn btn-sm btn-success">
+									<span class="bigger-110">Salvar</span>
+
+									<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+								</button>
+							</div>
+							</fieldset>
+							</form>
+						</div>
+
+
+					</div><!-- /.col -->
+				</div><!-- /.row -->
 			</div>
+		</div>
+	</div><!-- /.main-content -->
 
-			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-			</a>
-		</div><!-- /.main-container -->
+	<div class="footer">
+		<div class="footer-inner">
+			<div class="footer-content">
+				<span class="bigger-120">
+					<span class="blue bolder">El</span>
+					Patron &copy; 2020
+				</span>
 
-		<!-- basic scripts -->
-   
-		<!--[if !IE]> -->
-		<script src="assets/js/jquery-2.1.4.min.js"></script>
+			</div>
+		</div>
+	</div>
 
-		<!-- <![endif]-->
+	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+		<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+	</a>
+	</div><!-- /.main-container -->
 
-		<!--[if IE]>
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script src="assets/js/jquery-2.1.4.min.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
 <script src="assets/js/jquery-1.11.3.min.js"></script>
 <![endif]-->
-		<script type="text/javascript">
-			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-		</script>
-		<script src="assets/js/bootstrap.min.js"></script>
-        <script src="assets/js/chosen.jquery.min.js"></script>
-        <script src="assets/js/moment.min.js"></script>
-		<script src="assets/js/bootstrap-datetimepicker.min.js "></script>
-		<script src="assets/js/ace-elements.min.js"></script>
-		<script src="assets/js/ace.min.js"></script>
-
-        <!-- inline scripts related to this page -->
-       <script>
-        $(document).ready(function () {
-            $('input[type=radio]').change(function() {
-                $('input[type=radio]:checked').not(this).prop('checked', false);
-            });
-        });
-        </script>
-	</body>
-</html>
-  
-  
-@else
-  <script type="text/javascript">
-window.location ='/logout'
+	<script type="text/javascript">
+		if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 	</script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/chosen.jquery.min.js"></script>
+	<script src="assets/js/moment.min.js"></script>
+	<script src="assets/js/bootstrap-datetimepicker.min.js "></script>
+	<script src="assets/js/ace-elements.min.js"></script>
+	<script src="assets/js/ace.min.js"></script>
+	<script src="assets/js/selectCaptcha.js"></script>
+
+	<!-- inline scripts related to this page -->
+	<script>
+		$(document).ready(function () {
+			$('input[type=radio]').change(function () {
+				$('input[type=radio]:checked').not(this).prop('checked', false);
+			});
+		});
+	</script>
+</body>
+
+</html>
+
+
+@else
+<script type="text/javascript">
+	window.location = '/logout'
+</script>
 @endif

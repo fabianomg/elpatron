@@ -6,11 +6,11 @@ const randomString = require('random-string')
 const Mail = use('Mail')
 
 class RegisterController {
-  showRegisterForm ({ view }) {
+  showRegisterForm({ view }) {
     return view.render('auth.register')
   }
 
-  async register ({ request, session, response }) {
+  async register({ request, session, response }) {
     // validate form inputs
     const validation = await validateAll(request.all(), {
       username: 'required|unique:users,username',
@@ -23,14 +23,15 @@ class RegisterController {
       return response.redirect('back')
     }
 
-    // create user
+    let t = request.all()
+    console.log(t)
     const user = await User.create({
       username: request.input('username'),
       fullname: request.input('fullname'),
       password: request.input('password')
     })
 
-   
+
 
     // display success message
     session.flash({
@@ -43,7 +44,7 @@ class RegisterController {
     return response.redirect('back')
   }
 
-  async confirmEmail ({ params, session, response }) {
+  async confirmEmail({ params, session, response }) {
     // get user with the cinfirmation token
     const user = await User.findBy('confirmation_token', params.token)
 

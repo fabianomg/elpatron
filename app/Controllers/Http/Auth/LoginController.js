@@ -32,7 +32,6 @@ class LoginController {
 
   async login({ request, auth, session, response }) {
 
-
     // get form data
     const { username, password, remember } = request.all()
 
@@ -42,13 +41,25 @@ class LoginController {
       .first()
     let captcha = await Database
       .table('captchas')
-      .select('*')
+      .select('active')
+      .orderBy('active', 'desc')
+    if (captcha != '' && user.level == 2) {
 
-    if (captcha == '' && user.level == 2) {
+      if (captcha[0].active == 0) {
+        session.flash({
+          notification: {
+            type: 'warning',
+            message: `${user.username}, O Sistema está temporariamente indisponível, por favor entre em contato com o administrador.`
+          }
+        })
+        return response.redirect('back')
+      }
+    }
+    if (captcha == '' && user.level == 2 ) {
       session.flash({
         notification: {
           type: 'warning',
-          message: ` Sistema temporariamente indisponível, por favor entre em contato com o administrador.`
+          message: `${user.username}, O Sistema está temporariamente indisponível, por favor entre em contato com o administrador.`
         }
       })
       return response.redirect('back')
@@ -59,7 +70,7 @@ class LoginController {
         session.flash({
           notification: {
             type: 'warning',
-            message: `${user.username} Você não está ativo ou está sem créditos por favor  entre em contato com o administrador.`
+            message: `${user.username}, Você não está ativo ou está sem créditos por favor  entre em contato com o administrador.`
           }
         })
         return response.redirect('back')

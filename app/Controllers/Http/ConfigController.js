@@ -43,62 +43,112 @@ class ConfigController {
    * @param {Response} ctx.response
    */
   async store({ request, session, response }) {
-    let r = request.input('creditos')
+    let dias = request.input('dias');
+    let diasExpira = request.input('diasexpira');
+    let creditos = request.input('creditos');
+    let creditosExpira = request.input('creditosexpira');
 
-    let creditos = r.split(',')
-    try {
+    if (dias && diasExpira) {
 
-      for (let index = 0; index < creditos.length; index++) {
-        let c = await Config.query()
-          .where('creditos', creditos[index])
+      try {
+
+        let consult;
+        (dias == 1) ? consult = dias + " dia expira em " + diasExpira + "h" : consult = dias + " dias expira em " + diasExpira + "h";
+
+        let d = await Config.query()
+          .where('dias', consult)
           .first()
-        //console.log(c)
-        //return
+
+        if (!d || d == null) {
+          await Config.create({
+            dias: consult,
+
+          })
+        }
+        session.flash({
+          notification: {
+            type: 'success',
+            message: `Cadastro Realizado com sucesso!.`
+          }
+        })
+
+      } catch (error) {
+        session.flash({
+          notification: {
+            type: 'danger',
+            message: `Cadastro não realizado...` + error
+          }
+        })
+      }
+    }
+
+    if (creditos && creditosExpira) {
+
+      try {
+
+        let consult = creditos + " creditos expira em " + creditosExpira + " dias"
+        let c = await Config.query()
+          .where('creditos', consult)
+          .first()
+
         if (!c || c == null) {
-          const config = await Config.create({
-            creditos: creditos[index],
+          await Config.create({
+            creditos: consult,
 
           })
         }
 
+        session.flash({
+          notification: {
+            type: 'success',
+            message: `Cadastro Realizado com sucesso!.`
+          }
+        })
 
+      } catch (error) {
+        session.flash({
+          notification: {
+            type: 'danger',
+            message: `Cadastro não realizado...` + error
+          }
+        })
       }
-      session.flash({
-        notification: {
-          type: 'success',
-          message: `Cadastro Realizado com sucesso!.`
-        }
-      })
-
-    } catch (error) {
-      session.flash({
-        notification: {
-          type: 'danger',
-          message: `Cadastro não realizado...` + error
-        }
-      })
     }
     return response.redirect('back')
   }
   async cadCaptcha({ request, session, response }) {
+    let captcha = request.input('captcha');
+
     let campos = request.all();
+    let deathbycaptchaActive = campos.deathbycaptchaActive
+    let twocaptchaActive = campos.twocaptchaActive
+    if (twocaptchaActive == null && deathbycaptchaActive == null) {
+      session.flash({
+        notification: {
+          type: 'warning',
+          message: `Os dados não foram cadastrados, selecione o site que ficará ativo`
+        }
+      })
+      return response.redirect('back')
+    }
+
     try {
 
-      if (campos.deathbycaptcha && campos.userdea && campos.passworddea) {
+      if (captcha == 2 && campos.user && campos.password) {
         let Deathbycaptcha = await Captcha.query()
           .where('name', 'deathbycaptcha')
           .first()
         if (!Deathbycaptcha) {
-          const dea = await Captcha.create({
-            name: campos.deathbycaptcha,
-            login: campos.userdea,
-            password: campos.passworddea,
+          await Captcha.create({
+            name: 'deathbycaptcha',
+            login: campos.user,
+            password: campos.password,
             active: 1
           })
           session.flash({
             notification: {
               type: 'success',
-              message: `Login e Password do Deathbycaptcha cadastrados com sucesso!.`
+              message: `Username e Password do Deathbycaptcha cadastrados com sucesso!.`
             }
           })
         } else {
@@ -110,13 +160,14 @@ class ConfigController {
           })
         }
       }
-      if (campos.twocaptcha) {
+      console.log(campos.twocaptchaActive)
+      if (captcha == 1 && campos.apikey) {
         let twoCaptcha = await Captcha.query()
           .where('name', 'twocaptcha')
           .first()
         if (!twoCaptcha) {
-          const captcha = await Captcha.create({
-            name: campos.twocaptcha,
+          await Captcha.create({
+            name: 'twocaptcha',
             api: campos.apikey,
             active: 1
           })
@@ -152,6 +203,8 @@ class ConfigController {
 
     try {
       const p = await Proxy.create({
+        user: request.input('user'),
+        password: request.input('password'),
         proxy: request.input('proxy'),
       })
       session.flash({

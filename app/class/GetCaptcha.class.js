@@ -7,8 +7,11 @@ const Cache = use('Cache')
 class Captcha {
 
     async GetBalance() {
-        let apikey = await Database.select('api').from('captchas')
-        var b = new Client(apikey, {
+        let apikey = await Database.select('api')
+            .from('captchas')
+            .where('name', 'twocaptcha')
+        
+        var b = new Client(apikey[0].api, {
             timeout: 600000,
             polling: 5000,
             throwErrors: true

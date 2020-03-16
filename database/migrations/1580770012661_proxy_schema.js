@@ -7,7 +7,9 @@ class ProxySchema extends Schema {
   up () {
     this.create('proxies', (table) => {
       table.increments()
-      table.string('proxy', 60)
+      table.string('user', 200)
+      table.string('password', 200)
+      table.string('proxy', 200)
       table.timestamps()
     })
   }

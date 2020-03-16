@@ -90,7 +90,7 @@
             addCaption: "Adicionar registro",
             editCaption: "Editar registro",
             bSubmit: "Enviar",
-            bCancelar: "Cancelar",
+            bCancel: "Cancelar",
             bClose: "Fechar",
             saveData: "Os dados foram alterados! Salvar alterações?",
             bYes: "Sim",

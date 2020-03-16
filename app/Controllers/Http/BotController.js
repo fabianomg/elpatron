@@ -1,11 +1,15 @@
 'use strict'
 const Ws = use('Ws')
 const C = require('../../class/GetCaptcha.class');
+const DEA = require('../../class/RecaptchaGetToken.class');
 const ID = require('./VadateCardController');
 const User = use('App/Models/User')
 const Cache = use('Cache')
 const Redis = use('Redis')
+const Database = use('Database')
 var { isAfter, parseISO, format } = require('date-fns')
+const amqp = require('amqplib/callback_api');
+const url = "amqp://rabbitmq:rabbitmq@rabbit1:5672/"
 const moment = require('moment')
 class BotController {
     constructor(taskRestart) {
@@ -13,6 +17,9 @@ class BotController {
     }
 
     async  start({ auth, request, session, response }) {
+        const deathbycaptcha = await Database.from('captchas').where('name', 'deathbycaptcha')
+        const twocaptcha = await Database.from('captchas').where('name', 'twocaptcha')
+
 
         const status = await Ws.getChannel('status:*').topic('status:s' + auth.user.id)
         const carregadas = await Ws.getChannel('status:*').topic('status:c' + auth.user.id)
@@ -67,6 +74,20 @@ class BotController {
                 }
             }
         });
+
+        if (carregadas) {
+            await carregadas.broadcastToAll('message', 0)
+
+        }
+        if (aprovadas) {
+            await aprovadas.broadcastToAll('message', { cont: 0, msg: '' })
+        }
+        if (reprovadas) {
+            await reprovadas.broadcastToAll('message', { cont: 0, msg: '' })
+        }
+        if (testadas) {
+            await testadas.broadcastToAll('message', 0)
+        }
 
         // para garanti que não vai ficar nenhum vestigio do usuario essa fucntion é execultada
         await this.resetCache(auth.user.id);
@@ -124,8 +145,14 @@ class BotController {
         }
 
         if (!await Cache.has('user_id:' + auth.user.id + '#restart#')) {
-            const c = new C();
-            await c.GetCaptcha(auth.user.id);
+            if (twocaptcha[0].active) {
+                const c = new C();
+                await c.GetCaptcha(auth.user.id);
+            }
+            if (deathbycaptcha[0].active) {
+                const d = new DEA();
+                await d.CaptchaDecode(auth.user.id)
+            }
 
             const validator = new ID()
             await validator.GetId(auth.user.id);
@@ -187,6 +214,9 @@ class BotController {
 
 
         }, 5000);
+
+
+
     }
     async restart(id) {
         const cc = new C();
@@ -263,6 +293,36 @@ class BotController {
             }
         });
 
+    }
+    async sendmsg(queue, msg, expires = 0, autoDelete = false, durable = false) {
+        amqp.connect(url, function (error0, connection) {
+            if (error0) {
+                throw error0;
+            }
+            connection.createChannel(function (error1, channel) {
+                if (error1) {
+                    throw error1;
+                }
+
+                if (expires != 0) {
+                    channel.assertQueue(queue, {
+                        durable: durable,
+                        autoDelete: autoDelete,
+                        expires: expires
+                    });
+                } else {
+                    channel.assertQueue(queue, {
+                        durable: durable,
+                        autoDelete: autoDelete
+                    });
+                }
+
+                channel.sendToQueue(queue, Buffer.from(msg));
+            });
+            setTimeout(function () {
+                connection.close();
+            }, 500);
+        });
     }
 }
 

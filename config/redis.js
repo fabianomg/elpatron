@@ -32,9 +32,9 @@ module.exports = {
   |
   */
   local: {
-    host: 'redis-12503.c16.us-east-1-3.ec2.cloud.redislabs.com',
-    port: 12503,
-    password: 'Lxu5U3rE6DNn73Q',
+    host: 'redis',
+    port: 6379,
+    password: null,
     db: 0,
     keyPrefix: ''
   },

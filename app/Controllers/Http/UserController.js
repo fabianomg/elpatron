@@ -1,6 +1,7 @@
 'use strict'
 const Database = use('Database')
 const User = use('App/Models/User')
+const { isBefore, parseISO, format } = require('date-fns')
 class UserController {
     async ReturnUsers({ response }) {
 
@@ -8,6 +9,7 @@ class UserController {
 
         var result = [];
         for (let index = 0; index < user.length; index++) {
+            console.log(user[index].start)
             if (user[index].level != 1) {
                 result.push({
                     username: user[index].username,
@@ -24,20 +26,34 @@ class UserController {
         return response.json(result);
     }
     async  register({ request, session, response }) {
+        let datestart = parseISO(request.input('datestart'));
+        let dateend = parseISO(request.input('dateend'))
+        let comparedate = isBefore(datestart, dateend)
+        if (!comparedate) {
+            session.flash({
+                notification: {
+                    type: 'warning',
+                    message: 'Cadastro não realizado porque a data de Inicio é maior que a data de Expiração, assim a data de inicio dever ser menor que a data de Expiração '
+                }
+            })
+            return response.redirect('back')
+        }
         try {
-
+            let t = request.input('selectMetodo');
+            let cred;
+            (t == '1') ? cred = request.input('creditos') : cred = request.input('dias')
             let d = await User.query()
                 .where('username', request.input('username'))
                 .first()
-
+            console.log(cred)
             if (!d) {
                 const u = await User.create({
                     username: request.input('username'),
                     fullname: request.input('fullname'),
                     password: request.input('password'),
-                    balance: request.input('creditos'),
-                    start: request.input('start'),
-                    end: request.input('end'),
+                    balance: cred,
+                    start: request.input('datestart'),
+                    end: request.input('dateend'),
                     active: request.input('active'),
                     level: 2
 

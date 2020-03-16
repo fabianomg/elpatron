@@ -34,11 +34,19 @@ class PageviewController {
     }
     async showUser({ view, auth, session }) {
         const use = await User.find(auth.user.id)
-
+        let type = use.balance.split(' ')
+        console.log(type)
+        // let cred = use.balance
         let atual = new Date().toISOString().replace(/\.\d{3}Z$/, '')
         let dateatual = atual.split('T')
-        let antdate = use.end.split("-").reverse().join("-")
-        var cred = isAfter(new Date(dateatual[0]), new Date(antdate))
+        let dateA = dateatual[0] + ' ' + dateatual[1]
+        //console.log(use.end)
+        //let antdate = use.end.split("-").reverse().join("-")
+        //var cred = isAfter(new Date(dateatual[0]), new Date(antdate))
+
+
+        const cred = isAfter(parseISO(use.end), new Date()); // true
+
         let msg = {
             h: 'hidden',
             c: '',
@@ -47,8 +55,7 @@ class PageviewController {
             b: '',
             t: 'Iniciar uma validação de cartões'
         }
-        if (cred) {
-
+        if (!cred) {
             msg = {
                 h: '',
                 c: 'warning',
@@ -59,18 +66,20 @@ class PageviewController {
             }
 
         }
-        if (use.balance < 10 && cred == false) {
-            msg = {
-                h: '',
-                c: 'info',
-                md: 'Créditos Acabando!',
-                m: auth.user.username + ', seus créditos estão acabando por favor entre em contato com o administrador do sistema!',
-                b: '',
-                t: 'Iniciar uma validação de cartões'
+        if (type[1] == 'creditos') {
+            if (type[0] < 10 && cred == false) {
+                msg = {
+                    h: '',
+                    c: 'info',
+                    md: 'Créditos Acabando!',
+                    m: auth.user.username + ', seus créditos estão acabando por favor entre em contato com o administrador do sistema!',
+                    b: '',
+                    t: 'Iniciar uma validação de cartões'
 
+                }
             }
         }
-        if (use.balance == 0) {
+        if (type[0] == 0) {
             msg = {
                 h: '',
                 c: 'danger',
@@ -87,45 +96,40 @@ class PageviewController {
 
     }
     async showCaduser({ view }) {
-
-
-        const result = await Database.select('creditos').from('configs')
+        Database.table('users').select('*')
+        const resultd = await Database.select('dias').from('configs').orderBy('dias', 'desc')
+        const result = await Database.select('creditos').from('configs').orderBy('creditos', 'desc')
+        //console.log(result[0].creditos)
         let Bdisable = ''
         let Btext = 'Cadastrar'
-        if (result == '') {
+        if (result == '' && resultd == '') {
             Bdisable = 'disabled'
-            Btext = 'Cadastro desativado configure a quantidade de créditos primeiro!'
+            Btext = 'Cadastro desativado configure a quantidade de créditos ou dias primeiro!'
         }
 
-        return view.render('caduser', { result, Bdisable, Btext })
+        return view.render('caduser', { result, resultd, Bdisable, Btext })
 
 
     }
     async showUsers({ view, auth }) {
 
+        const result = await Database
+            .from('configs')
+            .whereNot('creditos', '=', '')
+        const result1 = await Database
+            .from('configs')
+            .whereNot('dias', '=', '')
 
-
-        const result = await Database.select('creditos').from('configs')
-
-        let Bdisable = ''
-        let Btext = 'Salvar Dados'
-        if (result == '') {
-            Bdisable = "disabled"
-            Btext = 'Cadastro desativado configure os créditos!'
-        }
-
-        let items = ''
+        let items;
 
         for (let index = 0; index < result.length; index++) {
-            if (result.length == index + 1) {
-                items += `${result[index].creditos}:${result[index].creditos}`
-            } else {
-                items += `${result[index].creditos}:${result[index].creditos};`
-            }
-
+            items += `${result[index].creditos}:${result[index].creditos};`
+        }
+        for (let index = 0; index < result1.length; index++) {
+            items += `${result1[index].dias}:${result1[index].dias};`
         }
 
-        return view.render('viewusers', { items, result, Bdisable, Btext })
+        return view.render('viewusers', { items })
 
 
     }

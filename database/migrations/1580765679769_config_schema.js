@@ -7,7 +7,8 @@ class ConfigSchema extends Schema {
   up () {
     this.create('configs', (table) => {
       table.increments()
-      table.string('creditos', 60).notNullable()
+      table.string('creditos', 200)
+      table.string('dias', 200)
       table.timestamps()
     })
   }

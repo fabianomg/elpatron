@@ -1,0 +1,5 @@
+name: elpatron1
+image: okteto/node:10
+command:
+- bash
+workdir: /usr/src/app

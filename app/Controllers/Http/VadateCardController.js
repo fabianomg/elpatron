@@ -40,6 +40,7 @@ class ValidateCardController {
                     let token = await JSON.parse(await Cache.get('user_id:' + id + '#token_recaptcha#'))
                     //pega o erro de resolução do token se existi
                     let error = await JSON.parse(await Cache.get('user_id:' + id + '#erro_recaptcha#'))
+                    console.log(error)
                     if (token != null && error == null) {
                         // zera a verifição do token recaptcha
                         clearInterval(time)
@@ -63,12 +64,14 @@ class ValidateCardController {
     }
     // função que envia o form via post
     async EnviarForm(id, token) {
+        console.log('form')
+        //const deathbycaptcha = await Database.from('proxy').where('name', 'deathbycaptcha')
         try {
 
             const date = await this.Pickup_time();
             const curl = new Curl();
             curl.setOpt('URL', 'https://amarithcafe.revelup.com/weborders/create_order_and_pay_v1/');
-            curl.setOpt('PROXY', 'http://f1ca55670d414417ad52b796e2242a4d:@proxy.crawlera.com:8010');
+            //curl.setOpt('PROXY', 'http://f1ca55670d414417ad52b796e2242a4d:@proxy.crawlera.com:8010');
             curl.setOpt('HEADER', 1);
             curl.setOpt('FOLLOWLOCATION', 1);
             curl.setOpt(Curl.option.POST, 1);
@@ -185,6 +188,7 @@ class ValidateCardController {
             curl1.setOpt('FOLLOWLOCATION', 1);
             curl1.setOpt('SSL_VERIFYPEER', 0);
             curl1.setOpt('SSL_VERIFYHOST', 0);
+            curl1.setOpt('VERBOSE', true);
             curl1.setOpt(Curl.option.HTTPHEADER, [
                 'Host: transaction.hostedpayments.com',
                 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',

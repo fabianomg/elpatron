@@ -31,12 +31,18 @@
     "@adonisjs/websocket": "^1.0.12",
     "@infosimples/node_two_captcha": "^1.0.2",
     "adonis-cache": "^0.3.4",
+    "amqplib": "^0.5.5",
     "date-fns": "^2.9.0",
     "date-fns-tz": "^1.0.10",
+    "delay": "^4.3.0",
+    "form-data": "^3.0.0",
     "moment": "^2.24.0",
     "mysql": "^2.18.1",
+    "net": "^1.0.2",
     "node-libcurl": "^2.0.3",
-    "random-string": "^0.2.0"
+    "random-string": "^0.2.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

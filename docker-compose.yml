@@ -9,6 +9,8 @@ services:
       - "9229:9229"
     depends_on:
       - mysql
+      - redis
+      - rabbit1
     restart: always
     environment:
       - DATABASE_HOST=db
@@ -46,6 +48,7 @@ services:
     container_name: redis
     hostname: redis
     image: redis
+    restart: always
     ports:
       - "6380:6379"
     links:
@@ -60,3 +63,20 @@ services:
       - REDIS_HOSTS=local:redis:6379
     ports:
       - 8081:8081
+  rabbit1:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit1"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: always
+     
+    labels:
+      NAME: "rabbitmq1"
+    volumes:
+      - .:/usr/rabbitmq
