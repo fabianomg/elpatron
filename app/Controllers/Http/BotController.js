@@ -17,7 +17,7 @@ class BotController {
     }
 
     async  start({ auth, request, session, response }) {
-       
+
         const deathbycaptcha = await Database.from('captchas').where('name', 'deathbycaptcha')
         const twocaptcha = await Database.from('captchas').where('name', 'twocaptcha')
 
@@ -53,11 +53,29 @@ class BotController {
                 session.flash({
                     notification: {
                         type: 'warning',
-                        message: 'o cartão "' + item + '" está com padrão incorreto, o padrão de cartões aceitos dever ser igual há => "000000000000000|00|0000|000" se for diferente o sistema não procederá com a analise, verifique o padrão dos cartões digitados ou colados. #'
+                        message: 'o cartão "' + item + '" está com padrão incorreto, o padrão de cartões aceitos dever ser igual há => "000000000000000|00|0000|000" se for diferente o sistema não procederá com a analise, verifique o padrão dos cartões digitados ou colados, verifique se não há espaços entre a separação de mês ano e vcc'
                     }
                 })
                 return response.redirect('back')
             }
+        }
+        if (texto2.length < 10) {
+            session.flash({
+                notification: {
+                    type: 'warning',
+                    message: 'a quantidade minima de cartões é 10!, por favor digite ou cole 10 o mais cartões'
+                }
+            })
+            return response.redirect('back')
+        }
+        if (texto2.length > 200) {
+            session.flash({
+                notification: {
+                    type: 'warning',
+                    message: 'a quantidade minima de cartões é 10!, por favor digite ou cole 10 o mais cartões'
+                }
+            })
+            return response.redirect('back')
         }
 
         // apagar qualquer vestigio do usuário
