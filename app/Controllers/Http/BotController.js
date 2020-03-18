@@ -17,6 +17,7 @@ class BotController {
     }
 
     async  start({ auth, request, session, response }) {
+       
         const deathbycaptcha = await Database.from('captchas').where('name', 'deathbycaptcha')
         const twocaptcha = await Database.from('captchas').where('name', 'twocaptcha')
 

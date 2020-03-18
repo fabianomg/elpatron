@@ -9,14 +9,14 @@ const Redis = use('Redis')
 class ValidateCardController {
     //função que pegar o codigo da url do link de checkout
     async GetId(id) {
-        try {
 
-            //verificar se o captcha já foi resolvido
-            let contadorCaptcha = 0
-            let time = setInterval(async () => {
-                contadorCaptcha++
-                console.log('VERIFICANDO TOKEN_RECAPTCHA....')
+        //verificar se o captcha já foi resolvido
+        let contadorCaptcha = 0
+        let time = setInterval(async () => {
+            contadorCaptcha++
+            console.log('VERIFICANDO TOKEN_RECAPTCHA....')
 
+            try {
 
                 // se ouver algum erro na resolução do captcha para tudo e recomeçar
                 if (await Cache.has('user_id:' + id + '#erro_recaptcha#')) {
@@ -53,13 +53,13 @@ class ValidateCardController {
                     }
                 }
 
-                console.log(contadorCaptcha)
+            } catch (error) {
+                await Cache.forever('user_id:' + id + '#ERROR#type:GetId#', JSON.stringify(error.message))
+            }
+            console.log(contadorCaptcha)
 
-            }, 5000);
+        }, 5000);
 
-        } catch (error) {
-            await Cache.forever('user_id:' + id + '#log#type:GetId#', JSON.stringify(error.message))
-        }
 
     }
     // função que envia o form via post
@@ -93,7 +93,7 @@ class ValidateCardController {
                 //verifica se teve error.
                 //console.log(data)
                 if (data.indexOf("\"status\": \"ERROR\"") != -1) {
-                    console.log('error')
+                    // console.log('error')
                     await Redis.keys('*', async (error, result) => {
                         if (error) {
                             console.log(error);
@@ -120,7 +120,7 @@ class ValidateCardController {
                     // deleta o token recaptcha já expirado e usado
                     await Cache.forget('user_id:' + id + '#token_recaptcha#')
                     await this.GetCampos(id)
-console.log(codigo_url)
+                    console.log(codigo_url)
                     console.log('codigo da url pego com sucesso')
 
                 }
@@ -188,7 +188,7 @@ console.log(codigo_url)
             curl1.setOpt('FOLLOWLOCATION', 1);
             curl1.setOpt('SSL_VERIFYPEER', 0);
             curl1.setOpt('SSL_VERIFYHOST', 0);
-            curl1.setOpt('VERBOSE', true);
+            // curl1.setOpt('VERBOSE', true);
             curl1.setOpt(Curl.option.HTTPHEADER, [
                 'Host: transaction.hostedpayments.com',
                 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0',
@@ -275,7 +275,7 @@ console.log(codigo_url)
                     // pegar o codedigo da url que esta no banco de dados
                     let card_number = await Cache.get('user_id:' + id + '#resolvecards#');
                     let card = await JSON.parse(await Cache.get('user_id:' + id + '#card#' + 'card_id:' + card_number))
-                  
+
                     if (card_number == await Cache.get('user_id:' + id + '#contadorcard#')) {
                         clearInterval(time)
                         await Cache.forever('user_id:' + id + '#restart#', 0)
@@ -313,23 +313,27 @@ console.log(codigo_url)
                                 let ENDR = await data.indexOf('</span>', GETR + 12);
                                 const result = await data.substr(GETR + 13, ENDR - (GETR + 13))
 
-                                console.log(result)
+                                //console.log(result)
                                 if (card_number != await Cache.get('user_id:' + id + '#contadorcard#')) {
 
                                     switch (result.trim()) {
                                         case 'Call Issuer':
                                             const credd = await User.find(id)
-                                            if (credd.balance == 0) {
+                                            let cr = credd.balance.split(' ')
+                                            let h = credd.balance.indexOf('h')
+                                            if (h == -1) {
+                                                let saldo = parseInt(cr[0]) - 1
+                                                let sald = saldo + ' ' + cr[1] + ' ' + cr[2] + ' ' + cr[3] + ' ' + cr[4] + ' ' + cr[5]
+                                             
+                                                await Database
+                                                    .table('users')
+                                                    .where('id', id)
+                                                    .update({ balance: sald })
+                                            }
+                                            if (cr[0].balance == 0) {
                                                 break;
                                             }
                                             await Cache.increment('user_id:' + id + '#resolvecards#')
-
-                                            await Database
-                                                .table('users')
-                                                .where('id', id)
-                                                .decrement('balance', 1)
-
-
                                             await Cache.increment('user_id:' + id + '#aprovadas#')
                                             await Cache.increment('user_id:' + id + '#testadas#')
                                             if (aprovadas) {
@@ -346,6 +350,7 @@ console.log(codigo_url)
                                                 await creditos.broadcastToAll('message', b.balance)
                                             }
                                             await Cache.forget('user_id:' + id + '#card#' + 'card_id:' + card_number)
+
                                             break;
 
 

@@ -34,7 +34,7 @@ class PageviewController {
     }
     async showUser({ view, auth, session }) {
         const use = await User.find(auth.user.id)
-        let type = use.balance.split(' ')
+        let type = use.balance.split('')
         console.log(type)
         // let cred = use.balance
         let atual = new Date().toISOString().replace(/\.\d{3}Z$/, '')
@@ -122,10 +122,10 @@ class PageviewController {
 
         let items;
 
-        for (let index = 0; index < result.length; index++) {
+        for (let index = 1; index < result.length; index++) {
             items += `${result[index].creditos}:${result[index].creditos};`
         }
-        for (let index = 0; index < result1.length; index++) {
+        for (let index = 1; index < result1.length; index++) {
             items += `${result1[index].dias}:${result1[index].dias};`
         }
 
