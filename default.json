@@ -1,0 +1,38 @@
+{
+  "noSave": false,
+  "noLogData": false,
+  "ui": {
+    "sidebarWidth": 250,
+    "locked": false,
+    "cliHeight": 320,
+    "cliOpen": false,
+    "foldingChar": ":",
+    "jsonViewAsDefault": "none",
+    "binaryAsHex": true
+  },
+  "redis": {
+    "readOnly": false,
+    "flushOnImport": false,
+    "useScan": true,
+    "scanCount": 100,
+    "rootPattern": "*",
+    "connectionName": "redis-commander",
+    "defaultLabel": "local",
+    "defaultSentinelGroup": "mymaster"
+  },
+  "server": {
+    "address": "0.0.0.0",
+    "port": 8082,
+    "urlPrefix": "",
+    "trustProxy": false,
+    "clientMaxBodySize": "100kb",
+    "httpAuth": {
+      "username": "",
+      "password": "",
+      "passwordHash": "",
+      "comment": "to enable http auth set username and either password or passwordHash",
+      "jwtSecret": ""
+    }
+  },
+  "connections": []
+}

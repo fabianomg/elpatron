@@ -1,7 +1,7 @@
-FROM node:10
+FROM node:alpine
 
 # Create app directory
-WORKDIR /usr/app
+WORKDIR /usr/src/elpatron
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -9,13 +9,11 @@ WORKDIR /usr/app
 COPY package*.json ./
 RUN npm i -g @adonisjs/cli
 RUN npm install
-
 # If you are building your code for production
 # RUN npm ci --only=production
-
+ENV PORT=3333
 # Bundle app source
 COPY . .
 
-EXPOSE 3333
-EXPOSE 9229
+EXPOSE $PORT
 CMD [ "npm", "start"]

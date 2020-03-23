@@ -1,82 +1,12 @@
 version: "3.1"
 services:
-  app:
+  elpatron:
     build: ./
     command: npm start
-    container_name: app
+    container_name: elpatron
     ports:
       - "3333:3333"
-      - "9229:9229"
-    depends_on:
-      - mysql
-      - redis
-      - rabbit1
     restart: always
-    environment:
-      - DATABASE_HOST=db
     volumes:
-      - .:/usr/app
-
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: elpatron
-    volumes:
-      - .:/usr/mysql
-    ports:
-      - 3306:3306
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: dev_pma
-    links:
-      - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    ports:
-      - 8183:80
-  # Redis
-  redis:
-    container_name: redis
-    hostname: redis
-    image: redis
-    restart: always
-    ports:
-      - "6380:6379"
-    links:
-      - redis-commander
-
-  redis-commander:
-    container_name: redis-commander
-    hostname: redis-commander
-    image: rediscommander/redis-commander:latest
-    restart: always
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-    ports:
-      - 8081:8081
-  rabbit1:
-    image: "rabbitmq:3-management"
-    hostname: "rabbit1"
-    environment:
-      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-      RABBITMQ_DEFAULT_VHOST: "/"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    restart: always
-     
-    labels:
-      NAME: "rabbitmq1"
-    volumes:
-      - .:/usr/rabbitmq
+      - .:/usr/src/elpatron
+  
