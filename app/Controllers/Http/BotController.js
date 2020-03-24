@@ -15,7 +15,7 @@ class BotController {
 
     async  start({ auth, request, session, response }) {
 
-
+console.log('teste')
 
 
         Queue.consume(false, auth.user.id + '#' + auth.user.username, async (message) => {
@@ -74,6 +74,7 @@ class BotController {
         // esse trexo de código verificai padrão dos cartões digitados
         let texto = await request.only('txtstart')
         let texto2 = texto.txtstart.split("\r\n")
+        console.log(texto)
         for (const item of texto2) {
             let fistnumber = item.substr(0, 1);
             if (fistnumber != 6) {
@@ -98,6 +99,7 @@ class BotController {
             }
             cards.push(item)
         }
+       
         if (texto2.length < 5) {
             session.flash({
                 notification: {
@@ -107,6 +109,7 @@ class BotController {
             })
             return response.redirect('back')
         }
+       
         if (texto2.length > 200) {
             session.flash({
                 notification: {
@@ -122,11 +125,12 @@ class BotController {
         Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: 'Iniciando verificação Aguarde....' })
         //return
         Func.registration({ userID: auth.user.id, owner: auth.user.username, cards })
+        
         setTimeout(() => {
             Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: cards.length + ' Cards Cadastrado com sucesso, aguarde....' })
         }, 1000);
 
-
+return
         Queue.consume(false, auth.user.id + '#verificar#cards', async (message) => {
             let result = await JSON.parse(message.content.toString());
          
