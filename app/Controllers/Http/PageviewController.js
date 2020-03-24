@@ -88,9 +88,11 @@ class PageviewController {
                 t: auth.user.username + ' você não possui créditos para iniciar uma validação de cartões'
             }
         }
-        let user = auth.user.id
 
-        return view.render('layout.paineluser', { msg, user })
+        const id = auth.user.id
+
+
+        return view.render('layout.paineluser', { msg, id })
 
 
     }

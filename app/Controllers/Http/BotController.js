@@ -14,10 +14,8 @@ const fetch = require('node-fetch');
 class BotController {
 
     async  start({ auth, request, session, response }) {
-
-console.log('teste')
-
-
+       // Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username + '#status', { type: 'aprovado', msg: 'aprovado' })
+        
         Queue.consume(false, auth.user.id + '#' + auth.user.username, async (message) => {
             const Topic = await Ws.getChannel('user:*').topic('user:' + auth.user.id)
             let result = await JSON.parse(message.content.toString());
@@ -28,7 +26,6 @@ console.log('teste')
             }
 
         })
-
         Queue.consume(false, auth.user.id + '#' + auth.user.username + '#status', async (message) => {
             const Topic = await Ws.getChannel('user:*').topic('user:' + auth.user.id)
             let result = await JSON.parse(message.content.toString());
@@ -130,7 +127,7 @@ console.log('teste')
             Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: cards.length + ' Cards Cadastrado com sucesso, aguarde....' })
         }, 1000);
 
-return
+
         Queue.consume(false, auth.user.id + '#verificar#cards', async (message) => {
             let result = await JSON.parse(message.content.toString());
          
