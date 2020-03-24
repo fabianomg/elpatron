@@ -88,22 +88,22 @@
 
 
     </div>
-    
+
     <div class="row justify-content-center">
         <center>
-        <div id="msg" {{msg.h}} class=" col-md-8 col-md-offset-2 alert alert-{{msg.c}}">
-           
-            <button type="button" class="close" data-dismiss="alert">
-                <i class="ace-icon fa fa-times"></i>
-            </button>
-            <strong id="emsgdestaque">{{msg.md}}</strong>
-            {{msg.m}}
-            <br>
-        </div>
-        @include('includes.notification')
-    </center>
+            <div id="msg" {{msg.h}} class=" col-md-8 col-md-offset-2 alert alert-{{msg.c}}">
+
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+                <strong id="emsgdestaque">{{msg.md}}</strong>
+                {{msg.m}}
+                <br>
+            </div>
+            @include('includes.notification')
+        </center>
     </div>
-    
+
     <div class="main-content" style="background-color:#868e96;">
         <div class="main-content-inner">
             <div class="page-content">
@@ -127,8 +127,8 @@
 
                                 <div style="padding-left: 100px;"
                                     class="col-md-4 col-md-offset-1 text-center infobox-container">
-                                    <textarea  style="max-width: 300px; min-width:245px;min-height: 300px;resize: none;" required
-                                        form="start" style="resize: none;text-align: center; height: 240px;"
+                                    <textarea style="max-width: 300px; min-width:245px;min-height: 300px;resize: none;"
+                                        required form="start" style="resize: none;text-align: center; height: 240px;"
                                         placeholder="000000000000000|00|0000|000" id="txtstart" name="txtstart"
                                         class="autosize-transition form-control"
                                         style="overflow: hidden; overflow-wrap: break-word; resize: horizontal; height: 152px;"></textarea>
@@ -238,359 +238,1353 @@
                                         <div id="resultAprovadas" class="widget-main padding-8">
 
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.row -->
-                        <div class="row">
-                            <div class="col-lg-8 col-lg-offset-2 ">
-                                <div class="widget-box widget-color-red">
-                                    <div class="widget-header">
-                                        <center>
-                                            <h4 class="widget-title lighter smaller  text-center">Reprovadas<span
-                                                    id="repro"></span></h4>
-                                        </center>
-                                    </div>
-                                    <div class="widget-body">
-                                        <div class="widget-main padding-10" id="resultReprovadas">
+                                    </div>@if(auth.user.level == 2)
+                                    <!DOCTYPE html>
+                                    <html lang="en">
+
+                                    <head>
+                                        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+                                        <meta charset="utf-8" />
+                                        <title>El patron</title>
+                                        <meta name="description" content="top menu &amp; navigation" />
+                                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                                        <!-- bootstrap & fontawesome -->
+                                        <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+                                        <link rel="stylesheet"
+                                            href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+                                        <!-- page specific plugin styles -->
+                                        <!-- text fonts -->
+                                        <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+                                        <!-- page specific plugin styles -->
+                                        <link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
+                                        <!-- ace styles -->
+                                        <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet"
+                                            id="main-ace-style" />
+                                        <!--[if lte IE 9]>
+                                          <link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+                                          <![endif]-->
+                                        <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+                                        <link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+                                        <!--[if lte IE 9]>
+                                          <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+                                          <![endif]-->
+                                        <!-- inline styles related to this page -->
+                                        <!-- ace settings handler -->
+                                        <script src="assets/js/ace-extra.min.js"></script>
+                                        <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+                                        <!--[if lte IE 8]>
+                                          <script src="assets/js/html5shiv.min.js"></script>
+                                          <script src="assets/js/respond.min.js"></script>
+                                          <![endif]-->
+                                        <script
+                                            src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.min.js"></script>
+                                        <script src="https://unpkg.com/@adonisjs/websocket-client"></script>
+
+
+                                    </head>
+
+                                    <body class="no-skin">
+
+                                        <div id="navbar"
+                                            class="navbar navbar-default    navbar-collapse       h-navbar ace-save-state">
+                                            <div class="navbar-container ace-save-state" id="navbar-container">
+                                                <div class="navbar-header pull-left">
+                                                    <a href="/" class="navbar-brand">
+                                                        <small>
+                                                            <i class="fa fa-leaf"></i>
+                                                            Elpatron Admin
+                                                        </small>
+                                                    </a>
+
+                                                    <button class="pull-right navbar-toggle navbar-toggle-img collapsed"
+                                                        type="button" data-toggle="collapse"
+                                                        data-target=".navbar-buttons,.navbar-menu">
+                                                        <span class="sr-only">Toggle user menu</span>
+
+                                                        <img src="assets/images/avatars/avatar2.png"
+                                                            alt="Jason's Photo" />
+                                                    </button>
+
+                                                    <button class="pull-right navbar-toggle collapsed" type="button"
+                                                        data-toggle="collapse" data-target="#sidebar">
+                                                        <span class="sr-only">Toggle sidebar</span>
+
+                                                        <span class="icon-bar"></span>
+
+                                                        <span class="icon-bar"></span>
+
+                                                        <span class="icon-bar"></span>
+                                                    </button>
+                                                </div>
+
+                                                <div class="navbar-buttons navbar-header pull-right  collapse navbar-collapse"
+                                                    role="navigation">
+
+
+                                                    <ul class="nav ace-nav">
+
+                                                        <li class="transparent dropdown-modal">
+
+
+                                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                                                <i class="ace-icon fa fa-envelope"></i>
+                                                                Menssagem
+                                                                <span class="badge badge-warning">5</span>
+                                                            </a>
+
+                                                            <div
+                                                                class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                                                                <div class="tabbable">
+
+
+                                                                    <div class="tab-content">
+                                                                        <div id="navbar-tasks"
+                                                                            class="tab-pane in active">
+                                                                            <ul
+                                                                                class="dropdown-menu-right dropdown-navbar dropdown-menu">
+                                                                                <li class="dropdown-content">
+                                                                                    <ul
+                                                                                        class="dropdown-menu dropdown-navbar">
+
+
+                                                                                        <li>
+                                                                                            <a href="#">
+                                                                                                <div class="clearfix">
+                                                                                                    <span
+                                                                                                        class="pull-left">Em
+                                                                                                        desenvolvimento..</span>
+                                                                                                    <span
+                                                                                                        class="pull-right">35%</span>
+                                                                                                </div>
+
+                                                                                                <div
+                                                                                                    class="progress progress-mini">
+                                                                                                    <div style="width:35%"
+                                                                                                        class="progress-bar progress-bar-danger">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </a>
+                                                                                        </li>
+
+
+                                                                                    </ul>
+                                                                                </li>
+
+                                                                                <li class="dropdown-footer">
+                                                                                    <a href="#">
+                                                                                        Veja msgs com detalhes
+                                                                                        <i
+                                                                                            class="ace-icon fa fa-arrow-right"></i>
+                                                                                    </a>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div><!-- /.tab-pane -->
+
+                                                                    </div><!-- /.tab-content -->
+                                                                </div><!-- /.tabbable -->
+                                                            </div><!-- /.dropdown-menu -->
+                                                        </li>
+
+                                                        <li class="light-blue dropdown-modal user-min">
+                                                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                                                <img class="nav-user-photo"
+                                                                    src="assets/images/avatars/avatar2.png"
+                                                                    alt="Jason's Photo" />
+                                                                <span class="user-info">
+                                                                    <small>Olá,</small>
+                                                                    {{auth.user.username}}}
+                                                                </span>
+
+                                                                <i class="ace-icon fa fa-caret-down"></i>
+                                                            </a>
+
+                                                            <ul
+                                                                class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+
+
+                                                                <li>
+                                                                    <a href="/">
+                                                                        <i class="ace-icon fa fa-user"></i>
+                                                                        Perfil
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class="divider"></li>
+
+                                                                <li>
+                                                                    <a href="/logout">
+                                                                        <i class="ace-icon fa fa-power-off"></i>
+                                                                        Sair
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                            </div><!-- /.navbar-container -->
 
                                         </div>
-                                    </div>
+                                        <!-- /.navbar-container -->
+                                        <ul class="nav  navbar-nav navbar-list " style="top: 0px;">
+                                            <li class=" active hover">
+                                                <a href="/">
+                                                    <i class="menu-icon fa fa-tachometer"></i>
+                                                    <span class="menu-text"> Dashboard </span>
+                                                </a>
+
+                                                <b class="arrow"></b>
+                                            </li>
+
+
+
+                                            <li class="hover">
+                                                <a href="/listcards">
+                                                    <i class="menu-icon fa fa-list"></i>
+                                                    <span class="menu-text"> Cartões </span>
+
+                                                </a>
+
+                                                <b class="arrow"></b>
+
+
+                                            </li>
+
+
+                                        </ul>
+
+                                        <div class="main-container ace-save-state" id="main-container">
+
+
+                                            <center>
+                                                <div class="row" style="margin-top:20px; ">
+                                                    <div class="col-md-12 justify-content-center">
+                                                        <span class="label label-xlg label-info  arrowed-right"
+                                                            style="font-size: 18px;">
+                                                            Você tem: <span class="badge badge-success"
+                                                                style="font-size: 18px;"
+                                                                id="creditos">{{auth.user.balance}}</span> Créditos
+                                                        </span>
+                                                        <span style="margin-top:10px;font-size: 18px;"
+                                                            class="label label-xlg label-info arrowed-in ">Seus
+                                                            créditos expiram em: <span class="badge badge-success"
+                                                                style="font-size: 18px;">{{auth.user.end}}</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </center>
+
+
+                                        </div>
+
+                                        <div class="row justify-content-center">
+                                            <center>
+                                                <div id="msg" {{msg.h}}
+                                                    class=" col-md-8 col-md-offset-2 alert alert-{{msg.c}}">
+
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                        <i class="ace-icon fa fa-times"></i>
+                                                    </button>
+                                                    <strong id="emsgdestaque">{{msg.md}}</strong>
+                                                    {{msg.m}}
+                                                    <br>
+                                                </div>
+
+                                                <div id="menss">
+
+                                                </div>
+                                                @include('includes.notification')
+                                            </center>
+                                        </div>
+
+                                        <div class="main-content" style="background-color:#868e96;">
+                                            <div class="main-content-inner">
+                                                <div class="page-content">
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <!-- PAGE CONTENT BEGINS -->
+                                                            <div class="row">
+                                                                <div class="space-6"></div>
+                                                                <div class="col-sm-3 infobox-container">
+                                                                    <div class="col-md-2">
+                                                                        <div class="text-center">
+                                                                            <img style="width: 200px; height: auto;"
+                                                                                src="assets/images/logotipo.png"
+                                                                                class="rounded" alt="El Patron">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <form id="start" action="{{ route('start') }}"
+                                                                    method="post">
+                                                                    {{ csrfField() }}
+
+                                                                    <div style="padding-left: 100px;"
+                                                                        class="col-md-4 col-md-offset-1 text-center infobox-container">
+                                                                        <textarea rows="4" cols="2"
+                                                                            style="max-width: 245px;min-height:300px;resize: none;"
+                                                                            required form="start"
+                                                                            placeholder="000000000000000|00|0000|000"
+                                                                            id="txtstart" name="txtstart"
+                                                                            class="autosize-transition form-control"
+                                                                            style="overflow: hidden; overflow-wrap: break-word; resize: horizontal;"></textarea>
+                                                                    </div>
+
+                                                                </form>
+                                                                <div class="vspace-12-sm"></div>
+                                                                <div class="col-sm-3">
+                                                                    <div class="widget-box transparent">
+                                                                        <div class="widget-header widget-header-flat">
+                                                                            <h3 class="widget-title lighter">
+
+                                                                                <i id="cstatus"
+                                                                                    class="ace-icon fa fa-star orange "></i>
+                                                                                Status <span id="status"
+                                                                                    class="label label-success arrowed arrowed-right">Aguardando...</span>
+                                                                            </h3>
+                                                                            <div class="widget-toolbar">
+                                                                                <a href="#" data-action="collapse">
+                                                                                    <i
+                                                                                        class="ace-icon fa fa-chevron-up"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="widget-body">
+                                                                            <div class="widget-main no-padding">
+                                                                                <div class="table-responsive-md">
+                                                                                    <table
+                                                                                        class="table table-bordered table-responsiv">
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td class="display-4">
+                                                                                                    Aprovadas</td>
+                                                                                                <td class="hidden-380">
+                                                                                                    <span id="aprovadas"
+                                                                                                        class="label label-success arrowed-right arrowed-in">0</span>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Reprovadas</td>
+                                                                                                <td class="hidden-380">
+                                                                                                    <span
+                                                                                                        id="reprovadas"
+                                                                                                        class="label label-danger arrowed-right arrowed-in">0</span>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                            <tr>
+                                                                                                <td>Testadas</td>
+                                                                                                <td class="hidden-380">
+                                                                                                    <span id="testadas"
+                                                                                                        class="label label-warning arrowed-right arrowed-in">0</span>
+                                                                                                </td>
+                                                                                            </tr>
+
+                                                                                            <tr>
+                                                                                                <td>Total de Carregadas
+                                                                                                </td>
+                                                                                                <td class="hidden-380">
+                                                                                                    <span
+                                                                                                        id="carregadas"
+                                                                                                        class="label label-info arrowed-right arrowed-in">0</span>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- /.widget-main -->
+                                                                        </div>
+                                                                        <!-- /.widget-body -->
+                                                                    </div>
+                                                                    <!-- /.widget-box -->
+                                                                </div>
+                                                                <!-- /.col -->
+                                                            </div>
+                                                            <!-- /.row -->
+                                                            <div class="row text-center">
+                                                                <span class="d-inline-block" tabindex="0"
+                                                                    data-toggle="tooltip" title="{{msg.t}}">
+                                                                    <button onclick="salvarForm();" {{msg.b}} id="start"
+                                                                        type="button" style="margin-top:10px;"
+                                                                        class="btn btn-success">
+                                                                        <i
+                                                                            class="ace-icon fa fa-play align-top bigger-125"></i>
+                                                                        Começar
+                                                                    </button>
+                                                                </span>
+                                                                <!-- inicio button parar-->
+                                                                <span class="d-inline-block" tabindex="0"
+                                                                    data-toggle="tooltip"
+                                                                    title="inicie uma verificação para poder ativar o botão">
+                                                                    <button type="button" id="stop" disabled="true"
+                                                                        style="margin-top:10px;" class="btn btn-danger">
+                                                                        <i
+                                                                            class="ace-icon fa fa-stop align-top bigger-125"></i>
+                                                                        Parar
+                                                                    </button>
+                                                                </span>
+
+                                                                <!-- fim button parar-->
+                                                                <span class="d-inline-block" tabindex="0"
+                                                                    data-toggle="tooltip"
+                                                                    title="voltar página anterior">
+                                                                    <a style="margin-top:10px;"
+                                                                        href="javascript: history.go(-1)" type="button"
+                                                                        class="btn btn-primary">
+                                                                        <i
+                                                                            class="ace-icon fa fa-home  align-top bigger-125 icon-on-right"></i>
+                                                                        Home
+                                                                    </a>
+                                                                </span>
+                                                            </div>
+                                                            <div class="hr hr32 hr-dotted"></div>
+                                                            <div class="col-md-6 col-md-offset-3 "
+                                                                style="color: green; font-size: 18px;">
+                                                                <p id="atividade"></p>
+                                                            </div>
+                                                            <!--############################################-->
+
+                                                            <div class="row">
+                                                                <div class="col-lg-8 col-lg-offset-2">
+                                                                    <div class="widget-box widget-color-green">
+                                                                        <div class="widget-header">
+                                                                            <center>
+                                                                                <h4 class="widget-title lighter smaller">Aprovadas<span
+                                                                                        id="apro"></span></span></h4>
+                                                                            </center>
+                                                                        </div>
+                                                                        <div class="widget-body">
+                                                                            <div id="resultAprovadas" class="widget-main padding-8">
+                                    
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.row -->
+                                                            <div class="row">
+                                                                <div class="col-lg-8 col-lg-offset-2 ">
+                                                                    <div class="widget-box widget-color-red">
+                                                                        <div class="widget-header">
+                                                                            <center>
+                                                                                <h4 class="widget-title lighter smaller  text-center">Reprovadas<span
+                                                                                        id="repro"></span></h4>
+                                                                            </center>
+                                                                        </div>
+                                                                        <div class="widget-body">
+                                                                            <div class="widget-main padding-10" id="resultReprovadas">
+                                    
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                    
+                                                            </div>
+                                                            <div id="dialog-confirm" class="hide">
+                                                                <div class="alert alert-info bigger-110">
+                                                                    todos os dados dos cartões seram excluídos
+                                                                    permanentemente e não poderão ser
+                                                                    recuperados.
+                                                                </div>
+
+                                                                <div class="space-6"></div>
+
+                                                                <p class="bigger-110 bolder center grey">
+                                                                    <i
+                                                                        class="ace-icon fa fa-hand-o-right blue bigger-120"></i>
+                                                                    Deseja Proseguir?
+                                                                </p>
+                                                            </div><!-- #dialog-confirm -->
+                                                            <div id="dialog-message" class="hide">
+                                                                <p id="cex_te_msg">
+
+                                                                </p>
+
+                                                                <div class="hr hr-12 hr-double"></div>
+
+                                                                <p id="cex_te_pro">
+
+                                                                </p>
+                                                            </div><!-- #dialog-message -->
+                                                            <!-- /.row -->
+                                                            <!-- PAGE CONTENT ENDS -->
+                                                        </div>
+                                                        <!-- /.col -->
+                                                    </div>
+                                                    <!-- /.row -->
+                                                </div>
+                                                <!-- /.page-content -->
+
+                                            </div>
+                                        </div>
+                                        <!-- /.main-content -->
+                                        <div class="footer">
+                                            <div class="footer-inner">
+                                                <div class="footer-content">
+                                                    <span class="bigger-120">
+                                                        Elpatron &copy; 2020
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+                                            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+                                        </a>
                                 </div>
-                            </div>
+                                <!-- /.main-container -->
+                                <!-- basic scripts -->
+                                <!--[if !IE]> -->
+                                <script src="assets/js/jquery-2.1.4.min.js"></script>
+                                <!-- <![endif]-->
+                                <!--[if IE]>
+                                          <script src="assets/js/jquery-1.11.3.min.js"></script>
+                                          <![endif]-->
+                                <script type="text/javascript">
+                                    if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+                                </script>
+                                <script src="assets/js/bootstrap.min.js"></script>
+                                <!-- page specific plugin scripts -->
+                                <!-- ace scripts -->
+                                <script src="assets/js/jquery-ui.min.js"></script>
+                                <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+                                <script src="assets/js/ace-elements.min.js"></script>
+                                <script src="assets/js/ace.min.js"></script>
+                                <script src="assets/js/jquery.easypiechart.min.js"></script>
 
-                        </div>
-                        <div id="dialog-confirm" class="hide">
-                            <div class="alert alert-info bigger-110">
-                                todos os dados dos cartões seram excluídos permanentemente e não poderão ser
-                                recuperados.
-                            </div>
+                                <script src="assets/js/jquery.dataTables.min.js"></script>
+                                <script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
+                                <script src="assets/js/dataTables.buttons.min.js"></script>
+                                <script src="assets/js/buttons.flash.min.js"></script>
+                                <script src="assets/js/buttons.html5.min.js"></script>
+                                <script src="assets/js/buttons.print.min.js"></script>
+                                <script src="assets/js/buttons.colVis.min.js"></script>
+                                <script src="assets/js/dataTables.select.min.js"></script>
+                                <script src="assets/js/grid.locale-pt-br.js"></script>
+                                <!-- ace scripts -->
+                                <script src="assets/js/ace-elements.min.js"></script>
+                                <script src="assets/js/ace.min.js"></script>
 
-                            <div class="space-6"></div>
+                                <!-- inline scripts related to this page -->
+                                <script type="text/javascript">
+                                    $('body').scrollspy({
+                                        target: '#listreprovados'
+                                    })
+                                    jQuery(function ($) {
+                                        $('.easy-pie-chart.percentage').each(function () {
+                                            var $box = $(this).closest('.infobox');
+                                            var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+                                            var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+                                            var size = parseInt($(this).data('size')) || 100;
+                                            $(this).easyPieChart({
+                                                barColor: barColor,
+                                                trackColor: trackColor,
+                                                scaleColor: false,
+                                                lineCap: 'butt',
+                                                lineWidth: parseInt(size / 10),
+                                                animate: ace.vars['old_ie'] ? false : 1000,
+                                                size: size
+                                            });
+                                        })
+                                        var $sidebar = $('.sidebar').eq(0);
+                                        if (!$sidebar.hasClass('h-sidebar')) return;
 
-                            <p class="bigger-110 bolder center grey">
-                                <i class="ace-icon fa fa-hand-o-right blue bigger-120"></i>
-                                Deseja Proseguir?
-                            </p>
-                        </div><!-- #dialog-confirm -->
-                        <div id="dialog-message" class="hide">
-                            <p id="cex_te_msg">
+                                        $(document).on('settings.ace.top_menu', function (ev, event_name, fixed) {
+                                            if (event_name !== 'sidebar_fixed') return;
 
-                            </p>
+                                            var sidebar = $sidebar.get(0);
+                                            var $window = $(window);
 
-                            <div class="hr hr-12 hr-double"></div>
+                                            //return if sidebar is not fixed or in mobile view mode
+                                            var sidebar_vars = $sidebar.ace_sidebar('vars');
+                                            if (!fixed || (sidebar_vars['mobile_view'] || sidebar_vars['collapsible'])) {
+                                                $sidebar.removeClass('lower-highlight');
+                                                //restore original, default marginTop
+                                                sidebar.style.marginTop = '';
 
-                            <p id="cex_te_pro">
+                                                $window.off('scroll.ace.top_menu')
+                                                return;
+                                            }
 
-                            </p>
-                        </div><!-- #dialog-message -->
-                        <!-- /.row -->
-                        <!-- PAGE CONTENT ENDS -->
-                    </div>
-                    <!-- /.col -->
+                                            var done = false;
+                                            $window.on('scroll.ace.top_menu', function (e) {
+
+                                                var scroll = $window.scrollTop();
+                                                scroll = parseInt(scroll / 4); //move the menu up 1px for every 4px of document scrolling
+                                                if (scroll > 17) scroll = 17;
+
+                                                if (scroll > 16) {
+                                                    if (!done) {
+                                                        $sidebar.addClass('lower-highlight');
+                                                        done = true;
+                                                    }
+                                                } else {
+                                                    if (done) {
+                                                        $sidebar.removeClass('lower-highlight');
+                                                        done = false;
+                                                    }
+                                                }
+
+                                                sidebar.style['marginTop'] = (17 - scroll) + 'px';
+                                            }).triggerHandler('scroll.ace.top_menu');
+
+                                        }).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
+
+                                        $(window).on('resize.ace.top_menu', function () {
+                                            $(document).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
+                                        });
+
+                                    });
+                                </script>
+                                <script>
+                                    function salvarForm() {
+
+                                        $('#start').submit(); //usando jquery
+                                    }
+                                    function parar() {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: window.location + 'stop',
+                                            data: '',
+                                            dataType: ''
+                                        });
+
+                                    }
+                                </script>
+                                <script>
+
+                                    //let username = {{ auth.user.username }};
+                                    let url;
+                                    let protrocol = window.location.protocol;
+                                    if (protrocol == 'http:') {
+                                        url = 'ws://' + window.location.host;
+                                    } else {
+                                        url = 'wss://' + window.location.host
+                                    }
+
+                                    const ws = adonis.Ws(url).connect();
+                                    let isConnected = false
+
+                                    ws.on('open', () => {
+                                        isConnected = true
+                                    })
+
+                                    ws.on('close', () => {
+
+                                        isConnected = false
+                                        console.log(' Websocket Desconectado, por favor reinicie a página')
+                                    })
+                                    // ###########creditos################
+                                    const User = ws.subscribe('user:' + {{ user }})
+
+                                    User.on('message', (result) => {
+                                        switch (result.type) {
+                                            case 'total':
+                                                $('#carregadas').text(result.msg)
+                                                break;
+                                            case 'status':
+
+                                                let teste = '<tr role="row" class="odd">' +
+                                                    '<td class="center"> <label class="pos-rel"><input type="checkbox" class="ace"> <span class="lbl"></span> </label></td>' +
+                                                    '<td class=""><a href="#">6504867262787880|06|2023|000</a></td>' +
+                                                    ' <td class="hidden-480 center">' +
+                                                    '<span class="label label-sm label-success">APROVADO</span>' +
+                                                    '<span class="label label-sm label-info">ELPATRON</span>' +
+                                                    '</td> </tr>'
+
+
+                                                $('#cstatus').addClass('fa-spin')
+                                                $('#status').text(result.msg)
+                                                const buttons = $("button[id='start']");
+                                                buttons.prop('disabled', 'true')
+                                                const buttons2 = $("button[id='stop']");
+                                                buttons2.prop('disabled', false)
+                                                break;
+                                            case 'statusfim':
+                                                $('#cstatus').removeClass('fa-spin')
+                                                $('#status').text(result.msg)
+                                                const startfim = $("button[id='start']");
+                                                startfim.prop('disabled', false)
+                                                const stopfim = $("button[id='stop']");
+                                                stopfim.prop('disabled', true)
+                                                break;
+                                            case 'atividade':
+                                                $('#atividade').text(result.msg)
+                                                break;
+                                            case 'card':
+                                                if (result.msg == 'valid') {
+
+                                                    let a = $('#aprovadas').text();
+                                                    let t = $('#testadas').text();
+
+                                                    $('#aprovadas').text(parseInt(a) + 1)
+                                                    $('#testadas').text(parseInt(t) + 1)
+                                                }
+                                                if (result.msg == 'denied') {
+                                                    let r = $('#reprovadas').text();
+                                                    let t = $('#testadas').text();
+
+                                                    $('#reprovadas').text(parseInt(r) + 1)
+                                                    $('#testadas').text(parseInt(t) + 1)
+                                                }
+
+                                                break;
+                                            case 'aprovado':
+                                                $('#resultados').append(result.msg)
+                                                break;
+                                            case 'reprovado':
+                                                $('#resultados').append(result.msg)
+                                                break;
+                                            case 'saldo':
+                                                $('#creditos').text(result.msg)
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                        $("#stop").on('click', function (e) {
+                                            e.preventDefault();
+
+                                            $("#dialog-confirm").removeClass('hide');
+                                            $("#dialog-confirm").dialog({
+                                                resizable: false,
+                                                width: '320',
+                                                modal: true,
+
+                                                title_html: false,
+                                                buttons: [
+                                                    {
+                                                        html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Parar Agora",
+                                                        "class": "btn btn-danger btn-minier",
+                                                        "onClick": "parar();",
+                                                        click: function () {
+
+                                                            $(this).dialog("close");
+                                                        }
+                                                    }
+                                                    ,
+                                                    {
+                                                        html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancelar",
+                                                        "class": "btn btn-minier",
+                                                        click: function () {
+                                                            $(this).dialog("close");
+                                                        }
+                                                    }
+                                                ]
+                                            });
+                                        });
+                                    });
+
+
+                                </script>
+                                <script type="text/javascript">
+                                    jQuery(function ($) {
+                                        //initiate dataTables plugin
+                                        var myTable =
+                                            $('#dynamic-table')
+                                                //.wrap("<div class='dataTables_borderWrap' />")   //if you are applying horizontal scrolling (sScrollX)
+                                                .DataTable({
+                                                    bAutoWidth: false,
+                                                    "aoColumns": [
+                                                        { "bSortable": false },
+                                                        null, null, null, null, null,
+                                                        { "bSortable": false }
+                                                    ],
+                                                    "aaSorting": [],
+
+
+                                                    //"bProcessing": true,
+                                                    //"bServerSide": true,
+                                                    //"sAjaxSource": "http://localhost:3332/checkingCards",
+
+                                                    //,
+                                                    //"sScrollY": "200px",
+                                                    "bPaginate": true,
+
+                                                    //"sScrollX": "100%",
+                                                    //"sScrollXInner": "120%",
+                                                    //"bScrollCollapse": true,
+                                                    //Note: if you are applying horizontal scrolling (sScrollX) on a ".table-bordered"
+                                                    //you may want to wrap the table inside a "div.dataTables_borderWrap" element
+                                                    zeroRecords: false,
+                                                    //"iDisplayLength": 50
+                                                    "language": {
+                                                        lengthMenu: "Mostrando _MENU_ registros por página",
+                                                        zeroRecords: "Não foram encontrados registros de api's",
+                                                        info: "Mostrando página _PAGE_ de _PAGES_",
+                                                        infoEmpty: "Nenhum registro disponível",
+                                                        infoFiltered: "(filtrado de _MAX_ registros no total)",
+                                                        search: "Pesquisar:",
+                                                        processing: "Aguarde! Carregando Dados...",
+                                                        paginate: {
+                                                            first: "Primeiro",
+                                                            last: "Ultimo",
+                                                            next: "Próximo",
+                                                            previous: "Anterior"
+                                                        }
+                                                    },
+
+
+                                                    select: {
+                                                        style: 'multi'
+                                                    }
+                                                });
+
+
+
+
+                                        $.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+
+                                        new $.fn.dataTable.Buttons(myTable, {
+                                            buttons: [
+                                                {
+                                                    "extend": "colvis",
+                                                    "text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Show/hide columns</span>",
+                                                    "className": "btn btn-white btn-primary btn-bold",
+                                                    //columns: ':not(:first):not(:last)'
+                                                },
+                                                {
+                                                    "extend": "copy",
+                                                    "text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copy to clipboard</span>",
+                                                    "className": "btn btn-white btn-primary btn-bold"
+                                                },
+                                                {
+                                                    "extend": "csv",
+                                                    "text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>Export to CSV</span>",
+                                                    "className": "btn btn-white btn-primary btn-bold"
+                                                },
+                                                {
+                                                    "extend": "excel",
+                                                    "text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Export to Excel</span>",
+                                                    "className": "btn btn-white btn-primary btn-bold"
+                                                },
+                                                {
+                                                    "extend": "pdf",
+                                                    "text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>Export to PDF</span>",
+                                                    "className": "btn btn-white btn-primary btn-bold"
+                                                },
+                                                {
+                                                    "extend": "print",
+                                                    "text": "<i class='fa fa-print bigger-110 grey'></i> <span class='hidden'>Print</span>",
+                                                    "className": "btn btn-white btn-primary btn-bold",
+                                                    autoPrint: false,
+                                                    message: 'This print was produced using the Print button for DataTables'
+                                                }
+                                            ]
+                                        });
+                                        myTable.buttons().container().appendTo($('.tableTools-container'));
+
+                                        //style the message box
+                                        var defaultCopyAction = myTable.button(1).action();
+                                        myTable.button(1).action(function (e, dt, button, config) {
+                                            defaultCopyAction(e, dt, button, config);
+                                            $('.dt-button-info').addClass('gritter-item-wrapper gritter-info gritter-center white');
+                                        });
+
+
+                                        var defaultColvisAction = myTable.button(0).action();
+                                        myTable.button(0).action(function (e, dt, button, config) {
+
+                                            defaultColvisAction(e, dt, button, config);
+
+
+                                            if ($('.dt-button-collection > .dropdown-menu').length == 0) {
+                                                $('.dt-button-collection')
+                                                    .wrapInner('<ul class="dropdown-menu dropdown-light dropdown-caret dropdown-caret" />')
+                                                    .find('a').attr('href', '#').wrap("<li />")
+                                            }
+                                            $('.dt-button-collection').appendTo('.tableTools-container .dt-buttons')
+                                        });
+
+                                        ////
+
+                                        setTimeout(function () {
+                                            $($('.tableTools-container')).find('a.dt-button').each(function () {
+                                                var div = $(this).find(' > div').first();
+                                                if (div.length == 1) div.tooltip({ container: 'body', title: div.parent().text() });
+                                                else $(this).tooltip({ container: 'body', title: $(this).text() });
+                                            });
+                                        }, 500);
+
+
+
+
+
+                                        myTable.on('select', function (e, dt, type, index) {
+                                            if (type === 'row') {
+                                                $(myTable.row(index).node()).find('input:checkbox').prop('checked', true);
+                                            }
+                                        });
+                                        myTable.on('deselect', function (e, dt, type, index) {
+                                            if (type === 'row') {
+                                                $(myTable.row(index).node()).find('input:checkbox').prop('checked', false);
+                                            }
+                                        });
+
+
+
+
+                                        /////////////////////////////////
+                                        //table checkboxes
+                                        $('th input[type=checkbox], td input[type=checkbox]').prop('checked', false);
+
+                                        //select/deselect all rows according to table header checkbox
+                                        $('#dynamic-table > thead > tr > th input[type=checkbox], #dynamic-table_wrapper input[type=checkbox]').eq(0).on('click', function () {
+                                            var th_checked = this.checked;//checkbox inside "TH" table header
+
+                                            $('#dynamic-table').find('tbody > tr').each(function () {
+                                                var row = this;
+                                                if (th_checked) myTable.row(row).select();
+                                                else myTable.row(row).deselect();
+                                            });
+                                        });
+
+                                        //select/deselect a row when the checkbox is checked/unchecked
+                                        $('#dynamic-table').on('click', 'td input[type=checkbox]', function () {
+                                            var row = $(this).closest('tr').get(0);
+                                            if (this.checked) myTable.row(row).deselect();
+                                            else myTable.row(row).select();
+                                        });
+
+
+
+                                        $(document).on('click', '#dynamic-table .dropdown-toggle', function (e) {
+                                            e.stopImmediatePropagation();
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                        });
+
+
+
+                                        //And for the first simple table, which doesn't have TableTools or dataTables
+                                        //select/deselect all rows according to table header checkbox
+                                        var active_class = 'active';
+                                        $('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function () {
+                                            var th_checked = this.checked;//checkbox inside "TH" table header
+
+                                            $(this).closest('table').find('tbody > tr').each(function () {
+                                                var row = this;
+                                                if (th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
+                                                else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
+                                            });
+                                        });
+
+                                        //select/deselect a row when the checkbox is checked/unchecked
+                                        $('#simple-table').on('click', 'td input[type=checkbox]', function () {
+                                            var $row = $(this).closest('tr');
+                                            if ($row.is('.detail-row ')) return;
+                                            if (this.checked) $row.addClass(active_class);
+                                            else $row.removeClass(active_class);
+                                        });
+
+
+
+                                        /********************************/
+                                        //add tooltip for small view action buttons in dropdown menu
+                                        $('[data-rel="tooltip"]').tooltip({ placement: tooltip_placement });
+
+                                        //tooltip placement on right or left
+                                        function tooltip_placement(context, source) {
+                                            var $source = $(source);
+                                            var $parent = $source.closest('table')
+                                            var off1 = $parent.offset();
+                                            var w1 = $parent.width();
+
+                                            var off2 = $source.offset();
+                                            //var w2 = $source.width();
+
+                                            if (parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2)) return 'right';
+                                            return 'left';
+                                        }
+
+
+
+
+                                        /***************/
+                                        $('.show-details-btn').on('click', function (e) {
+                                            e.preventDefault();
+                                            $(this).closest('tr').next().toggleClass('open');
+                                            $(this).find(ace.vars['.icon']).toggleClass('fa-angle-double-down').toggleClass('fa-angle-double-up');
+                                        });
+                                        /***************/
+
+
+
+
+
+                                        /**
+                                        //add horizontal scrollbars to a simple table
+                                        $('#simple-table').css({'width':'2000px', 'max-width': 'none'}).wrap('<div style="width: 1000px;" />').parent().ace_scroll(
+                                          {
+                                            horizontal: true,
+                                            styleClass: 'scroll-top scroll-dark scroll-visible',//show the scrollbars on top(default is bottom)
+                                            size: 2000,
+                                            mouseWheelLock: true
+                                          }
+                                        ).css('padding-top', '12px');
+                                        */
+
+
+                                    })
+                                </script>
+</body>
+
+</html>
+@else
+<script type="text/javascript">
+    window.location = '/logout'
+</script>
+@endif
+</div>
+</div>
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2 ">
+        <div class="widget-box widget-color-red">
+            <div class="widget-header">
+                <center>
+                    <h4 class="widget-title lighter smaller  text-center">Reprovadas<span id="repro"></span></h4>
+                </center>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main padding-10" id="resultReprovadas">
+
                 </div>
-                <!-- /.row -->
             </div>
-            <!-- /.page-content -->
+        </div>
+    </div>
 
+</div>
+<div id="dialog-confirm" class="hide">
+    <div class="alert alert-info bigger-110">
+        todos os dados dos cartões seram excluídos permanentemente e não poderão ser
+        recuperados.
+    </div>
+
+    <div class="space-6"></div>
+
+    <p class="bigger-110 bolder center grey">
+        <i class="ace-icon fa fa-hand-o-right blue bigger-120"></i>
+        Deseja Proseguir?
+    </p>
+</div><!-- #dialog-confirm -->
+<div id="dialog-message" class="hide">
+    <p id="cex_te_msg">
+
+    </p>
+
+    <div class="hr hr-12 hr-double"></div>
+
+    <p id="cex_te_pro">
+
+    </p>
+</div><!-- #dialog-message -->
+<!-- /.row -->
+<!-- PAGE CONTENT ENDS -->
+</div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.page-content -->
+
+</div>
+</div>
+<!-- /.main-content -->
+<div class="footer">
+    <div class="footer-inner">
+        <div class="footer-content">
+            <span class="bigger-120">
+                Elpatron &copy; 2020
+            </span>
         </div>
     </div>
-    <!-- /.main-content -->
-    <div class="footer">
-        <div class="footer-inner">
-            <div class="footer-content">
-                <span class="bigger-120">
-                    Elpatron &copy; 2020
-                </span>
-            </div>
-        </div>
-    </div>
-    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-    </a>
-    </div>
-    <!-- /.main-container -->
-    <!-- basic scripts -->
-    <!--[if !IE]> -->
-    <script src="assets/js/jquery-2.1.4.min.js"></script>
-    <!-- <![endif]-->
-    <!--[if IE]>
+</div>
+<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+    <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+</a>
+</div>
+<!-- /.main-container -->
+<!-- basic scripts -->
+<!--[if !IE]> -->
+<script src="assets/js/jquery-2.1.4.min.js"></script>
+<!-- <![endif]-->
+<!--[if IE]>
       <script src="assets/js/jquery-1.11.3.min.js"></script>
       <![endif]-->
-    <script type="text/javascript">
-        if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
-    </script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <!-- page specific plugin scripts -->
-    <!-- ace scripts -->
-    <script src="assets/js/jquery-ui.min.js"></script>
-    <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
-    <script src="assets/js/ace-elements.min.js"></script>
-    <script src="assets/js/ace.min.js"></script>
-    <script src="assets/js/jquery.easypiechart.min.js"></script>
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
+<script src="assets/js/bootstrap.min.js"></script>
+<!-- page specific plugin scripts -->
+<!-- ace scripts -->
+<script src="assets/js/jquery-ui.min.js"></script>
+<script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="assets/js/ace-elements.min.js"></script>
+<script src="assets/js/ace.min.js"></script>
+<script src="assets/js/jquery.easypiechart.min.js"></script>
 
-    <!-- inline scripts related to this page -->
-    <script type="text/javascript">
-        $('body').scrollspy({
-            target: '#listreprovados'
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    $('body').scrollspy({
+        target: '#listreprovados'
+    })
+    jQuery(function ($) {
+        $('.easy-pie-chart.percentage').each(function () {
+            var $box = $(this).closest('.infobox');
+            var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+            var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+            var size = parseInt($(this).data('size')) || 100;
+            $(this).easyPieChart({
+                barColor: barColor,
+                trackColor: trackColor,
+                scaleColor: false,
+                lineCap: 'butt',
+                lineWidth: parseInt(size / 10),
+                animate: ace.vars['old_ie'] ? false : 1000,
+                size: size
+            });
         })
-        jQuery(function ($) {
-            $('.easy-pie-chart.percentage').each(function () {
-                var $box = $(this).closest('.infobox');
-                var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
-                var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
-                var size = parseInt($(this).data('size')) || 100;
-                $(this).easyPieChart({
-                    barColor: barColor,
-                    trackColor: trackColor,
-                    scaleColor: false,
-                    lineCap: 'butt',
-                    lineWidth: parseInt(size / 10),
-                    animate: ace.vars['old_ie'] ? false : 1000,
-                    size: size
-                });
-            })
-            var $sidebar = $('.sidebar').eq(0);
-            if (!$sidebar.hasClass('h-sidebar')) return;
+        var $sidebar = $('.sidebar').eq(0);
+        if (!$sidebar.hasClass('h-sidebar')) return;
 
-            $(document).on('settings.ace.top_menu', function (ev, event_name, fixed) {
-                if (event_name !== 'sidebar_fixed') return;
+        $(document).on('settings.ace.top_menu', function (ev, event_name, fixed) {
+            if (event_name !== 'sidebar_fixed') return;
 
-                var sidebar = $sidebar.get(0);
-                var $window = $(window);
+            var sidebar = $sidebar.get(0);
+            var $window = $(window);
 
-                //return if sidebar is not fixed or in mobile view mode
-                var sidebar_vars = $sidebar.ace_sidebar('vars');
-                if (!fixed || (sidebar_vars['mobile_view'] || sidebar_vars['collapsible'])) {
-                    $sidebar.removeClass('lower-highlight');
-                    //restore original, default marginTop
-                    sidebar.style.marginTop = '';
+            //return if sidebar is not fixed or in mobile view mode
+            var sidebar_vars = $sidebar.ace_sidebar('vars');
+            if (!fixed || (sidebar_vars['mobile_view'] || sidebar_vars['collapsible'])) {
+                $sidebar.removeClass('lower-highlight');
+                //restore original, default marginTop
+                sidebar.style.marginTop = '';
 
-                    $window.off('scroll.ace.top_menu')
-                    return;
+                $window.off('scroll.ace.top_menu')
+                return;
+            }
+
+            var done = false;
+            $window.on('scroll.ace.top_menu', function (e) {
+
+                var scroll = $window.scrollTop();
+                scroll = parseInt(scroll / 4); //move the menu up 1px for every 4px of document scrolling
+                if (scroll > 17) scroll = 17;
+
+                if (scroll > 16) {
+                    if (!done) {
+                        $sidebar.addClass('lower-highlight');
+                        done = true;
+                    }
+                } else {
+                    if (done) {
+                        $sidebar.removeClass('lower-highlight');
+                        done = false;
+                    }
                 }
 
-                var done = false;
-                $window.on('scroll.ace.top_menu', function (e) {
+                sidebar.style['marginTop'] = (17 - scroll) + 'px';
+            }).triggerHandler('scroll.ace.top_menu');
 
-                    var scroll = $window.scrollTop();
-                    scroll = parseInt(scroll / 4); //move the menu up 1px for every 4px of document scrolling
-                    if (scroll > 17) scroll = 17;
+        }).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
 
-                    if (scroll > 16) {
-                        if (!done) {
-                            $sidebar.addClass('lower-highlight');
-                            done = true;
-                        }
-                    } else {
-                        if (done) {
-                            $sidebar.removeClass('lower-highlight');
-                            done = false;
-                        }
-                    }
-
-                    sidebar.style['marginTop'] = (17 - scroll) + 'px';
-                }).triggerHandler('scroll.ace.top_menu');
-
-            }).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
-
-            $(window).on('resize.ace.top_menu', function () {
-                $(document).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
-            });
-
+        $(window).on('resize.ace.top_menu', function () {
+            $(document).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
         });
-    </script>
-    <script>
-        function salvarForm() {
 
-            $('#start').submit(); //usando jquery
-        }
-        function parar() {
-            $.ajax({
-                type: "GET",
-                url: window.location + 'stop',
-                data: '',
-                dataType: ''
-            });
+    });
+</script>
+<script>
+    function salvarForm() {
 
+        $('#start').submit(); //usando jquery
+    }
+    function parar() {
+        $.ajax({
+            type: "GET",
+            url: window.location + 'stop',
+            data: '',
+            dataType: ''
+        });
+
+    }
+</script>
+<script>
+    let id = {{ auth.user.id }};
+    let url;
+    let protrocol = window.location.protocol;
+    if (protrocol == 'http:') {
+        url = 'ws://' + window.location.host;
+    } else {
+        url = 'wss://' + window.location.host
+    }
+
+    const ws = adonis.Ws(url).connect();
+    let isConnected = false
+
+    ws.on('open', () => {
+        isConnected = true
+    })
+
+    ws.on('close', () => {
+
+        isConnected = false
+        // alert(' Websocket Desconectado, por favor reinicie a página')
+    })
+    // ###########creditos################
+    const creditos = ws.subscribe('status:cred' + id)
+
+    creditos.on('message', (creditos) => {
+
+        $('#creditos').text(creditos)
+    });
+    // ###########carregadas################
+    const status = ws.subscribe('status:s' + id)
+
+    status.on('message', (s) => {
+
+        if (s.s == 'start') {
+            $('#cstatus').addClass('fa-spin')
         }
-    </script>
-    <script>
-        let id = {{ auth.user.id }};
-        let url;
-        let protrocol = window.location.protocol;
-        if (protrocol == 'http:') {
-            url = 'ws://' + window.location.host;
+        if (s.s == 'end') {
+            $('#cstatus').removeClass('fa-spin')
+        }
+
+        $('#status').text(s.msg)
+    });
+    // ###########carregadas################
+    const carregadas = ws.subscribe('status:c' + id)
+
+    carregadas.on('message', (c) => {
+
+        $('#carregadas').text(c)
+    });
+    // ###########testadas################
+    const testadas = ws.subscribe('status:t' + id)
+
+    testadas.on('message', (t) => {
+        if (t == '') {
+            $('#testadas').text(0)
+
         } else {
-            url = 'wss://' + window.location.host
+            $('#testadas').text(t)
         }
 
-        const ws = adonis.Ws(url).connect();
-        let isConnected = false
+    });
+    // ###########reprovadas################
+    const reprovadas = ws.subscribe('status:r' + id)
 
-        ws.on('open', () => {
-            isConnected = true
-        })
+    reprovadas.on('message', (r) => {
 
-        ws.on('close', () => {
+        if (r.cont == 0) {
+            console.log(r.cont)
+            $('#resultAprovadas .remov').remove()
+        } else {
+            $('#resultReprovadas').append(r.msg)
+        }
 
-            isConnected = false
-            // alert(' Websocket Desconectado, por favor reinicie a página')
-        })
-        // ###########creditos################
-        const creditos = ws.subscribe('status:cred' + id)
+        $('#reprovadas').text(r.cont)
+        $('#repro').text(' #' + r.cont + '#')
+    });
+    // ###########button start################
+    const start = ws.subscribe('status:st' + id)
+    start.on('message', (st) => {
+        const buttons = $("button[id='start']");
+        buttons.prop('disabled', st)
+        console.log(st)
 
-        creditos.on('message', (creditos) => {
+    });
+    // ###########button stop################
+    const stop = ws.subscribe('status:stop' + id)
+    stop.on('message', (stop) => {
+        const buttons2 = $("button[id='stop']");
+        buttons2.prop('disabled', stop)
 
-            $('#creditos').text(creditos)
-        });
-        // ###########carregadas################
-        const status = ws.subscribe('status:s' + id)
+    });
 
-        status.on('message', (s) => {
+    // ###########aprovadas################
+    const aprovadas = ws.subscribe('status:a' + id)
 
-            if (s.s == 'start') {
-                $('#cstatus').addClass('fa-spin')
-            }
-            if (s.s == 'end') {
-                $('#cstatus').removeClass('fa-spin')
-            }
+    aprovadas.on('message', (a) => {
 
-            $('#status').text(s.msg)
-        });
-        // ###########carregadas################
-        const carregadas = ws.subscribe('status:c' + id)
-
-        carregadas.on('message', (c) => {
-
-            $('#carregadas').text(c)
-        });
-        // ###########testadas################
-        const testadas = ws.subscribe('status:t' + id)
-
-        testadas.on('message', (t) => {
-            if (t == '') {
-                $('#testadas').text(0)
-
-            } else {
-                $('#testadas').text(t)
-            }
-
-        });
-        // ###########reprovadas################
-        const reprovadas = ws.subscribe('status:r' + id)
-
-        reprovadas.on('message', (r) => {
-
-            if (r.cont == 0) {
-                console.log(r.cont)
-                $('#resultAprovadas .remov').remove()
-            } else {
-                $('#resultReprovadas').append(r.msg)
-            }
-
-            $('#reprovadas').text(r.cont)
-            $('#repro').text(' #' + r.cont + '#')
-        });
-        // ###########button start################
-        const start = ws.subscribe('status:st' + id)
-        start.on('message', (st) => {
-            const buttons = $("button[id='start']");
-            buttons.prop('disabled', st)
-            console.log(st)
-
-        });
-        // ###########button stop################
-        const stop = ws.subscribe('status:stop' + id)
-        stop.on('message', (stop) => {
-            const buttons2 = $("button[id='stop']");
-            buttons2.prop('disabled', stop)
-
-        });
-
-        // ###########aprovadas################
-        const aprovadas = ws.subscribe('status:a' + id)
-
-        aprovadas.on('message', (a) => {
-
-            if (a.cont == 0) {
-                $('#resultAprovadas .remov').remove()
-            } else {
-                $('#resultAprovadas').append(a.msg)
-            }
-
-            $('#aprovadas').text(a.cont)
-
-            $('#apro').text(' #' + a.cont + '#')
-        });
-        // ###########mensagem################
-        const mensagem = ws.subscribe('status:msg' + id)
-
-        mensagem.on('message', (a) => {
+        if (a.cont == 0) {
+            $('#resultAprovadas .remov').remove()
+        } else {
             $('#resultAprovadas').append(a.msg)
-            $('#aprovadas').text(a.cont)
-        });
+        }
 
-        //#######expired##############
+        $('#aprovadas').text(a.cont)
 
-        const credexpired = ws.subscribe('status:cex_te' + id)
+        $('#apro').text(' #' + a.cont + '#')
+    });
+    // ###########mensagem################
+    const mensagem = ws.subscribe('status:msg' + id)
 
-        credexpired.on('message', (tx) => {
-            $('#cex_te_msg').text(tx.msg);
-            $('#cex_te_pro').text(tx.pro);
+    mensagem.on('message', (a) => {
+        $('#resultAprovadas').append(a.msg)
+        $('#aprovadas').text(a.cont)
+    });
 
-            var dialog = $("#dialog-message").removeClass('hide').dialog({
-                modal: true,
-                title_html: true,
-                buttons: [
+    //#######expired##############
 
-                    {
-                        text: "OK",
-                        "class": "btn btn-primary btn-minier",
-                        click: function () {
-                            //location.reload();
-                            $(this).dialog("close");
-                        }
+    const credexpired = ws.subscribe('status:cex_te' + id)
+
+    credexpired.on('message', (tx) => {
+        $('#cex_te_msg').text(tx.msg);
+        $('#cex_te_pro').text(tx.pro);
+
+        var dialog = $("#dialog-message").removeClass('hide').dialog({
+            modal: true,
+            title_html: true,
+            buttons: [
+
+                {
+                    text: "OK",
+                    "class": "btn btn-primary btn-minier",
+                    click: function () {
+                        //location.reload();
+                        $(this).dialog("close");
                     }
-                ]
-            });
+                }
+            ]
         });
+    });
 
 
 
-        $("#stop").on('click', function (e) {
-            e.preventDefault();
+    $("#stop").on('click', function (e) {
+        e.preventDefault();
 
-            $("#dialog-confirm").removeClass('hide');
-            $("#dialog-confirm").dialog({
-                resizable: false,
-                width: '320',
-                modal: true,
+        $("#dialog-confirm").removeClass('hide');
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            width: '320',
+            modal: true,
 
-                title_html: false,
-                buttons: [
-                    {
-                        html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Parar Agora",
-                        "class": "btn btn-danger btn-minier",
-                        "onClick": "parar();",
-                        click: function () {
+            title_html: false,
+            buttons: [
+                {
+                    html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Parar Agora",
+                    "class": "btn btn-danger btn-minier",
+                    "onClick": "parar();",
+                    click: function () {
 
-                            $(this).dialog("close");
-                        }
+                        $(this).dialog("close");
                     }
-                    ,
-                    {
-                        html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancelar",
-                        "class": "btn btn-minier",
-                        click: function () {
-                            $(this).dialog("close");
-                        }
+                }
+                ,
+                {
+                    html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancelar",
+                    "class": "btn btn-minier",
+                    click: function () {
+                        $(this).dialog("close");
                     }
-                ]
-            });
+                }
+            ]
         });
-    </script>
+    });
+</script>
 </body>
 
 </html>

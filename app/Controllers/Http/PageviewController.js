@@ -90,7 +90,7 @@ class PageviewController {
         }
         let user = auth.user.id
 
-        return view.render('layout.paineluser', { msg, user })
+        return view.render('layout.adminUser', { msg, user })
 
 
     }
