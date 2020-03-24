@@ -356,9 +356,46 @@
                         <div class="col-md-6 col-md-offset-3 " style="color: green; font-size: 18px;">
                             <p id="atividade"></p>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2">
+                                <div class="widget-box widget-color-green">
+                                    <div class="widget-header">
+                                        <center>
+                                            <h4 class="widget-title lighter smaller">Aprovadas<span
+                                                    id="apro"></span></span></h4>
+                                        </center>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div id="resultAprovadas" class="widget-main padding-8">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                        <div class="row">
+                            <div class="col-lg-8 col-lg-offset-2 ">
+                                <div class="widget-box widget-color-red">
+                                    <div class="widget-header">
+                                        <center>
+                                            <h4 class="widget-title lighter smaller  text-center">Reprovadas<span
+                                                    id="repro"></span></h4>
+                                        </center>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main padding-10" id="resultReprovadas">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                         <!--############################################-->
 
                         <!-- /.row -->
+                         <!--
                         <div class="row">
                             <div class="col-xs-6 col-md-offset-3 table-responsive">
                                 <h3 class="header smaller lighter blue"></h3>
@@ -373,9 +410,6 @@
                                     Resultados
                                 </div>
 
-                                <!-- div.table-responsive -->
-
-                                <!-- div.dataTables_borderWrap -->
                                 <div>
                                     <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
                                         <div class="row">
@@ -432,8 +466,9 @@
                                 </div>
                             </div>
 
-                            <!--############################################-->
+                           ############################################
                         </div>
+                        -->
                         <div id="dialog-confirm" class="hide">
                             <div class="alert alert-info bigger-110">
                                 todos os dados dos cartões seram excluídos permanentemente e não poderão ser
@@ -681,10 +716,10 @@
 
                     break;
                 case 'aprovado':
-                    $('#resultados').append(result.msg)
+                    $('#resultAprovadas').append(result.msg)
                     break;
                 case 'reprovado':
-                    $('#resultados').append(result.msg)
+                    $('#repro').append(result.msg)
                     break;
                 case 'saldo':
                     $('#creditos').text(result.msg)
