@@ -35,7 +35,7 @@ class PageviewController {
     async showUser({ view, auth, session }) {
         const use = await User.find(auth.user.id)
         let type = use.balance.split('')
-        / // let cred = use.balance
+        // let cred = use.balance
         let atual = new Date().toISOString().replace(/\.\d{3}Z$/, '')
         let dateatual = atual.split('T')
         let dateA = dateatual[0] + ' ' + dateatual[1]
@@ -90,7 +90,7 @@ class PageviewController {
         }
         let user = auth.user.id
 
-        return view.render('layout.paineluser', { msg ,user})
+        return view.render('layout.paineluser', { msg, user })
 
 
     }
@@ -131,6 +131,9 @@ class PageviewController {
         return view.render('viewusers', { items })
 
 
+    }
+    async listCadrs({ view, auth }) {
+        return view.render('users.listcards')
     }
 
 }

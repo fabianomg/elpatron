@@ -177,10 +177,10 @@
             <b class="arrow"></b>
         </li>
 
-       
+
 
         <li class="hover">
-            <a href="/listcards">
+            <a href="/liscards">
                 <i class="menu-icon fa fa-list"></i>
                 <span class="menu-text"> Cartões </span>
 
@@ -191,283 +191,123 @@
 
         </li>
 
-        
+
     </ul>
 
     <div class="main-container ace-save-state" id="main-container">
 
 
-        <center>
-            <div class="row" style="margin-top:20px; ">
-                <div class="col-md-12 justify-content-center">
-                    <span class="label label-xlg label-info  arrowed-right" style="font-size: 18px;">
-                        Você tem: <span class="badge badge-success" style="font-size: 18px;"
-                            id="creditos">{{auth.user.balance}}</span> Créditos
-                    </span>
-                    <span style="margin-top:10px;font-size: 18px;" class="label label-xlg label-info arrowed-in ">Seus
-                        créditos expiram em: <span class="badge badge-success"
-                            style="font-size: 18px;">{{auth.user.end}}</span>
-                    </span>
-                </div>
-            </div>
-        </center>
 
+        <!--############################################-->
 
-    </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-xs-10 col-md-offset-1 table-responsive">
+                <h3 class="header smaller lighter blue"></h3>
 
-    <div class="row justify-content-center">
-        <center>
-            <div id="msg" {{msg.h}} class=" col-md-8 col-md-offset-2 alert alert-{{msg.c}}">
-
-                <button type="button" class="close" data-dismiss="alert">
-                    <i class="ace-icon fa fa-times"></i>
-                </button>
-                <strong id="emsgdestaque">{{msg.md}}</strong>
-                {{msg.m}}
-                <br>
-            </div>
-
-            <div id="menss">
-
-            </div>
-            @include('includes.notification')
-        </center>
-    </div>
-
-    <div class="main-content" style="background-color:#868e96;">
-        <div class="main-content-inner">
-            <div class="page-content">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <!-- PAGE CONTENT BEGINS -->
-                        <div class="row">
-                            <div class="space-6"></div>
-                            <div class="col-sm-3 infobox-container">
-                                <div class="col-md-2">
-                                    <div class="text-center">
-                                        <img style="width: 200px; height: auto;" src="assets/images/logotipo.png"
-                                            class="rounded" alt="El Patron">
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <form id="start" action="{{ route('start') }}" method="post">
-                                {{ csrfField() }}
-
-                                <div style="padding-left: 100px;"
-                                    class="col-md-4 col-md-offset-1 text-center infobox-container">
-                                    <textarea rows="4" cols="2" style="max-width: 245px;min-height:300px;resize: none;"
-                                        required form="start" placeholder="000000000000000|00|0000|000" id="txtstart"
-                                        name="txtstart" class="autosize-transition form-control"
-                                        style="overflow: hidden; overflow-wrap: break-word; resize: horizontal;"></textarea>
-                                </div>
-
-                            </form>
-                            <div class="vspace-12-sm"></div>
-                            <div class="col-sm-3">
-                                <div class="widget-box transparent">
-                                    <div class="widget-header widget-header-flat">
-                                        <h3 class="widget-title lighter">
-
-                                            <i id="cstatus" class="ace-icon fa fa-star orange "></i>
-                                            Status <span id="status"
-                                                class="label label-success arrowed arrowed-right">Aguardando...</span>
-                                        </h3>
-                                        <div class="widget-toolbar">
-                                            <a href="#" data-action="collapse">
-                                                <i class="ace-icon fa fa-chevron-up"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="widget-body">
-                                        <div class="widget-main no-padding">
-                                            <div class="table-responsive-md">
-                                                <table class="table table-bordered table-responsiv">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="display-4">Aprovadas</td>
-                                                            <td class="hidden-380">
-                                                                <span id="aprovadas"
-                                                                    class="label label-success arrowed-right arrowed-in">0</span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Reprovadas</td>
-                                                            <td class="hidden-380">
-                                                                <span id="reprovadas"
-                                                                    class="label label-danger arrowed-right arrowed-in">0</span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Testadas</td>
-                                                            <td class="hidden-380">
-                                                                <span id="testadas"
-                                                                    class="label label-warning arrowed-right arrowed-in">0</span>
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>Total de Carregadas</td>
-                                                            <td class="hidden-380">
-                                                                <span id="carregadas"
-                                                                    class="label label-info arrowed-right arrowed-in">0</span>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <!-- /.widget-main -->
-                                    </div>
-                                    <!-- /.widget-body -->
-                                </div>
-                                <!-- /.widget-box -->
-                            </div>
-                            <!-- /.col -->
+                <div class="clearfix">
+                    <div class="pull-right tableTools-container">
+                        <div class="dt-buttons btn-overlap btn-group">
                         </div>
-                        <!-- /.row -->
-                        <div class="row text-center">
-                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{msg.t}}">
-                                <button onclick="salvarForm();" {{msg.b}} id="start" type="button"
-                                    style="margin-top:10px;" class="btn btn-success">
-                                    <i class="ace-icon fa fa-play align-top bigger-125"></i> Começar
-                                </button>
-                            </span>
-                            <!-- inicio button parar-->
-                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                                title="inicie uma verificação para poder ativar o botão">
-                                <button type="button" id="stop" disabled="true" style="margin-top:10px;"
-                                    class="btn btn-danger">
-                                    <i class="ace-icon fa fa-stop align-top bigger-125"></i> Parar
-                                </button>
-                            </span>
-
-                            <!-- fim button parar-->
-                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                                title="voltar página anterior">
-                                <a style="margin-top:10px;" href="javascript: history.go(-1)" type="button"
-                                    class="btn btn-primary">
-                                    <i class="ace-icon fa fa-home  align-top bigger-125 icon-on-right"></i> Home
-                                </a>
-                            </span>
-                        </div>
-                        <div class="hr hr32 hr-dotted"></div>
-                        <div class="col-md-6 col-md-offset-3 " style="color: green; font-size: 18px;">
-                            <p id="atividade"></p>
-                        </div>
-                        <!--############################################-->
-
-                        <!-- /.row -->
-                        <div class="row">
-                            <div class="col-xs-6 col-md-offset-3 table-responsive">
-                                <h3 class="header smaller lighter blue"></h3>
-
-                                <div class="clearfix">
-                                    <div class="pull-right tableTools-container">
-                                        <div class="dt-buttons btn-overlap btn-group">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-header">
-                                    Resultados
-                                </div>
-
-                                <!-- div.table-responsive -->
-
-                                <!-- div.dataTables_borderWrap -->
-                                <div>
-                                    <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="dataTables_length" id="dynamic-table_length">
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <table id="dynamic-table"
-                                            class="table table-striped table-bordered table-hover dataTable no-footer table-responsive"
-                                            role="grid" aria-describedby="dynamic-table_info">
-                                            <thead>
-                                                <tr role="row">
-                                                    <th class="center sorting_disabled" rowspan="1" colspan="1"
-                                                        aria-label=" ">
-                                                        <label class="pos-rel">
-                                                            <input type="checkbox" class="ace">
-                                                            <span class="lbl"></span>
-                                                        </label>
-                                                    </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="dynamic-table"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Domain: activate to sort column ascending">Cartões
-                                                    </th>
-
-                                                    <th class="hidden-480 sorting" tabindex="0"
-                                                        aria-controls="dynamic-table" rowspan="1" colspan="1"
-                                                        aria-label="Status: activate to sort column ascending">Status
-                                                    </th>
-
-                                                </tr>
-                                            </thead>
-
-                                            <tbody id="resultados">
-
-
-
-                                            </tbody>
-                                        </table>
-                                        <div class="row">
-                                            <div class="col-xs-6">
-                                                <div class="dataTables_info" id="dynamic-table_info" role="status"
-                                                    aria-live="polite"></div>
-                                            </div>
-                                            <div class="col-xs-6">
-                                                <div class="dataTables_paginate paging_simple_numbers"
-                                                    id="dynamic-table_paginate">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!--############################################-->
-                        </div>
-                        <div id="dialog-confirm" class="hide">
-                            <div class="alert alert-info bigger-110">
-                                todos os dados dos cartões seram excluídos permanentemente e não poderão ser
-                                recuperados.
-                            </div>
-
-                            <div class="space-6"></div>
-
-                            <p class="bigger-110 bolder center grey">
-                                <i class="ace-icon fa fa-hand-o-right blue bigger-120"></i>
-                                Deseja Proseguir?
-                            </p>
-                        </div><!-- #dialog-confirm -->
-                        <div id="dialog-message" class="hide">
-                            <p id="cex_te_msg">
-
-                            </p>
-
-                            <div class="hr hr-12 hr-double"></div>
-
-                            <p id="cex_te_pro">
-
-                            </p>
-                        </div><!-- #dialog-message -->
-                        <!-- /.row -->
-                        <!-- PAGE CONTENT ENDS -->
                     </div>
-                    <!-- /.col -->
                 </div>
-                <!-- /.row -->
-            </div>
-            <!-- /.page-content -->
+                <div class="table-header">
+                    Resultados
+                </div>
 
+                <!-- div.table-responsive -->
+
+                <!-- div.dataTables_borderWrap -->
+                <div>
+                    <div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="dataTables_length" id="dynamic-table_length">
+                                </div>
+                            </div>
+
+                        </div>
+                        <table id="dynamic-table"
+                            class="table table-striped table-bordered table-hover dataTable no-footer table-responsive"
+                            role="grid" aria-describedby="dynamic-table_info">
+                            <thead>
+                                <tr role="row">
+                                    <th class="center sorting_disabled" rowspan="1" colspan="1" aria-label=" ">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace">
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1"
+                                        colspan="1" aria-label="Domain:  to sort column ascending">Card
+                                    </th>
+
+                                    <th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table"
+                                        rowspan="1" colspan="1" aria-label="Status:  to sort column ascending">Mês
+                                    </th>
+                                    <th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table"
+                                        rowspan="1" colspan="1" aria-label="Status:  to sort column ascending">Ano
+                                    </th>
+                                    <th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table"
+                                        rowspan="1" colspan="1" aria-label="Status:  to sort column ascending">CVV
+                                    </th>
+                                    <th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table"
+                                        rowspan="1" colspan="1" aria-label="Status:  to sort column ascending">Valido
+                                    </th>
+                                    <th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table"
+                                        rowspan="1" colspan="1" aria-label="Status:  to sort column ascending">Testado
+                                    </th>
+                                    <th class="hidden-480 sorting" tabindex="0" aria-controls="dynamic-table"
+                                        rowspan="1" colspan="1" aria-label="Status:  to sort column ascending">Data
+                                    </th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="resultados">
+
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--############################################-->
         </div>
+
+        <div id="dialog-message" class="hide">
+            <p id="cex_te_msg">
+
+            </p>
+
+            <div class="hr hr-12 hr-double"></div>
+
+            <p id="cex_te_pro">
+
+            </p>
+        </div><!-- #dialog-message -->
+        <!-- /.row -->
+        <!-- PAGE CONTENT ENDS -->
+    </div>
+    <!-- /.col -->
+    </div>
+    </div>
+    <!-- /.row -->
+    </div>
+    <!-- /.page-content -->
+
+    </div>
     </div>
     <!-- /.main-content -->
     <div class="footer">
@@ -587,146 +427,7 @@
 
         });
     </script>
-    <script>
-        function salvarForm() {
-
-            $('#start').submit(); //usando jquery
-        }
-        function parar() {
-            $.ajax({
-                type: "GET",
-                url: window.location + 'stop',
-                data: '',
-                dataType: ''
-            });
-
-        }
-    </script>
-    <script>
-
-        //let username = {{ auth.user.username }};
-        let url;
-        let protrocol = window.location.protocol;
-        if (protrocol == 'http:') {
-            url = 'ws://' + window.location.host;
-        } else {
-            url = 'wss://' + window.location.host
-        }
-
-        const ws = adonis.Ws(url).connect();
-        let isConnected = false
-
-        ws.on('open', () => {
-            isConnected = true
-        })
-
-        ws.on('close', () => {
-
-            isConnected = false
-            console.log(' Websocket Desconectado, por favor reinicie a página')
-        })
-        // ###########creditos################
-        const User = ws.subscribe('user:' + {{ user }})
-
-        User.on('message', (result) => {
-            switch (result.type) {
-                case 'total':
-                    $('#carregadas').text(result.msg)
-                    break;
-                case 'status':
-
-                    let teste = '<tr role="row" class="odd">' +
-                        '<td class="center"> <label class="pos-rel"><input type="checkbox" class="ace"> <span class="lbl"></span> </label></td>' +
-                        '<td class=""><a href="#">6504867262787880|06|2023|000</a></td>' +
-                        ' <td class="hidden-480 center">' +
-                        '<span class="label label-sm label-success">APROVADO</span>' +
-                        '<span class="label label-sm label-info">ELPATRON</span>' +
-                        '</td> </tr>'
-
-
-                    $('#cstatus').addClass('fa-spin')
-                    $('#status').text(result.msg)
-                    const buttons = $("button[id='start']");
-                    buttons.prop('disabled', 'true')
-                    const buttons2 = $("button[id='stop']");
-                    buttons2.prop('disabled', false)
-                    break;
-                case 'statusfim':
-                    $('#cstatus').removeClass('fa-spin')
-                    $('#status').text(result.msg)
-                    const startfim = $("button[id='start']");
-                    startfim.prop('disabled', false)
-                    const stopfim = $("button[id='stop']");
-                    stopfim.prop('disabled', true)
-                    break;
-                case 'atividade':
-                    $('#atividade').text(result.msg)
-                    break;
-                case 'card':
-                    if (result.msg == 'valid') {
-
-                        let a = $('#aprovadas').text();
-                        let t = $('#testadas').text();
-
-                        $('#aprovadas').text(parseInt(a) + 1)
-                        $('#testadas').text(parseInt(t) + 1)
-                    }
-                    if (result.msg == 'denied') {
-                        let r = $('#reprovadas').text();
-                        let t = $('#testadas').text();
-
-                        $('#reprovadas').text(parseInt(r) + 1)
-                        $('#testadas').text(parseInt(t) + 1)
-                    }
-
-                    break;
-                case 'aprovado':
-                    $('#resultados').append(result.msg)
-                    break;
-                case 'reprovado':
-                    $('#resultados').append(result.msg)
-                    break;
-                case 'saldo':
-                    $('#creditos').text(result.msg)
-                    break;
-                default:
-                    break;
-            }
-            $("#stop").on('click', function (e) {
-                e.preventDefault();
-
-                $("#dialog-confirm").removeClass('hide');
-                $("#dialog-confirm").dialog({
-                    resizable: false,
-                    width: '320',
-                    modal: true,
-
-                    title_html: false,
-                    buttons: [
-                        {
-                            html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Parar Agora",
-                            "class": "btn btn-danger btn-minier",
-                            "onClick": "parar();",
-                            click: function () {
-
-                                $(this).dialog("close");
-                            }
-                        }
-                        ,
-                        {
-                            html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancelar",
-                            "class": "btn btn-minier",
-                            click: function () {
-                                $(this).dialog("close");
-                            }
-                        }
-                    ]
-                });
-            });
-        });
-
-
-    </script>
+    
     <script type="text/javascript">
         jQuery(function ($) {
             //initiate dataTables plugin
@@ -745,7 +446,7 @@
 
                         //"bProcessing": true,
                         //"bServerSide": true,
-                        //"sAjaxSource": "http://localhost:3332/checkingCards",
+                        "sAjaxSource": "localhost:3332/listCards",
 
                         //,
                         //"sScrollY": "200px",

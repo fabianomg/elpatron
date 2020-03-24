@@ -10,6 +10,8 @@ Route.get('/viewusers', 'PageviewController.showUsers').middleware('auth')
 Route.on('/cadcaptcha').render('captcha').middleware('auth')
 Route.on('/cadproxy').render('proxy').middleware('auth')
 Route.on('/cadsite').render('configsite').middleware('auth')
+Route.get('/listcards','PageviewController.listCadrs').middleware('auth')
+
 
 //Route.on('/').render('home').as('home').middleware(['auth'])
 
