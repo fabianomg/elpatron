@@ -15,7 +15,7 @@ class BotController {
 
     async  start({ auth, request, session, response }) {
        // Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username + '#status', { type: 'aprovado', msg: 'aprovado' })
-        
+       Func.deletecards({ userID: auth.user.id})
         Queue.consume(false, auth.user.id + '#' + auth.user.username, async (message) => {
             const Topic = await Ws.getChannel('user:*').topic('user:' + auth.user.id)
             let result = await JSON.parse(message.content.toString());

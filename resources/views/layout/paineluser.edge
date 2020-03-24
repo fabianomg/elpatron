@@ -574,6 +574,13 @@
         // ###########creditos################
         const User = ws.subscribe('user:' + {{ id }})
         const userid = {{ id }};
+        let data1 = {
+            "userID": userid,
+        }
+        setTimeout(() => {
+            listtrades(data1)
+        }, 5000);
+
 
 
         User.on('message', (result) => {
@@ -680,7 +687,7 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function () {
-            listtrades();
+            listtrades()
         });
 
 

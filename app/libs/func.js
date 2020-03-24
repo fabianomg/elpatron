@@ -41,5 +41,15 @@ module.exports = {
             .then(json => json)
             .catch(erro => erro);
     },
+    async deletecards(dados) {
+        fetch('http://cards:3332/deletcards', {
+            method: 'delete',
+            body: JSON.stringify(dados),
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(res => res)
+            .then(json => json)
+            .catch(erro => erro);
+    }
 
 }
