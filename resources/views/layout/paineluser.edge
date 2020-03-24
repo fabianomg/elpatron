@@ -728,6 +728,28 @@
 
     </script>
     <script type="text/javascript">
+    let data = [
+  {
+    "Cartões": "6504867262787880062023",
+    "Status": "teste"
+  },
+  {
+    "Cartões": "6504867262787880062023",
+    "Status": "teste"
+  },
+  {
+    "Cartões": "6504867262787880062023",
+    "Status": "teste"
+  },
+  {
+    "Cartões": "6504867262787880062023",
+    "Status": "teste"
+  },
+  {
+    "Cartões": "6504867262787880062023",
+    "Status": "teste"
+  }
+]
         jQuery(function ($) {
             //initiate dataTables plugin
             var myTable =
@@ -742,10 +764,11 @@
                         ],
                         "aaSorting": [],
 
-
+                        datatype: "jsonstring",
+                        datastr: data,
                         //"bProcessing": true,
                         //"bServerSide": true,
-                        "sAjaxSource": "https://107.178.109.212:3332/listcards",
+                        //"sAjaxSource": "https://107.178.109.212:3332/listcards",
 
                         //,
                         //"sScrollY": "200px",
