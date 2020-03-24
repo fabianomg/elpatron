@@ -35,8 +35,7 @@ class PageviewController {
     async showUser({ view, auth, session }) {
         const use = await User.find(auth.user.id)
         let type = use.balance.split('')
-        console.log(type)
-        // let cred = use.balance
+        / // let cred = use.balance
         let atual = new Date().toISOString().replace(/\.\d{3}Z$/, '')
         let dateatual = atual.split('T')
         let dateA = dateatual[0] + ' ' + dateatual[1]
