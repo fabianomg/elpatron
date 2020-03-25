@@ -640,7 +640,7 @@
                         "userID": userid,
                     }
                     console.log(data)
-                    listtrades(data)
+                    listtrades(userid)
                     break;
                 case 'reprovado':
                     $('#repro').append(result.msg)
@@ -686,12 +686,7 @@
 
     </script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            listtrades()
-        });
-
-
-        function listtrades(data) {
+    function listtrades(data) {
 
             $('#listcards').DataTable({
 
@@ -725,7 +720,7 @@
                 processing: false,
                 responsive: true,
                 ajax: {
-                    url: 'http://107.178.109.212:3332/checkingcards',
+                    url: 'http://localhost:3332/checkingcards',
                     type: "GET",
                     contentType: "application/json",
                     data: data

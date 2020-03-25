@@ -135,7 +135,8 @@ class PageviewController {
 
     }
     async listCadrs({ view, auth }) {
-        return view.render('users.listcards')
+        let id = auth.user.id;
+        return view.render('users.listcards',{id})
     }
 
 }

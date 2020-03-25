@@ -14,8 +14,16 @@ const fetch = require('node-fetch');
 class BotController {
 
     async  start({ auth, request, session, response }) {
-       // Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username + '#status', { type: 'aprovado', msg: 'aprovado' })
-       Func.deletecards({ userID: auth.user.id})
+
+
+        // Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username + '#status', { type: 'aprovado', msg: 'aprovado' })
+
+        // apagando dados de cache e mongo
+        Func.deletecards({ userID: auth.user.id })
+        await Redis.del(auth.user.id + 'listcardsreprovados');
+        await Redis.del(auth.user.id + 'listcardsaprovados');
+        await Redis.del(auth.user.id + 'listcards');
+
         Queue.consume(false, auth.user.id + '#' + auth.user.username, async (message) => {
             const Topic = await Ws.getChannel('user:*').topic('user:' + auth.user.id)
             let result = await JSON.parse(message.content.toString());
@@ -71,7 +79,6 @@ class BotController {
         // esse trexo de código verificai padrão dos cartões digitados
         let texto = await request.only('txtstart')
         let texto2 = texto.txtstart.split("\r\n")
-        console.log(texto)
         for (const item of texto2) {
             let fistnumber = item.substr(0, 1);
             if (fistnumber != 6) {
@@ -96,7 +103,7 @@ class BotController {
             }
             cards.push(item)
         }
-       
+
         if (texto2.length < 5) {
             session.flash({
                 notification: {
@@ -106,7 +113,7 @@ class BotController {
             })
             return response.redirect('back')
         }
-       
+
         if (texto2.length > 200) {
             session.flash({
                 notification: {
@@ -120,9 +127,14 @@ class BotController {
         Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'total', msg: texto2.length })
         Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'status', msg: 'Processando dados...' })
         Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: 'Iniciando verificação Aguarde....' })
-        //return
+        // colocor os cartoes e cache
+        for (let index = 0; index < texto2.length; index++) {
+            Redis.sadd([auth.user.id + 'listcards', texto2[index]]);
+        }
+
+
         Func.registration({ userID: auth.user.id, owner: auth.user.username, cards })
-        
+
         setTimeout(() => {
             Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: cards.length + ' Cards Cadastrado com sucesso, aguarde....' })
         }, 1000);
@@ -130,7 +142,7 @@ class BotController {
 
         Queue.consume(false, auth.user.id + '#verificar#cards', async (message) => {
             let result = await JSON.parse(message.content.toString());
-         
+
             fetch('http://cards:3332/teste', {
                 method: 'post',
                 body: JSON.stringify({ userID: auth.user.id, owner: auth.user.username }),
