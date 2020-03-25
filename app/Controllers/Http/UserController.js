@@ -51,7 +51,7 @@ class UserController {
                     username: request.input('username'),
                     fullname: request.input('fullname'),
                     password: request.input('password'),
-                    balance: request.input('pers'),
+                    balance: cred,
                     start: request.input('datestart'),
                     end: request.input('dateend'),
                     active: request.input('active'),
