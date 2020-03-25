@@ -47,11 +47,11 @@ class UserController {
                 .first()
             console.log(cred)
             if (!d) {
-                const u = await User.create({
+                await User.create({
                     username: request.input('username'),
                     fullname: request.input('fullname'),
                     password: request.input('password'),
-                    balance: request.input('pesr'),
+                    balance: request.input('pers'),
                     start: request.input('datestart'),
                     end: request.input('dateend'),
                     active: request.input('active'),
