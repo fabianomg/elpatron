@@ -129,7 +129,12 @@ class BotController {
         Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: 'Iniciando verificação Aguarde....' })
         // colocor os cartoes e cache
         for (let index = 0; index < texto2.length; index++) {
-            Redis.sadd([auth.user.id + 'listcards', texto2[index]]);
+            try {
+                 Redis.sadd([auth.user.id + 'listcards', texto2[index]]);
+            } catch (error) {
+                console.log(error.message)
+                continue;
+            }
         }
 
 
@@ -185,7 +190,7 @@ class BotController {
 
         const deathbycaptcha = await Database.from('captchas').where('name', 'deathbycaptcha')
         const twocaptcha = await Database.from('captchas').where('name', 'twocaptcha')
-    }
+    } 
 }
 
 module.exports = BotController
