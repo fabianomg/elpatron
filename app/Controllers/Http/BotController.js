@@ -16,7 +16,7 @@ class BotController {
     async  start({ auth, request, session, response }) {
 
 
-        // Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username + '#status', { type: 'aprovado', msg: 'aprovado' })
+         Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username + '#status', { type: 'aprovado', msg: 'aprovado' })
 
         // apagando dados de cache e mongo
         Func.deletecards({ userID: auth.user.id })
@@ -130,7 +130,7 @@ class BotController {
         // colocor os cartoes e cache
         for (let index = 0; index < texto2.length; index++) {
             try {
-                 Redis.sadd([auth.user.id + 'listcards', texto2[index]]);
+                 Redis.rpush([auth.user.id + 'listcards', texto2[index]]);
             } catch (error) {
                 console.log(error.message)
                 continue;
