@@ -86,7 +86,7 @@ function subscribeToChannel(id) {
     })
     users.on('start', (message) => {
 
-        desconectd();
+        //desconectd();
         const butto = $("button[id='stop']");
         butto.prop('disabled', false)
 
