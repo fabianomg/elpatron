@@ -171,7 +171,7 @@ class BotController {
                             "pageurl": "https://amarithcafe.revelup.com",
                             "site": {
                                 "name": "twocaptcha",
-                                "api": "dcfa48509f1dc4ac0c57a890c46b0628"
+                                "api": "e262288cabf75ce03e50c90de3c6db9c"
                             }
                         }
                         Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', 'Aguardando Captcha ser Resolvido....')
