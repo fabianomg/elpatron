@@ -46,7 +46,7 @@ function subscribeToChannel(id) {
     })
     users.on('atividade', (message) => {
         let i = message.indexOf('class="label')
-        if (i != -1) {
+        if (i == -1) {
             $('#atividade').text(message)
         } else {
             $('#atividade').html(message)
