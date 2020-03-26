@@ -45,7 +45,13 @@ function subscribeToChannel(id) {
         }
     })
     users.on('atividade', (message) => {
-        $('#atividade').text(message)
+        let i = message.indexOf('class="label')
+        if (i != -1) {
+            $('#atividade').text(message)
+        } else {
+            $('#atividade').html(message)
+        }
+        
 
     })
     users.on('aprovados', (message) => {
