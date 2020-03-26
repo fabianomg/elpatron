@@ -16,12 +16,12 @@ ws.on('open', () => {
 })
 ws.on('close', () => {
     $('.connection-status').removeClass('connected')
-    desconectd();
+    //desconectd();
 })
 ws.on('error', () => {
     console.log('1teste')
     $('.connection-status').removeClass('connected')
-    desconectd();
+    //desconectd();
 })
 
 function subscribeToChannel(id) {
@@ -29,7 +29,7 @@ function subscribeToChannel(id) {
 
     users.on('error', () => {
         $('.connection-status').removeClass('connected')
-        desconectd();
+       // desconectd();
     })
 
     users.on('total', (message) => {
