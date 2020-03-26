@@ -1,6 +1,6 @@
-function listtrades(data) {
+function list() {
 
-    $('#listcards').DataTable({
+    $('#list').DataTable({
 
         details: {
             renderer: function (api, rowIdx) {
@@ -31,12 +31,6 @@ function listtrades(data) {
         destroy: true,
         processing: false,
         responsive: true,
-        ajax: {
-            url: 'http://107.178.109.212:3332/checkingcards',
-            type: "GET",
-            contentType: "application/json",
-            data: data
-        },
 
         columns: [
             {
@@ -45,8 +39,6 @@ function listtrades(data) {
             {
                 data: "status"
             }
-
-
 
         ]
     });

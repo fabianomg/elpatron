@@ -33,6 +33,12 @@
     <!-- inline styles related to this page -->
     <!-- ace settings handler -->
     <script src="assets/js/ace-extra.min.js"></script>
+    <style>
+        .table-overflow {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
 
     <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
     <!--[if lte IE 8]>
@@ -56,7 +62,9 @@
                     </small>
                 </a>
 
-                <span data-toggle="tooltip" data-placement="bottom" title="{{auth.user.username}} você está recendo dados em REALTIME VIA WEBSOCKET" class="connection-status"></span>
+                <span data-toggle="tooltip" data-placement="bottom"
+                    title="{{auth.user.username}} você está recendo dados em REALTIME VIA WEBSOCKET"
+                    class="connection-status"></span>
 
 
 
@@ -314,79 +322,103 @@
                                                         </tr>
 
                                                         <tr>
-                                                            <td>Total de Carregadas</td>
+                                                            <td>Total Carregados</td>
                                                             <td class="hidden-380">
-                                                                <span id="carregadas"
+                                                                <span id="total"
                                                                     class="label label-info arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
+                                                        
+
                                                     </tbody>
                                                 </table>
+
                                             </div>
                                         </div>
-                                        <!-- /.widget-main -->
                                     </div>
-                                    <!-- /.widget-body -->
+                                    <!-- /.widget-main -->
                                 </div>
-                                <!-- /.widget-box -->
+                                <!-- /.widget-body -->
                             </div>
-                            <!-- /.col -->
+                            <!-- /.widget-box -->
                         </div>
-                        <!-- /.row -->
-                        <div class="row text-center">
-                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{msg.t}}">
-                                <button onclick="salvarForm();" {{msg.b}} id="start" type="button"
-                                    style="margin-top:10px;" class="btn btn-success">
-                                    <i class="ace-icon fa fa-play align-top bigger-125"></i> Começar
-                                </button>
-                            </span>
-                            <!-- inicio button parar-->
-                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                                title="inicie uma verificação para poder ativar o botão">
-                                <button type="button" id="stop" disabled="true" style="margin-top:10px;"
-                                    class="btn btn-danger">
-                                    <i class="ace-icon fa fa-stop align-top bigger-125"></i> Parar
-                                </button>
-                            </span>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                    <div class="row text-center">
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{msg.t}}">
+                            <button onclick="salvarForm();" {{msg.b}} id="start" type="button" style="margin-top:10px;"
+                                class="btn btn-success">
+                                <i class="ace-icon fa fa-play align-top bigger-125"></i> Começar
+                            </button>
+                        </span>
+                        <!-- inicio button parar-->
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                            title="inicie uma verificação para poder ativar o botão">
+                            <button type="button" id="stop" disabled="true" style="margin-top:10px;"
+                                class="btn btn-danger">
+                                <i class="ace-icon fa fa-stop align-top bigger-125"></i> Parar
+                            </button>
+                        </span>
 
-                            <!-- fim button parar-->
-                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
-                                title="voltar página anterior">
-                                <a style="margin-top:10px;" id="home" href="javascript: history.go(-1)" type="button"
-                                    class="btn btn-primary">
-                                    <i class="ace-icon fa fa-home  align-top bigger-125 icon-on-right"></i> Home
-                                </a>
-                            </span>
-                        </div>
-                        <div class="hr hr32 hr-dotted"></div>
-                        <div class="col-md-6 col-md-offset-3 " style="color: green; font-size: 18px;">
-                            <p id="atividade"></p>
-                        </div>
+                        <!-- fim button parar-->
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="voltar página anterior">
+                            <a style="margin-top:10px;" id="home" href="javascript: history.go(-1)" type="button"
+                                class="btn btn-primary">
+                                <i class="ace-icon fa fa-home  align-top bigger-125 icon-on-right"></i> Home
+                            </a>
+                        </span>
+                    </div>
+                    <div class="hr hr32 hr-dotted"></div>
+                    <div class="col-md-6 col-md-offset-3 " style="color: green; font-size: 18px;">
+                        <center>
+                        <p id="atividade"></p>
+                    </center>
+                    </div>
 
-                        <!--############################################-->
+                    <!--############################################-->
 
-                        <!-- /.row -->
+                    <!-- /.row -->
 
-                        <div class="row">
-                            <div class="col-xs-6 col-md-offset-3 table-responsive">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-bordered" id="listcards">
-                                        <thead>
-                                            <tr>
 
-                                                <th>cards</th>
-                                                <th>status</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        </tbody>
-                                    </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="widget-box widget-color-green">
+                                <div class="widget-header">
+                                    <center>
+                                        <h4 class="widget-title lighter smaller">Aprovados<span id="apro"></span></span>
+                                        </h4>
+                                    </center>
                                 </div>
+                                <center>
+                                <div class="widget-body">
+                                    <div class="table-overflow" id="listaprovados" class="widget-main padding-8">
+
+                                    </div>
+                                </div>
+                            </center>
                             </div>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <div class="row">
+                        <div class="col-md-4 col-lg-offset-4 ">
+                            <div class="widget-box widget-color-red">
+                                <div class="widget-header">
+                                    <center>
+                                        <h4 class="widget-title lighter smaller  text-center">Reprovados<span
+                                                id="repro"></span></h4>
+                                    </center>
+                                </div>
+                                <center>
+                                <div class="widget-body">
+                                    <div class="table-overflow" class="widget-main padding-10" id="listreprovados">
 
-
+                                    </div>
+                                </div>
+                            </center>
+                            </div>
                         </div>
 
                         <div id="dialog-confirm" class="hide">
@@ -464,7 +496,50 @@
     <script src="assets/js/ace.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+
     <script>
+        $('#list').DataTable({
+
+            details: {
+                renderer: function (api, rowIdx) {
+                    var data = api.cells(rowIdx, ':hidden').eq(0).map(function (cell) {
+                        var header = $(api.column(cell.column).header());
+                        return '<p style="color:#00A">' + header.text() + ' : ' + api.cell(cell).data() + '</p>';
+                    }).toArray().join('');
+
+                    return data ? $('<table/>').append(data) : false;
+                }
+            },
+            "language": {
+                lengthMenu: "Mostrando _MENU_ registros por página",
+                zeroRecords: "Não foram encontrados cartões testados aguarde. os cartões serem verificados",
+                info: "Mostrando página _PAGE_ de _PAGES_",
+                infoEmpty: "Nenhum registro disponível",
+                infoFiltered: "(filtrado de _MAX_ registros no total)",
+                search: "Pesquisar:",
+                processing: "Aguarde! Carregando Dados...",
+                paginate: {
+                    first: "Primeiro",
+                    last: "Ultimo",
+                    next: "Próximo",
+                    previous: "Anterior"
+                }
+            },
+
+            destroy: true,
+            processing: false,
+            responsive: true,
+
+            columns: [
+                {
+                    data: "cards"
+                },
+                {
+                    data: "status"
+                }
+
+            ]
+        });
         window.id = '{{ id }}'
 
     </script>
@@ -473,6 +548,7 @@
     {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
     {{ script('https://unpkg.com/jquery@3.3.1/dist/jquery.js') }}
     {{ script('interactivity/websocket/sockert.js') }}
+    {{ script('interactivity/tables/tabledashboard.js') }}
 
     <!-- inline scripts related to this page -->
 

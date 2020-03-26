@@ -1,5 +1,6 @@
 'use strict'
 let url = null
+let table = [];
 let users;
 let protrocol = window.location.protocol;
 if (protrocol == 'http:') {
@@ -29,12 +30,14 @@ function subscribeToChannel(id) {
 
     users.on('error', () => {
         $('.connection-status').removeClass('connected')
-       // desconectd();
+        // desconectd();
     })
 
     users.on('total', (message) => {
-        $('#carregadas').text(message)
+        $('#total').text(message)
     })
+  
+    
     users.on('status', (message) => {
         $('#status').text(message)
         if (message == 'Processando dados...') {
@@ -64,6 +67,21 @@ function subscribeToChannel(id) {
 
         let t = $('#testados').text();
         $('#testados').text(parseInt(t) + parseInt(message))
+
+    })
+    users.on('listaprovados', (message) => {
+
+        $('#listaprovados').append(message)
+
+    })
+    users.on('listreprovados', (message) => {
+
+        $('#listreprovados').append(message)
+
+    })
+    users.on('saldo', (message) => {
+
+        $('#creditos').text(message)
 
     })
 

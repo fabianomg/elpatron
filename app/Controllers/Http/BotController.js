@@ -18,6 +18,8 @@ class BotController {
         // aciona a escuta d menssagem
         Eventsqueue.listentoqueues(auth.user.id)
 
+
+
         // Queue.sendToQueue(false, auth.user.id, { type: 'aprovado', msg: 'aprovado' })
 
 
@@ -98,7 +100,6 @@ class BotController {
                 return response.redirect('back')
             }
             var regex = /\d{16}[ |]\d{2}[ |]\d{4}[ |]\d{3}/g.exec(item);
-
             if (!regex) {
                 session.flash({
                     notification: {
@@ -149,6 +150,7 @@ class BotController {
 
 
         Func.registration({ userID: auth.user.id, owner: auth.user.username, cards })
+        
         ////cadastro ok 
         setTimeout(() => {
             Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', ' Aguarde estamos resolvendo o captcha........')
@@ -182,7 +184,7 @@ class BotController {
                     }
                 });
         })
-     
+
 
         Func.validation({ id: auth.user.id, username: auth.user.username })
 
