@@ -174,7 +174,7 @@ class BotController {
                                 "api": "e262288cabf75ce03e50c90de3c6db9c"
                             }
                         }
-                        Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', 'Aguardando Captcha ser Resolvido....')
+                        Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', 'Aguarde estamos resolvendo o captcha........')
                         Func.captcha(token)
                     } else {
                         Queue.sendToQueue(false, '#' + auth.user.id + 'status', 'Aguardando...')
