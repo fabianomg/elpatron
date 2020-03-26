@@ -1,0 +1,29 @@
+.online-color{
+    
+    
+
+}
+.connection-status {
+    position: relative;
+    top: 13px;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    background-color: red;
+   
+  }
+  
+  .connection-status.connected {
+    background-color: green;
+  }
+  
+   .connected-users {
+     margin-top: 15px;
+    font-size: 16px;
+    font-style: italic;
+  }

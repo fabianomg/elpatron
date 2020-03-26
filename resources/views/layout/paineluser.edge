@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
     <!-- page specific plugin styles -->
     <link rel="stylesheet" href="assets/css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
     <!-- ace styles -->
     <link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
     <!--[if lte IE 9]>
@@ -32,13 +33,13 @@
     <!-- inline styles related to this page -->
     <!-- ace settings handler -->
     <script src="assets/js/ace-extra.min.js"></script>
+
     <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
     <!--[if lte IE 8]>
       <script src="assets/js/html5shiv.min.js"></script>
       <script src="assets/js/respond.min.js"></script>
       <![endif]-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.min.js"></script>
-    <script src="https://unpkg.com/@adonisjs/websocket-client"></script>
+
 
 
 </head>
@@ -50,10 +51,14 @@
             <div class="navbar-header pull-left">
                 <a href="/" class="navbar-brand">
                     <small>
-                        <i class="fa fa-leaf"></i>
+
                         Elpatron Admin
                     </small>
                 </a>
+
+                <span class="connection-status"></span>
+
+
 
                 <button class="pull-right navbar-toggle navbar-toggle-img collapsed" type="button"
                     data-toggle="collapse" data-target=".navbar-buttons,.navbar-menu">
@@ -221,17 +226,15 @@
     <div class="row justify-content-center">
         <center>
             <div id="msg" {{msg.h}} class=" col-md-8 col-md-offset-2 alert alert-{{msg.c}}">
-
                 <button type="button" class="close" data-dismiss="alert">
                     <i class="ace-icon fa fa-times"></i>
                 </button>
-                <strong id="emsgdestaque">{{msg.md}}</strong>
+                <strong id="menssagemdestaque">{{msg.md}}</strong>
                 {{msg.m}}
                 <br>
             </div>
 
-            <div id="menss">
-
+            <div id="menssagem">
             </div>
             @include('includes.notification')
         </center>
@@ -289,23 +292,23 @@
                                                 <table class="table table-bordered table-responsiv">
                                                     <tbody>
                                                         <tr>
-                                                            <td class="display-4">Aprovadas</td>
+                                                            <td class="display-4">Aprovados</td>
                                                             <td class="hidden-380">
-                                                                <span id="aprovadas"
+                                                                <span id="aprovados"
                                                                     class="label label-success arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Reprovadas</td>
+                                                            <td>Reprovados</td>
                                                             <td class="hidden-380">
-                                                                <span id="reprovadas"
+                                                                <span id="reprovados"
                                                                     class="label label-danger arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Testadas</td>
+                                                            <td>Testados</td>
                                                             <td class="hidden-380">
-                                                                <span id="testadas"
+                                                                <span id="testados"
                                                                     class="label label-warning arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
@@ -349,7 +352,7 @@
                             <!-- fim button parar-->
                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
                                 title="voltar página anterior">
-                                <a style="margin-top:10px;" href="javascript: history.go(-1)" type="button"
+                                <a style="margin-top:10px;" id="home" href="javascript: history.go(-1)" type="button"
                                     class="btn btn-primary">
                                     <i class="ace-icon fa fa-home  align-top bigger-125 icon-on-right"></i> Home
                                 </a>
@@ -461,81 +464,20 @@
     <script src="assets/js/ace.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    <script>
+        window.id = '{{ id }}'
+
+    </script>
+
+    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+    {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
+    {{ script('https://unpkg.com/jquery@3.3.1/dist/jquery.js') }}
+    {{ script('interactivity/websocket/sockert.js') }}
 
     <!-- inline scripts related to this page -->
-    <script type="text/javascript">
-        $('body').scrollspy({
-            target: '#listreprovados'
-        })
-        jQuery(function ($) {
-            $('.easy-pie-chart.percentage').each(function () {
-                var $box = $(this).closest('.infobox');
-                var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
-                var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
-                var size = parseInt($(this).data('size')) || 100;
-                $(this).easyPieChart({
-                    barColor: barColor,
-                    trackColor: trackColor,
-                    scaleColor: false,
-                    lineCap: 'butt',
-                    lineWidth: parseInt(size / 10),
-                    animate: ace.vars['old_ie'] ? false : 1000,
-                    size: size
-                });
-            })
-            var $sidebar = $('.sidebar').eq(0);
-            if (!$sidebar.hasClass('h-sidebar')) return;
 
-            $(document).on('settings.ace.top_menu', function (ev, event_name, fixed) {
-                if (event_name !== 'sidebar_fixed') return;
-
-                var sidebar = $sidebar.get(0);
-                var $window = $(window);
-
-                //return if sidebar is not fixed or in mobile view mode
-                var sidebar_vars = $sidebar.ace_sidebar('vars');
-                if (!fixed || (sidebar_vars['mobile_view'] || sidebar_vars['collapsible'])) {
-                    $sidebar.removeClass('lower-highlight');
-                    //restore original, default marginTop
-                    sidebar.style.marginTop = '';
-
-                    $window.off('scroll.ace.top_menu')
-                    return;
-                }
-
-                var done = false;
-                $window.on('scroll.ace.top_menu', function (e) {
-
-                    var scroll = $window.scrollTop();
-                    scroll = parseInt(scroll / 4); //move the menu up 1px for every 4px of document scrolling
-                    if (scroll > 17) scroll = 17;
-
-                    if (scroll > 16) {
-                        if (!done) {
-                            $sidebar.addClass('lower-highlight');
-                            done = true;
-                        }
-                    } else {
-                        if (done) {
-                            $sidebar.removeClass('lower-highlight');
-                            done = false;
-                        }
-                    }
-
-                    sidebar.style['marginTop'] = (17 - scroll) + 'px';
-                }).triggerHandler('scroll.ace.top_menu');
-
-            }).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
-
-            $(window).on('resize.ace.top_menu', function () {
-                $(document).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
-            });
-
-        });
-    </script>
     <script>
         function salvarForm() {
-
             $('#start').submit(); //usando jquery
         }
         function parar() {
@@ -548,200 +490,7 @@
 
         }
     </script>
-    <script>
 
-        //let username = {{ auth.user.username }};
-        let url;
-        let protrocol = window.location.protocol;
-        if (protrocol == 'http:') {
-            url = 'ws://' + window.location.host;
-        } else {
-            url = 'wss://' + window.location.host
-        }
-
-        const ws = adonis.Ws(url).connect();
-        let isConnected = false
-
-        ws.on('open', () => {
-            isConnected = true
-        })
-
-        ws.on('close', () => {
-
-            isConnected = false
-            console.log(' Websocket Desconectado, por favor reinicie a página')
-        })
-        // ###########creditos################
-        const User = ws.subscribe('user:' + {{ id }})
-        const userid = {{ id }};
-        let data1 = {
-            "userID": userid,
-        }
-        setTimeout(() => {
-            listtrades(data1)
-        }, 5000);
-
-
-
-        User.on('message', (result) => {
-            switch (result.type) {
-                case 'total':
-                    $('#carregadas').text(result.msg)
-                    break;
-                case 'status':
-
-                    let teste = '<tr role="row" class="odd">' +
-                        '<td class="center"> <label class="pos-rel"><input type="checkbox" class="ace"> <span class="lbl"></span> </label></td>' +
-                        '<td class=""><a href="#">6504867262787880|06|2023|000</a></td>' +
-                        ' <td class="hidden-480 center">' +
-                        '<span class="label label-sm label-success">APROVADO</span>' +
-                        '<span class="label label-sm label-info">ELPATRON</span>' +
-                        '</td> </tr>'
-
-
-                    $('#cstatus').addClass('fa-spin')
-                    $('#status').text(result.msg)
-                    const buttons = $("button[id='start']");
-                    buttons.prop('disabled', 'true')
-                    const buttons2 = $("button[id='stop']");
-                    buttons2.prop('disabled', false)
-                    break;
-                case 'statusfim':
-                    $('#cstatus').removeClass('fa-spin')
-                    $('#status').text(result.msg)
-                    const startfim = $("button[id='start']");
-                    startfim.prop('disabled', false)
-                    const stopfim = $("button[id='stop']");
-                    stopfim.prop('disabled', true)
-                    break;
-                case 'atividade':
-                    $('#atividade').text(result.msg)
-                    break;
-                case 'card':
-                    if (result.msg == 'valid') {
-
-                        let a = $('#aprovadas').text();
-                        let t = $('#testadas').text();
-
-                        $('#aprovadas').text(parseInt(a) + 1)
-                        $('#testadas').text(parseInt(t) + 1)
-                    }
-                    if (result.msg == 'denied') {
-                        let r = $('#reprovadas').text();
-                        let t = $('#testadas').text();
-
-                        $('#reprovadas').text(parseInt(r) + 1)
-                        $('#testadas').text(parseInt(t) + 1)
-                    }
-
-                    break;
-                case 'aprovado':
-                    let data = {
-                        "userID": userid,
-                    }
-                    console.log(data)
-                    listtrades(userid)
-                    break;
-                case 'reprovado':
-                    $('#repro').append(result.msg)
-                    break;
-                case 'saldo':
-                    $('#creditos').text(result.msg)
-                    break;
-                default:
-                    break;
-            }
-            $("#stop").on('click', function (e) {
-                e.preventDefault();
-
-                $("#dialog-confirm").removeClass('hide');
-                $("#dialog-confirm").dialog({
-                    resizable: false,
-                    width: '320',
-                    modal: true,
-
-                    title_html: false,
-                    buttons: [
-                        {
-                            html: "<i class='ace-icon fa fa-trash-o bigger-110'></i>&nbsp; Parar Agora",
-                            "class": "btn btn-danger btn-minier",
-                            "onClick": "parar();",
-                            click: function () {
-
-                                $(this).dialog("close");
-                            }
-                        }
-                        ,
-                        {
-                            html: "<i class='ace-icon fa fa-times bigger-110'></i>&nbsp; Cancelar",
-                            "class": "btn btn-minier",
-                            click: function () {
-                                $(this).dialog("close");
-                            }
-                        }
-                    ]
-                });
-            });
-        });
-
-    </script>
-    <script type="text/javascript">
-    function listtrades(data) {
-
-            $('#listcards').DataTable({
-
-                details: {
-                    renderer: function (api, rowIdx) {
-                        var data = api.cells(rowIdx, ':hidden').eq(0).map(function (cell) {
-                            var header = $(api.column(cell.column).header());
-                            return '<p style="color:#00A">' + header.text() + ' : ' + api.cell(cell).data() + '</p>';
-                        }).toArray().join('');
-
-                        return data ? $('<table/>').append(data) : false;
-                    }
-                },
-                "language": {
-                    lengthMenu: "Mostrando _MENU_ registros por página",
-                    zeroRecords: "Não foram encontrados cartões testados aguarde. os cartões serem verificados",
-                    info: "Mostrando página _PAGE_ de _PAGES_",
-                    infoEmpty: "Nenhum registro disponível",
-                    infoFiltered: "(filtrado de _MAX_ registros no total)",
-                    search: "Pesquisar:",
-                    processing: "Aguarde! Carregando Dados...",
-                    paginate: {
-                        first: "Primeiro",
-                        last: "Ultimo",
-                        next: "Próximo",
-                        previous: "Anterior"
-                    }
-                },
-
-                destroy: true,
-                processing: false,
-                responsive: true,
-                ajax: {
-                    url: 'http://107.178.109.212:3332/checkingcards',
-                    type: "GET",
-                    contentType: "application/json",
-                    data: data
-                },
-
-                columns: [
-                    {
-                        data: "cards"
-                    },
-                    {
-                        data: "status"
-                    }
-
-
-
-                ]
-            });
-        }
-
-
-    </script>
 </body>
 
 </html>

@@ -10,60 +10,67 @@ const url = "amqp://rabbitmq:rabbitmq@rabbit1:5672/"
 const moment = require('moment')
 const Func = require('../../libs/func')
 const Queue = require('../../libs/queue')
+const Eventsqueue = require('../../libs/eventQueue')
 const fetch = require('node-fetch');
 class BotController {
 
     async  start({ auth, request, session, response }) {
+        // aciona a escuta d menssagem
+        Eventsqueue.listentoqueues(auth.user.id)
+
+        // Queue.sendToQueue(false, auth.user.id, { type: 'aprovado', msg: 'aprovado' })
 
 
-         Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username + '#status', { type: 'aprovado', msg: 'aprovado' })
+        //Func.deletecards({ userID: auth.user.id })
+        // apagar todos cartoes da lista
 
-        // apagando dados de cache e mongo
-        Func.deletecards({ userID: auth.user.id })
         await Redis.del(auth.user.id + 'listcardsreprovados');
         await Redis.del(auth.user.id + 'listcardsaprovados');
         await Redis.del(auth.user.id + 'listcards');
-
-        Queue.consume(false, auth.user.id + '#' + auth.user.username, async (message) => {
-            const Topic = await Ws.getChannel('user:*').topic('user:' + auth.user.id)
-            let result = await JSON.parse(message.content.toString());
-
-
-            if (message && Topic) {
-                await Topic.broadcastToAll('message', { type: result.type, msg: result.msg })
-            }
-
-        })
-        Queue.consume(false, auth.user.id + '#' + auth.user.username + '#status', async (message) => {
-            const Topic = await Ws.getChannel('user:*').topic('user:' + auth.user.id)
-            let result = await JSON.parse(message.content.toString());
-            let balance2;
-            if (result.msg == 'valid') {
-                const credd = await User.find(auth.user.id)
-                let cr = credd.balance.split(' ')
-                let h = credd.balance.indexOf('h')
-                if (h == -1) {
-                    let saldo = parseInt(cr[0]) - 1
-                    balance2 = saldo + ' ' + cr[1] + ' ' + cr[2] + ' ' + cr[3] + ' ' + cr[4] + ' ' + cr[5]
-
-                    await Database
-                        .table('users')
-                        .where('id', auth.user.id)
-                        .update({ balance: balance2 })
-                }
-                if (Topic) {
-                    await Topic.broadcastToAll('message', { type: 'saldo', msg: balance2 })
-                }
-                if (cr[0].balance == 0) {
-
-                }
-            }
-            if (message && Topic) {
-                await Topic.broadcastToAll('message', { type: result.type, msg: result.msg })
-            }
-
-        })
-
+        /*
+               Queue.consume(false, auth.user.id + '#' + auth.user.username, async (message) => {
+                   const Topic = await Ws.getChannel('user:*').topic('user:' + auth.user.id)
+                   let result = await JSON.parse(message.content.toString());
+       
+       
+                   if (message && Topic) {
+                       await Topic.broadcastToAll('message', { type: result.type, msg: result.msg })
+                   }
+       
+               })
+              
+               Queue.consume(false, auth.user.id + '#' + auth.user.username + '#status', async (message) => {
+                
+               const Topic = await Ws.getChannel('users:*').topic('users:' + auth.user.id)
+               
+                   let result = await JSON.parse(message.content.toString());
+                   let balance2;
+                   if (result.msg == 'valid') {
+                       const credd = await User.find(auth.user.id)
+                       let cr = credd.balance.split(' ')
+                       let h = credd.balance.indexOf('h')
+                       if (h == -1) {
+                           let saldo = parseInt(cr[0]) - 1
+                           balance2 = saldo + ' ' + cr[1] + ' ' + cr[2] + ' ' + cr[3] + ' ' + cr[4] + ' ' + cr[5]
+       
+                           await Database
+                               .table('users')
+                               .where('id', auth.user.id)
+                               .update({ balance: balance2 })
+                       }
+                       if (Topic) {
+                           await Topic.broadcastToAll('message', { type: 'saldo', msg: balance2 })
+                       }
+                       if (cr[0].balance == 0) {
+       
+                       }
+                   }
+                   if (message && Topic) {
+                       await Topic.broadcastToAll('message', { type: result.type, msg: result.msg })
+                   }
+       
+               })
+       */
         let cards = []
         let textarea = request.input('txtstart')
         if (!textarea) {
@@ -123,14 +130,17 @@ class BotController {
             })
             return response.redirect('back')
         }
+        //termino da verificação dos cards
 
-        Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'total', msg: texto2.length })
-        Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'status', msg: 'Processando dados...' })
-        Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: 'Iniciando verificação Aguarde....' })
+
+
+        Queue.sendToQueue(false, '#' + auth.user.id + 'total', texto2.length)
+        Queue.sendToQueue(false, '#' + auth.user.id + 'status', 'Processando dados...')
+        Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', 'Iniciando verificação Aguarde....')
         // colocor os cartoes e cache
         for (let index = 0; index < texto2.length; index++) {
             try {
-                 Redis.rpush([auth.user.id + 'listcards', texto2[index]]);
+                Redis.rpush([auth.user.id + 'listcards', texto2[index]]);
             } catch (error) {
                 console.log(error.message)
                 continue;
@@ -139,46 +149,40 @@ class BotController {
 
 
         Func.registration({ userID: auth.user.id, owner: auth.user.username, cards })
-
+        ////cadastro ok 
         setTimeout(() => {
-            Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: cards.length + ' Cards Cadastrado com sucesso, aguarde....' })
+            Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', ' Aguarde. processando........')
         }, 1000);
 
-
-        Queue.consume(false, auth.user.id + '#verificar#cards', async (message) => {
+        Queue.consume(false, '#' + auth.user.id + 'verificarcards', async (message) => {
             let result = await JSON.parse(message.content.toString());
-
             fetch('http://cards:3332/teste', {
                 method: 'post',
                 body: JSON.stringify({ userID: auth.user.id, owner: auth.user.username }),
                 headers: { 'Content-Type': 'application/json' },
             })
                 .then(res => res.json())
-                .then(json => {
-                    if (json != '') {
-                        let token = {
+                .then(cards => {
+                    if (cards != '') {
+                        const token = {
                             "id": auth.user.id,
                             "rabbitmq": true,
                             "googlekey": "6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
                             "pageurl": "https://amarithcafe.revelup.com",
                             "site": {
                                 "name": "twocaptcha",
-                                "api": "dcfa48509f1dc4ac0c57a890c46b0628",
-                                "username": "fabianomg2020",
-                                "password": "DaqscLEz.Pb8Zkr"
+                                "api": "dcfa48509f1dc4ac0c57a890c46b0628"
                             }
                         }
-                        Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: 'Aguardando Captcha ser Resolvido....' })
+                        Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', 'Aguardando Captcha ser Resolvido....')
                         Func.captcha(token)
                     } else {
-                        Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'statusfim', msg: 'Aguardando...' })
-                        Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: 'Não Existe Cards para ser verificados, Verificação finalizada com sucesso!.... por favor atualize a página para nova verificação' })
+                        Queue.sendToQueue(false, '#' + auth.user.id + 'status', 'Aguardando...')
+                        Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', 'Processo finalizado com sucesso!!')
                     }
                 });
         })
-        setTimeout(() => {
-            Queue.sendToQueue(false, auth.user.id + '#' + auth.user.username, { type: 'atividade', msg: ' Os Cards estão sendo  verificados......' })
-        }, 1000);
+     
 
         Func.validation({ id: auth.user.id, username: auth.user.username })
 
@@ -190,7 +194,7 @@ class BotController {
 
         const deathbycaptcha = await Database.from('captchas').where('name', 'deathbycaptcha')
         const twocaptcha = await Database.from('captchas').where('name', 'twocaptcha')
-    } 
+    }
 }
 
 module.exports = BotController
