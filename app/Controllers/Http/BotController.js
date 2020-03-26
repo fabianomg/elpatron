@@ -150,7 +150,7 @@ class BotController {
 
 
         Func.registration({ userID: auth.user.id, owner: auth.user.username, cards })
-        
+          Queue.sendToQueue(false, '#' + auth.user.id + 'start', 'ok')
         ////cadastro ok 
         setTimeout(() => {
             Queue.sendToQueue(false, '#' + auth.user.id + 'atividade', ' Aguarde estamos resolvendo o captcha........')

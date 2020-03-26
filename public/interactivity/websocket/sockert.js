@@ -84,6 +84,14 @@ function subscribeToChannel(id) {
         $('#creditos').text(message)
 
     })
+    users.on('start', (message) => {
+
+        desconectd();
+        const butto = $("button[id='stop']");
+        butto.prop('disabled', false)
+
+    })
+    
 
 
     users.on('ready', () => {

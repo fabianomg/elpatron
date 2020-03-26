@@ -102,6 +102,23 @@ module.exports = {
             }
         })
 
+        Queue.consume(false, '#' + id + 'start', async (message) => {
+            let msg = await JSON.parse(message.content.toString());
+            const Topic = await Ws.getChannel('users:*').topic('users:' + id)
+
+            if (Topic) {
+                await Topic.broadcastToAll('start', msg)
+            }
+        })
+        Queue.consume(false, '#' + id + 'stop', async (message) => {
+            let msg = await JSON.parse(message.content.toString());
+            const Topic = await Ws.getChannel('users:*').topic('users:' + id)
+
+            if (Topic) {
+                await Topic.broadcastToAll('stop', msg)
+            }
+        })
+
     }
 
 }
