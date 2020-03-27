@@ -92,7 +92,7 @@ class PageviewController {
         const id = auth.user.id
 
 
-        return view.render('layout.paineluser', { msg, id })
+        return view.render('layout.manutencao', { msg, id })
 
 
     }
