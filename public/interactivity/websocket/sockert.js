@@ -34,7 +34,9 @@ function subscribeToChannel(id) {
     })
 
     users.on('total', (message) => {
-        $('#total').text(message)
+        let t = $('#total').text();
+        $('#total').text(parseInt(t) + parseInt(message))
+        
     })
   
     
@@ -42,13 +44,21 @@ function subscribeToChannel(id) {
         $('#status').text(message)
         if (message == 'Processando dados...') {
             $('#cstatus').addClass('fa-spin')
+            const butt = $("button[id='stop']");
+            butt.prop('disabled', false)
+            const but = $("button[id='start']");
+            but.prop('disabled', true)
         }
         if (message == 'Aguardando...') {
             $('#cstatus').removeClass('fa-spin')
+            const butt = $("button[id='stop']");
+            butt.prop('disabled', true)
+            const but = $("button[id='start']");
+            but.prop('disabled', false)
         }
     })
-    users.on('atividade', (message) => {
-        $('#atividade').text(message)
+    users.on('atividades', (message) => {
+        $('#atividades').text(message)
 
     })
     users.on('aprovados', (message) => {

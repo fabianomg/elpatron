@@ -33,12 +33,7 @@
     <!-- inline styles related to this page -->
     <!-- ace settings handler -->
     <script src="assets/js/ace-extra.min.js"></script>
-    <style>
-        .table-overflow {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-    </style>
+   
 
     <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
     <!--[if lte IE 8]>
@@ -47,168 +42,11 @@
       <![endif]-->
 
 
-
 </head>
 
 <body class="no-skin">
 
-    <div id="navbar" class="navbar navbar-default    navbar-collapse       h-navbar ace-save-state">
-        <div class="navbar-container ace-save-state" id="navbar-container">
-            <div class="navbar-header pull-left">
-                <a href="/" class="navbar-brand">
-                    <small>
-
-                        Elpatron Admin
-                    </small>
-                </a>
-
-                <span data-toggle="tooltip" data-placement="bottom"
-                    title="{{auth.user.username}} você está recendo dados em REALTIME VIA WEBSOCKET"
-                    class="connection-status"></span>
-
-
-
-                <button class="pull-right navbar-toggle navbar-toggle-img collapsed" type="button"
-                    data-toggle="collapse" data-target=".navbar-buttons,.navbar-menu">
-                    <span class="sr-only">Toggle user menu</span>
-
-                    <img src="assets/images/avatars/avatar2.png" alt="Jason's Photo" />
-                </button>
-
-                <button class="pull-right navbar-toggle collapsed" type="button" data-toggle="collapse"
-                    data-target="#sidebar">
-                    <span class="sr-only">Toggle sidebar</span>
-
-                    <span class="icon-bar"></span>
-
-                    <span class="icon-bar"></span>
-
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
-
-            <div class="navbar-buttons navbar-header pull-right  collapse navbar-collapse" role="navigation">
-
-
-                <ul class="nav ace-nav">
-
-                    <li class="transparent dropdown-modal">
-
-
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="ace-icon fa fa-envelope"></i>
-                            Menssagem
-                            <span class="badge badge-warning">5</span>
-                        </a>
-
-                        <div class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
-                            <div class="tabbable">
-
-
-                                <div class="tab-content">
-                                    <div id="navbar-tasks" class="tab-pane in active">
-                                        <ul class="dropdown-menu-right dropdown-navbar dropdown-menu">
-                                            <li class="dropdown-content">
-                                                <ul class="dropdown-menu dropdown-navbar">
-
-
-                                                    <li>
-                                                        <a href="#">
-                                                            <div class="clearfix">
-                                                                <span class="pull-left">Em desenvolvimento..</span>
-                                                                <span class="pull-right">35%</span>
-                                                            </div>
-
-                                                            <div class="progress progress-mini">
-                                                                <div style="width:35%"
-                                                                    class="progress-bar progress-bar-danger"></div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-
-
-                                                </ul>
-                                            </li>
-
-                                            <li class="dropdown-footer">
-                                                <a href="#">
-                                                    Veja msgs com detalhes
-                                                    <i class="ace-icon fa fa-arrow-right"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div><!-- /.tab-pane -->
-
-                                </div><!-- /.tab-content -->
-                            </div><!-- /.tabbable -->
-                        </div><!-- /.dropdown-menu -->
-                    </li>
-
-                    <li class="light-blue dropdown-modal user-min">
-                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <img class="nav-user-photo" src="assets/images/avatars/avatar2.png" alt="Jason's Photo" />
-                            <span class="user-info">
-                                <small>Olá,</small>
-                                {{auth.user.username}}}
-                            </span>
-
-                            <i class="ace-icon fa fa-caret-down"></i>
-                        </a>
-
-                        <ul
-                            class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-
-
-                            <li>
-                                <a href="/">
-                                    <i class="ace-icon fa fa-user"></i>
-                                    Perfil
-                                </a>
-                            </li>
-
-                            <li class="divider"></li>
-
-                            <li>
-                                <a href="/logout">
-                                    <i class="ace-icon fa fa-power-off"></i>
-                                    Sair
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-        </div><!-- /.navbar-container -->
-
-    </div>
-    <!-- /.navbar-container -->
-    <ul class="nav  navbar-nav navbar-list " style="top: 0px;">
-        <li class=" active hover">
-            <a href="/">
-                <i class="menu-icon fa fa-tachometer"></i>
-                <span class="menu-text"> Dashboard </span>
-            </a>
-
-            <b class="arrow"></b>
-        </li>
-
-
-
-        <li class="hover">
-            <a href="/listcards">
-                <i class="menu-icon fa fa-list"></i>
-                <span class="menu-text"> Cartões </span>
-
-            </a>
-
-            <b class="arrow"></b>
-
-
-        </li>
-
-
-    </ul>
+  @include('includes.navbar')
 
     <div class="main-container ace-save-state" id="main-container">
 
@@ -242,7 +80,8 @@
                 <br>
             </div>
 
-            <div id="menssagem">
+            <div class="col-md-6 col-md-offset-3" id="menssagem">
+             
             </div>
             @include('includes.notification')
         </center>
@@ -257,9 +96,9 @@
                         <div class="row">
                             <div class="space-6"></div>
                             <div class="col-sm-3 infobox-container">
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div class="text-center">
-                                        <img style="width: 200px; height: auto;" src="assets/images/logotipo.png"
+                                        <img style="width: 200px; height: auto; " src="assets/images/logotipo.png"
                                             class="rounded" alt="El Patron">
                                     </div>
                                 </div>
@@ -268,17 +107,21 @@
 
                             <form id="start" action="{{ route('start') }}" method="post">
                                 {{ csrfField() }}
-
-                                <div style="padding-left: 100px;"
+                               
+                                <div 
                                     class="col-md-4 col-md-offset-1 text-center infobox-container">
-                                    <textarea rows="4" cols="2" style="max-width: 260px;min-height:300px;resize: none;"
-                                        required form="start" placeholder="000000000000000|00|0000|000" id="txtstart"
-                                        name="txtstart" class="autosize-transition form-control"
-                                        style="overflow: hidden; overflow-wrap: break-word; resize: horizontal;"></textarea>
+                                    
+                                    <textarea rows="10" cols="5" 
+                                        required form="start" id="textarea"
+                                        name="textarea" class="autosize-transition form-control"
+                                        style="width:270px:   margin-left:30px;  resize: none;"></textarea>
                                 </div>
 
                             </form>
+
+
                             <div class="vspace-12-sm"></div>
+
                             <div class="col-sm-3">
                                 <div class="widget-box transparent">
                                     <div class="widget-header widget-header-flat">
@@ -288,43 +131,40 @@
                                             Status <span id="status"
                                                 class="label label-success arrowed arrowed-right">Aguardando...</span>
                                         </h3>
-                                        <div class="widget-toolbar">
-                                            <a href="#" data-action="collapse">
-                                                <i class="ace-icon fa fa-chevron-up"></i>
-                                            </a>
-                                        </div>
+                                        
                                     </div>
                                     <div class="widget-body">
                                         <div class="widget-main no-padding">
                                             <div class="table-responsive-md">
-                                                <table class="table table-bordered table-responsiv">
+                                                <table class="table table-bordered table-responsive">
                                                     <tbody>
                                                         <tr>
                                                             <td class="display-4">Aprovados</td>
                                                             <td class="hidden-380">
-                                                                <span id="aprovados"
+                                                                <span style="margin-left:30px;" id="aprovados"
                                                                     class="label label-success arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Reprovados</td>
                                                             <td class="hidden-380">
-                                                                <span id="reprovados"
+                                                                <span style="margin-left:30px;" id="reprovados"
                                                                     class="label label-danger arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Testados</td>
                                                             <td class="hidden-380">
-                                                                <span id="testados"
+                                                                <span style="margin-left:30px;" id="testados"
                                                                     class="label label-warning arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
+                                                       
 
                                                         <tr>
                                                             <td>Total Carregados</td>
                                                             <td class="hidden-380">
-                                                                <span id="total"
+                                                                <span style="margin-left:30px;" id="total"
                                                                     class="label label-info arrowed-right arrowed-in">0</span>
                                                             </td>
                                                         </tr>
@@ -344,6 +184,7 @@
                         </div>
                         <!-- /.col -->
                     </div>
+                </div>
                     <!-- /.row -->
                     <div class="row text-center">
                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{msg.t}}">
@@ -355,7 +196,7 @@
                         <!-- inicio button parar-->
                         <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
                             title="inicie uma verificação para poder ativar o botão">
-                            <button type="button" id="stop" disabled="true" style="margin-top:10px;"
+                            <button type="button" id="stop" onclick="parar();" disabled="true" style="margin-top:10px;"
                                 class="btn btn-danger">
                                 <i class="ace-icon fa fa-stop align-top bigger-125"></i> Parar
                             </button>
@@ -372,55 +213,57 @@
                     <div class="hr hr32 hr-dotted"></div>
                     <div class="col-md-6 col-md-offset-3 " style="color: green; font-size: 18px;">
                         <center>
-                        <p id="atividade"></p>
+                        <p id="atividades"> </p>
                     </center>
                     </div>
 
-                    <!--############################################-->
-
-                    <!-- /.row -->
-
-
-                    </div>
+                
                     <div class="row">
                         <div class="col-md-4 col-md-offset-4">
-                            <div class="widget-box widget-color-green">
+                            <div class="widget-box widget-color-green light-border ui-sortable-handle" id="widget-box-6">
                                 <div class="widget-header">
-                                    <center>
-                                        <h4 class="widget-title lighter smaller">Aprovados<span id="apro"></span></span>
-                                        </h4>
-                                    </center>
-                                </div>
-                                <center>
-                                <div class="widget-body">
-                                    <div class="table-overflow" id="listaprovados" class="widget-main padding-8">
+                                    <h5 class="widget-title smaller">Aprovados</h5>
 
+                                    <div class="widget-toolbar">
+                                        <span class="badge badge-info"></span>
                                     </div>
                                 </div>
-                            </center>
+
+                                <div class="widget-body">
+                                    <div class="widget-main padding-6">
+                                        <ul id="listaprovados"  style="font-size:16px;" class="scrollpersonalizado tree tree-unselectable tree-folder-select" role="tree">
+                                         
+                                         </ul>
+                                    </div>
+                                </div>
                             </div>
+                           
                         </div>
                     </div>
                     <!-- /.row -->
                     <div class="row">
                         <div class="col-md-4 col-lg-offset-4 ">
-                            <div class="widget-box widget-color-red">
+                            <div class=" widget-box widget-color-red light-border ui-sortable-handle" id="widget-box-6">
                                 <div class="widget-header">
-                                    <center>
-                                        <h4 class="widget-title lighter smaller  text-center">Reprovados<span
-                                                id="repro"></span></h4>
-                                    </center>
-                                </div>
-                                <center>
-                                <div class="widget-body">
-                                    <div class="table-overflow" class="widget-main padding-10" id="listreprovados">
+                                    <h5 class="widget-title smaller">Reprovados</h5>
 
+                                    <div class="widget-toolbar">
+                                        <span class="badge badge-info"></span>
                                     </div>
                                 </div>
-                            </center>
+
+                                <div class="widget-body" >
+                                    <div class="widget-main padding-6">
+                                        <ul id="listreprovados" style="font-size:16px;" class="scrollpersonalizado tree tree-unselectable tree-folder-select" role="tree">
+                                        
+                              
+                                         </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
+                    </div>
+                    </div>
                         <div id="dialog-confirm" class="hide">
                             <div class="alert alert-info bigger-110">
                                 todos os dados dos cartões seram excluídos permanentemente e não poderão ser
@@ -498,6 +341,11 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
 
     <script>
+
+$('.scrollpersonalizado').ace_scroll({
+    size: 250,
+    styleClass: 'scroll-light scroll-ringth scroll-thin'
+ });
         $('#list').DataTable({
 
             details: {
@@ -559,10 +407,11 @@
             $('#start').submit(); //usando jquery
         }
         function parar() {
+
             $.ajax({
-                type: "GET",
-                url: window.location + 'stop',
-                data: '',
+                type: "POST",
+                url: window.location + '/start',
+                data: 'okokok',
                 dataType: ''
             });
 

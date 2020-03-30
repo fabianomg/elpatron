@@ -41,5 +41,4 @@ Route.post('/deluser', 'UserController.delUser')
 Route.post('/ajax/status', 'UserController.status')
 Route.get('/ajax/getstatus', 'UserController.Getstatus')
 
-Route.post('/teste', 'BotController.start').as('start')
-Route.get('/stop', 'BotController.stop').as('stop')
+Route.post('/teste', 'ValidarController.start').as('start')

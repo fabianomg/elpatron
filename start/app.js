@@ -22,6 +22,7 @@ const providers = [
   '@adonisjs/websocket/providers/WsProvider',
   'adonis-cache/providers/CacheProvider',
   '@adonisjs/redis/providers/RedisProvider'
+  
 ]
 
 /*
@@ -35,7 +36,8 @@ const providers = [
 */
 const aceProviders = [
   '@adonisjs/lucid/providers/MigrationsProvider',
-  'adonis-cache/providers/CommandsProvider'
+  'adonis-cache/providers/CommandsProvider',
+  
 ]
 
 /*

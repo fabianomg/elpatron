@@ -11,9 +11,10 @@ RUN npm i -g @adonisjs/cli
 RUN npm install
 # If you are building your code for production
 # RUN npm ci --only=production
-ENV PORT=3333
+
 # Bundle app source
 COPY . .
+ENV PORT=3000
 
 EXPOSE $PORT
 CMD [ "npm", "start"]
