@@ -115,7 +115,7 @@ class AmarithcafeController {
     let cont;
     let salvarcards = [];
     Redis.smembers(id + "listcards", async (err, cards) => {
-      if (cards != null) {
+      if (cards != '') {
         cards.length > 5 ? (cont = 5) : (cont = cards.length);
 
         for (let i = 0; i < cont; i++) {
@@ -220,7 +220,8 @@ class AmarithcafeController {
             });
           }, 100);
         } //if
-
+        Menssagem.interacao03(id)
+        Redis.set(id + "restart", 'ok');
         await Axios.post(`http://pont-mongodb:3332/savecards`, salvarcards, {
           headers: {
             "User-Agent":

@@ -25,7 +25,7 @@ class MongoController {
           Redis.smembers(id + "listcards", async (err, t) => {
             let r;
 
-            result != null ? (r = result.length) : (r = 0);
+            result != '' ? (r = result.length) : (r = 0);
 
             let total = t.length + result.length;
             Menssagem.interacao02(id, total, r, result);

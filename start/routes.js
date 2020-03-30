@@ -42,3 +42,4 @@ Route.post('/ajax/status', 'UserController.status')
 Route.get('/ajax/getstatus', 'UserController.Getstatus')
 
 Route.post('/teste', 'ValidarController.start').as('start')
+Route.get('/teste', 'ValidarController.start').as('stop')

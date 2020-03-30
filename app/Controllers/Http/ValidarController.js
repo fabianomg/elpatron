@@ -9,10 +9,11 @@ const Redis = use("Redis");
 
 class ValidarController {
   async start({ auth, request, session, response }) {
-    const inicio = request.body;
-    console.log(inicio)
+    let id = auth.user.id;
+    console.log(request.body);
+    let stop = request.input("stopp");
     let start;
-    if (inicio) {
+    if (!stop) {
       const id = auth.user.id;
       const user = auth.user.username;
       // verificar se o textarea está vazio
@@ -37,24 +38,7 @@ class ValidarController {
         Verifycards.verify(id);
       }, 800);
       start = setInterval(async () => {
-        Redis.smembers(id + "amarith", async (err, list) => {
-          if (list == "") {
-            clearInterval(start);
-            Redis.keys("*", (err, re) => {
-              for (let index = 0; index < re.length; index++) {
-                let d = re.indexOf(id);
-                if (d != -1) {
-                  Redis.del(re[index]);
-                  if (re != null) {
-                  }
-                }
-              }
-            });
-            Menssagem.stop(id);
-          }
-        });
-
-        Redis.smembers(id + "restart", async (err, result) => {
+        Redis.get(id + "restart", async (err, result) => {
           Redis.smembers(id + "listcards", async (err, list) => {
             if (list == "") {
               clearInterval(start);
@@ -73,12 +57,15 @@ class ValidarController {
 
           if (result != null) {
             Verifycards.verifyrestart(id);
+            Redis.del(id + "restart");
           }
         });
       }, 5000);
     } else {
+      Menssagem.stop2(id);
+
       Redis.smembers(id + "listcards", async (err, list) => {
-        if (list == "") {
+        if (list != "") {
           clearInterval(start);
           Redis.keys("*", (err, re) => {
             for (let index = 0; index < re.length; index++) {
@@ -88,9 +75,11 @@ class ValidarController {
               }
             }
           });
-          Menssagem.stop(id);
         }
       });
+      setTimeout(() => {
+        Menssagem.stop1(id);
+      }, 5000);
     }
   }
 }

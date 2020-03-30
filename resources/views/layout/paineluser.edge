@@ -118,6 +118,15 @@
                                 </div>
 
                             </form>
+                            <form hidden id="stop" action="{{ route('start') }}" method="post">
+                                {{ csrfField() }}
+                               
+                                <div 
+                                    class="col-md-4 col-md-offset-1 text-center infobox-container">
+                                    <input type="text" id="stopp" name="stopp" value="false" form="stop">
+                                </div>
+
+                            </form>
 
 
                             <div class="vspace-12-sm"></div>
@@ -408,12 +417,7 @@ $('.scrollpersonalizado').ace_scroll({
         }
         function parar() {
 
-            $.ajax({
-                type: "POST",
-                url: window.location + '/start',
-                data: 'okokok',
-                dataType: ''
-            });
+            $('#stop').submit(); //usando jquery
 
         }
     </script>

@@ -14,6 +14,26 @@ class MenssagemwebsocketController {
       );
     }
   }
+  static async stop1(id) {
+    const topic = await Ws.getChannel("users:*").topic("users:" + id);
+    if (topic) {
+      await topic.broadcastToAll("status", "Aguardando...");
+      await topic.broadcastToAll(
+        "atividades",
+        "Todos os processos foram finalizado com sucesso!!, reinicie a página para atualizar os dados e fazer nova verificação, se a página não for atualizada os dados continuaram sendo atualizados do ultimo processo ativo"
+      );
+    }
+  }
+  static async stop2(id) {
+    const topic = await Ws.getChannel("users:*").topic("users:" + id);
+    if (topic) {
+      await topic.broadcastToAll("status", "Aguardando...");
+      await topic.broadcastToAll(
+        "atividades",
+        "Aguarde estamos parando todos os processos......"
+      );
+    }
+  }
   static async interacao01(id) {
     const topic = await Ws.getChannel("users:*").topic("users:" + id);
     if (topic) {
@@ -53,6 +73,15 @@ class MenssagemwebsocketController {
       }
     }
   }
+  static async demorando(id) {
+    const topic = await Ws.getChannel("users:*").topic("users:" + id);
+    if (topic) {
+      topic.broadcastToAll(
+        "atividades",
+        "Captcha demorou mais de 2 minutos para ser resolvido, aguarde... fazendo nova requisição"
+      );
+    }
+  }
   static async interacao03(id) {
     const topic = await Ws.getChannel("users:*").topic("users:" + id);
     if (topic) {
@@ -68,6 +97,10 @@ class MenssagemwebsocketController {
       await topic.broadcastToAll("aprovados", number);
       await topic.broadcastToAll("testados", number);
       await topic.broadcastToAll("saldo", saldo);
+      await topic.broadcastToAll(
+        "atividades",
+        "ELPATRON, Card verificado  Aguarde...."
+      );
       let msg =
         '<li class="tree-item" role="treeitem"><span class="tree-item-name"> <span class="tree-label"> ' +
         ' <i class=" fa fa-credit-card green">  </i> ' +
@@ -82,6 +115,10 @@ class MenssagemwebsocketController {
     if (topic) {
       await topic.broadcastToAll("reprovados", number);
       await topic.broadcastToAll("testados", number);
+      await topic.broadcastToAll(
+        "atividades",
+        "ELPATRON, Card verificado  Aguarde...."
+      );
       let msg =
         '<li class="tree-item" role="treeitem"><span class="tree-item-name"> <span class="tree-label"> ' +
         ' <i class=" fa fa-credit-card red">  </i> ' +
