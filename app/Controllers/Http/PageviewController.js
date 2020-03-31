@@ -1,9 +1,8 @@
 'use strict'
-const Ws = use('Ws')
 const Database = use('Database')
-const Config = use('App/Models/Config')
 const User = use('App/Models/User')
-var { isAfter, parseISO, format } = require('date-fns')
+let { isAfter, parseISO, format } = require('date-fns')
+let { format } =require('date-fns-tz');
 class PageviewController {
     async  showAdmin({ view }) {
 
@@ -43,7 +42,11 @@ class PageviewController {
         //let antdate = use.end.split("-").reverse().join("-")
         //var cred = isAfter(new Date(dateatual[0]), new Date(antdate))
 
+       // const addedDate = addHours(znDate, 2);
 
+       let data =  format(auth.user.end, 'dd/MM/YYYY HH:mm', {
+          timeZone: 'America/Sao_Paulo',
+        });
         const cred = isAfter(parseISO(use.end), new Date()); // true
 
         let msg = {
@@ -92,7 +95,7 @@ class PageviewController {
         const id = auth.user.id
 
 
-        return view.render('layout.paineluser', { msg, id })
+        return view.render('layout.paineluser', { msg, id,data })
 
 
     }
