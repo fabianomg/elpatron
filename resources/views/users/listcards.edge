@@ -261,14 +261,14 @@
             responsive: true,
             ajax: {
                 url: 'http://localhost:3332/getcards',
-                type: "GET",
+                type: "POST",
                 contentType: "application/json",
                 data: data
             },
 
             columns: [
                 {
-                    data: "valido"
+                    data: "valid"
                 },
                 {
                     data: "card"
