@@ -36,9 +36,7 @@ class ValidartextareaController {
             notification: {
               type: "warning",
               message:
-                "existe cartões iniciado com: " +
-                fistnumber +
-                ", apenas cartões iniciados com o número 65 são aceitos, por favor reveja sua lista de cartões"
+                " apenas cartões iniciados com o número 65 são aceitos, por favor reveja sua lista de cartões"
             }
           });
           return response.redirect("back");
