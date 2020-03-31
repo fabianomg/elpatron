@@ -60,9 +60,7 @@ class ValidartextareaController {
           notification: {
             type: "warning",
             message:
-              "a quantidade de cartões que pode ser verificada por vez é 200, sua lista está com: " +
-              texto2.length +
-              " por favor reveja sua lista."
+              "a quantidade de cartões que pode ser verificada por vez é 200, sua lista está com mais de 200 cartões por favor reveja sua lista."
           }
         });
         return response.redirect("back");
