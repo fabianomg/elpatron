@@ -1,7 +1,7 @@
 'use strict'
 const Database = use('Database')
 const User = use('App/Models/User')
-let { isAfter, parseISO, format } = require('date-fns')
+let { isAfter, parseISO } = require('date-fns')
 let { format } =require('date-fns-tz');
 class PageviewController {
     async  showAdmin({ view }) {
