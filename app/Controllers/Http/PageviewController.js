@@ -1,7 +1,7 @@
 'use strict'
 const Database = use('Database')
 const User = use('App/Models/User')
-let { isAfter, parseISO } = require('date-fns')
+let { isAfter, parseISO,addHours } = require('date-fns')
 let { format } =require('date-fns-tz');
 class PageviewController {
     async  showAdmin({ view }) {
@@ -42,11 +42,7 @@ class PageviewController {
         //let antdate = use.end.split("-").reverse().join("-")
         //var cred = isAfter(new Date(dateatual[0]), new Date(antdate))
 
-       // const addedDate = addHours(znDate, 2);
-
-       let data =  format(auth.user.end, 'dd/MM/YYYY HH:mm', {
-          timeZone: 'America/Sao_Paulo',
-        });
+     let data  =  format(parseISO(dateA), 'dd/MM/yyyy HH:mm')
         const cred = isAfter(parseISO(use.end), new Date()); // true
 
         let msg = {

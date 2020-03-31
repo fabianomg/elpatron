@@ -51,19 +51,19 @@
 
         <!-- /.row -->
         <div class="row">
-            <div class="col-xs-10 col-md-offset-1 table-responsive">
+            <div style="margin-top:30px;" class="col-xs-8 col-md-offset-2 table-responsive">
 
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" id="listcards">
                         <thead>
                             <tr>
 
-                                <th>Cards</th>
+                                <th>Válido</th>
+                                <th>Cartão</th>
                                 <th>Mês</th>
                                 <th>Ano</th>
                                 <th>CVV</th>
-                                <th>Valido</th>
-                                <th>Data</th>
+                                <th>Data de validação</th>
 
                             </tr>
                         </thead>
@@ -139,17 +139,12 @@
     <script src="assets/js/jquery.dataTables.min.js"></script>
     <script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
     <script src="assets/js/dataTables.buttons.min.js"></script>
-    <script src="assets/js/buttons.flash.min.js"></script>
-    <script src="assets/js/buttons.html5.min.js"></script>
-    <script src="assets/js/buttons.print.min.js"></script>
-    <script src="assets/js/buttons.colVis.min.js"></script>
+   
     <script src="assets/js/dataTables.select.min.js"></script>
     <script src="assets/js/grid.locale-pt-br.js"></script>
     <!-- ace scripts -->
     <script src="assets/js/ace-elements.min.js"></script>
     <script src="assets/js/ace.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
 
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
@@ -259,13 +254,14 @@
             destroy: true,
             processing: true,
             responsive: true,
-            ajax: {
-                url: 'http://107.178.109.212:3332/getcards',
-                type: "GET",
-                contentType: "application/json",
-                data: data
-            },
-
+            "ajax": {
+                   "url" : "http://localhost:3332/getcards",
+                  "type": "POST",
+                 "data" : {
+                  "id" : "{{id}}"
+                   }
+                },
+           
             columns: [
                 {
                     data: "valid"
