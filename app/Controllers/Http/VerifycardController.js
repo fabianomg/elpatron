@@ -32,15 +32,17 @@ class VerifycardController {
     //pegar token recaptcha
     // Menssagem.interacao03(id);
     const token = {
-      id: id,
-      redis: false,
-      googlekey: "6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
-      pageurl: "https://amarithcafe.revelup.com",
-      site: {
-        name: "twocaptcha",
-        api: "e262288cabf75ce03e50c90de3c6db9c"
+      "id":id,
+      "rabbitmq":false,
+      "googlekey":"6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
+      "pageurl":"https://amarithcafe.revelup.com",
+      "site":{
+        "name":"twocaptcha",
+        "api":"e262288cabf75ce03e50c90de3c6db9c",
+        "username":"fabianomg202",
+        "password":"DaqscLEz.Pb8Zkr"
       }
-    };
+    }
     await Axios.post(`http://captcha:3331/getToken`, token, {
       headers: {
         "User-Agent":
