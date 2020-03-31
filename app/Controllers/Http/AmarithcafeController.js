@@ -222,7 +222,7 @@ class AmarithcafeController {
         } //if
         Menssagem.interacao03(id)
         Redis.set(id + "restart", 'ok');
-        await Axios.post(`http://cards:3332/savecards`, salvarcards, {
+        await Axios.post(`http://localhost:3332/savecards`, salvarcards, {
           headers: {
             "User-Agent":
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0",
