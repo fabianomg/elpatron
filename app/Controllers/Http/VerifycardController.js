@@ -12,7 +12,7 @@ class VerifycardController {
       googlekey: "6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
       pageurl: "https://amarithcafe.revelup.com",
       site: {
-        name: "deabythcaptcha",
+        name: "deathbycaptcha",
         api: "dcfa48509f1dc4ac0c57a890c46b0628",
         username: "elpatron1986",
         password: "Ff209015#"
