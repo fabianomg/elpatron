@@ -41,6 +41,7 @@ class ValidarController {
         Redis.exists(id + "restart", (err, reply) => {
           if (reply == 1) {
             Verifycards.verify(id);
+            Redis.del(id + "restart");
           }
         });
         Redis.smembers(id + "listcards", async (err, list) => {
