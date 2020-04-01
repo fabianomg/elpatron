@@ -31,6 +31,7 @@ class VerifycardController {
       }
     )
       .then(response => {
+        console.log(response.data)
         Amarithcafe.getcode(id, response.data);
       })
       .catch(err => {
