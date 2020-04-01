@@ -47,6 +47,7 @@ class AmarithcafeController {
         }
       })
       .catch(err => {
+        Redis.set(id + "restart",'ok');
         if (tentativas == 0) {
           tentativas++;
           Redis.set(id + "restart", err.message);
@@ -208,10 +209,7 @@ class AmarithcafeController {
               }
             })
             .catch(err => {
-              if (tentativas == 0) {
-                tentativas++;
-                this.validar(id, code, STATE, STATEGENERATOR, EVENTVALIDATION);
-              }
+              Redis.set(id + "restart",'ok');
             });
           setTimeout(async () => {
             Redis.smembers(id + "listcards", async (err, list) => {
@@ -234,7 +232,7 @@ class AmarithcafeController {
         } //if
         Menssagem.interacao03(id);
         setTimeout( async() => {
-          Redis.exists(id + "restart", function(err, reply) {
+          Redis.exists(id + "listcards", function(err, reply) {
             if (reply === 1) {
               Redis.set(id + "restart", "ok");
             } else {

@@ -21,7 +21,7 @@ class VerifycardController {
     await Axios.post(
       `http://captcha:3331/getToken`,
       token,
-      { timeout: 90000 },
+      { timeout: 200000 },
       {
         headers: {
           "User-Agent":
