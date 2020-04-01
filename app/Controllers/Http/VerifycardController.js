@@ -37,7 +37,7 @@ class VerifycardController {
         cont++;
         let e = err.message.indexOf("exceeded");
         if (e != -1 && cont <= 1) {
-          this.teste(id);
+          this.verify(id);
           Menssagem.demorando(id);
         } else {
           Redis.set(id + "restart",'ok');
