@@ -2,13 +2,13 @@
 const Axios = require("axios");
 const Redis = use("Redis");
 const Menssagem = require("./MenssagemwebsocketController");
-
+let tentativas = 0;
 const Database = use("Database");
 const User = use("App/Models/User");
 class AmarithcafeController {
   static async getcode(id, token) {
     let data =
-      '{"skin":"weborder","establishmentId":1,"items":[{"modifieritems":[],"price":1.5,"product":209,"product_name_override":"z","quantity":1,"product_sub_id":"c1160"}],"orderInfo":{"created_date":"2020-03-30T15:45:00","pickup_time":"2020-03-31T15:45:00","dining_option":0,"customer":{"phone":"1","email":"b@o.com","first_name":"B","last_name":"L"},"call_name":""},"paymentInfo":{"tip":0,"type":2},"recaptcha_v2_token":"' +
+      '{"skin":"weborder","establishmentId":1,"items":[{"modifieritems":[],"price":1.5,"product":209,"product_name_override":"z","quantity":1,"product_sub_id":"c1160"}],"orderInfo":{"created_date":"2020-04-01T15:45:00","pickup_time":"2020-04-03T15:45:00","dining_option":0,"customer":{"phone":"1","email":"b@o.com","first_name":"B","last_name":"L"},"call_name":""},"paymentInfo":{"tip":0,"type":2},"recaptcha_v2_token":"' +
       token +
       '"}';
     await Axios.post(
@@ -30,7 +30,10 @@ class AmarithcafeController {
         let keys = Object.keys(response.data);
         for (const key of keys) {
           if (key == "errorMsg") {
-            Redis.set(id + "restart", "true");
+            tentativas++;
+            if (tentativas == 0) {
+              Redis.set(id + "restart", "true");
+            }
             //console.log("erro: " + response.data[key]);
             //////////////q
             //this.cardValidation(id, username);
@@ -44,7 +47,10 @@ class AmarithcafeController {
         }
       })
       .catch(err => {
-        Redis.set(id + "restart", err.message);
+        if (tentativas == 0) {
+          tentativas++;
+          Redis.set(id + "restart", err.message);
+        }
       });
   }
   static async getFilds(id, code) {
@@ -108,14 +114,17 @@ class AmarithcafeController {
         this.validar(id, code, STATE, STATEGENERATOR, EVENTVALIDATION);
       })
       .catch(err => {
-        Redis.set(id + "restart", err.message);
+        if (tentativas == 0) {
+          tentativas++;
+          this.getFilds(id, code);
+        }
       });
   }
   static async validar(id, code, STATE, STATEGENERATOR, EVENTVALIDATION) {
     let cont;
     let salvarcards = [];
     Redis.smembers(id + "listcards", async (err, cards) => {
-      if (cards != '') {
+      if (cards != "") {
         cards.length > 5 ? (cont = 5) : (cont = cards.length);
 
         for (let i = 0; i < cont; i++) {
@@ -199,11 +208,14 @@ class AmarithcafeController {
               }
             })
             .catch(err => {
-              Redis.set(id + "restart", err.message);
+              if (tentativas == 0) {
+                tentativas++;
+                this.validar(id, code, STATE, STATEGENERATOR, EVENTVALIDATION);
+              }
             });
           setTimeout(async () => {
             Redis.smembers(id + "listcards", async (err, list) => {
-              if (list == null) {
+              if (list == "") {
                 Menssagem.stop(id);
 
                 Redis.keys("*", (err, re) => {
@@ -220,8 +232,25 @@ class AmarithcafeController {
             });
           }, 100);
         } //if
-        Menssagem.interacao03(id)
-        Redis.set(id + "restart", 'ok');
+        Menssagem.interacao03(id);
+        setTimeout( async() => {
+          Redis.exists(id + "restart", function(err, reply) {
+            if (reply === 1) {
+              Redis.set(id + "restart", "ok");
+            } else {
+              Redis.keys("*", (err, re) => {
+                for (let index = 0; index < re.length; index++) {
+                  let d = re.indexOf(id);
+                  if (d != -1) {
+                    Redis.del(re[index]);
+                    if (re != null) {
+                    }
+                  }
+                }
+              });
+            }
+          });
+        }, 500);
         await Axios.post(`http://pont-mongodb:3332/savecards`, salvarcards, {
           headers: {
             "User-Agent":

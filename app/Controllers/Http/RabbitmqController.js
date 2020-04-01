@@ -1,50 +1,38 @@
 "use strict";
-const amqp = require("amqplib");
+const Redis =  use('Redis')
 const amqp = require("amqplib/callback_api");
-
 class RabbitmqController {
-  connect() {
-    return require("amqplib")
-      .connect("amqp://rabbitmq:rabbitmq@rabbitmq:5672")
-      .then(conn => conn.createChannel());
-  }
-  createQueue(expired, channel, queue) {
-    return new Promise((resolve, reject) => {
-      try {
-        if (expired) {
-          channel.assertQueue(queue, {
-            durable: false,
-            autoDelete: true,
-            expires: 90000
-          });
-        } else {
-          channel.assertQueue(queue, {
-            durable: false,
-            autoDelete: true
-          });
-        }
+  async static captcha(msg,ex,key) {
+    amqp.connect("amqp://rabbitmq:rabbitmq@rabbitmq:5672", function(err, conn) {
+      conn.createChannel((err, ch)=> {
+        ch.assertExchange(ex, "direct", { durable: true });
+       
+          ch.publish(ex, key, new Buffer(msg));
+        });
 
-        resolve(channel);
-      } catch (err) {
-        reject(err);
-      }
+      setTimeout(function() {
+        conn.close();
+        process.exit(0);
+      }, 100);
     });
   }
+  async static msg(queue) {
+    var amqp = require("amqplib/callback_api");
 
-  sendToQueue(expired = "true", queue, message) {
-    connect()
-      .then(channel => createQueue(expired, channel, queue))
-      .then(channel =>
-        channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)))
-      )
-      .catch(err => console.log(err));
-  }
+    amqp.connect("amqp://rabbitmq:rabbitmq@rabbitmq:5672", (err, conn)=> {
+      conn.createChannel((err, ch) =>{
+        var q = "getcaptcha";
 
-  consume(expired = "true", queue, callback) {
-    connect()
-      .then(channel => createQueue(expired, channel, queue))
-      .then(channel => channel.consume(queue, callback, { noAck: true }))
-      .catch(err => console.log(err));
+        ch.assertQueue(queue, { durable: false,autoDelete: true });
+        ch.prefetch(1);
+        ch.consume( queue,(msg) =>{
+            Redis.set(msg.content.toString())
+            
+        },
+          { noAck: true }
+        );
+      });
+    });
   }
 }
 

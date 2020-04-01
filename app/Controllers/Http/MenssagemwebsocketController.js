@@ -78,7 +78,7 @@ class MenssagemwebsocketController {
     if (topic) {
       topic.broadcastToAll(
         "atividades",
-        "Captcha demorou mais de 2 minutos para ser resolvido, aguarde... fazendo nova requisição"
+        "Captcha demorou para ser resolvido, aguarde... fazendo nova requisição"
       );
     }
   }

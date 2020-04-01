@@ -30,10 +30,8 @@ class MongoController {
             let total = t.length + result.length;
             Menssagem.interacao02(id, total, r, result);
             if (t == '') {
-              console.log("ok");
               Menssagem.stop(id);
             }
-            //verificar se é true ou false
           });
         });
       }, 500);

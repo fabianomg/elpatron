@@ -45,7 +45,6 @@ Route.post('/teste', 'ValidarController.start').as('start')
 Route.get('/teste', 'ValidarController.start').as('stop')
 
 
+// rota de te
 // rota de teste
-Route.get('/teste2','TesteController.rabbit')
-// rota de teste
-Route.get('/teste3','TesteController.getmsg')
+Route.get('/teste2','TesteController.teste')

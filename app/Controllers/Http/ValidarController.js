@@ -38,26 +38,18 @@ class ValidarController {
         Verifycards.verify(id);
       }, 800);
       start = setInterval(async () => {
-        Redis.get(id + "restart", async (err, result) => {
-          Redis.smembers(id + "listcards", async (err, list) => {
-            if (list == "") {
-              clearInterval(start);
-              Redis.keys("*", (err, re) => {
-                for (let index = 0; index < re.length; index++) {
-                  let d = re.indexOf(id);
-                  console.log(d);
-                  if (d == -1) {
-                    Redis.del(re[index]);
-                  }
+        Redis.smembers(id + "listcards", async (err, list) => {
+          if (list == "") {
+            clearInterval(start);
+            Redis.keys("*", (err, re) => {
+              for (let index = 0; index < re.length; index++) {
+                let d = re.indexOf(id);
+                if (d == -1) {
+                  Redis.del(re[index]);
                 }
-              });
-              Menssagem.stop(id);
-            }
-          });
-
-          if (result != null) {
-            Verifycards.verifyrestart(id);
-            Redis.del(id + "restart");
+              }
+            });
+            Menssagem.stop(id);
           }
         });
       }, 5000);
