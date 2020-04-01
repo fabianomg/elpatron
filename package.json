@@ -39,7 +39,10 @@
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.0",
     "random-string": "^0.2.0",
-    "tunnel": "0.0.6"
+    "random-words": "^1.1.0",
+    "request": "^2.88.2",
+    "tunnel": "0.0.6",
+    "when": "^3.7.8"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

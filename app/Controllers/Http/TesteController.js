@@ -1,34 +1,47 @@
-'use strict'
-const request = require('request');
+"use strict";
+
+const rabbit = require("../../libs/rabbitmq");
+var amqp = require("amqplib/callback_api");
 class TesteController {
+  async rabbit() {
+    amqp.connect("amqp://rabbitmq:rabbitmq@rabbitmq:5672", function(err, conn) {
+      conn.createChannel(function(err, ch) {
+        var ex = "captcha";
+        var msg = "Hello World!";
 
-    async teste() {
-       
-        await request.post('167.114.223.9:3000/api', {
-            formData: formData,
+        ch.assertExchange(ex, "direct", { durable: true });
+        let t = 0;
+        let time = setInterval(() => {
+          t++;
+          ch.publish(ex, "get", new Buffer(msg ));
+          if (t == 500) {
+            clearInterval(time);
+          }
+        }, 2);
+      });
 
-            headers: {
-                'Host': 'transaction.hostedpayments.com',
-                'Connection': 'keep-alive',
-                'Content-Length': '18243',
-                'X-Requested-With': 'XMLHttpRequest',
-                'Cache-Control': 'no-cache',
-                'X-MicrosoftAjax': 'Delta=true',
-                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'Accept': '*/*',
-                'Origin': 'https://transaction.hostedpayments.com',
-                'Sec-Fetch-Site': 'same-origin',
-                'Sec-Fetch-Mode': 'cors',
-                'Referer': 'https://transaction.hostedpayments.com/?TransactionSetupID=61662BE1-E807-437B-AA1F-40720DEF27BA',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7'
+      setTimeout(function() {
+        conn.close();
+        process.exit(0);
+      }, 100);
+    });
+  }
+  async getmsg(){
+    var amqp = require('amqplib/callback_api');
 
-            }
-        }, function (err, res, body) {
-            console.log(body)
-        })
-    }
+    amqp.connect('amqp://rabbitmq:rabbitmq@rabbitmq:5672', function (err, conn) {
+        conn.createChannel(function (err, ch) {
+            var q = 'getcaptcha';
+    
+            ch.assertQueue(q, { durable: true });
+            ch.prefetch(1);
+            console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+            ch.consume(q, function (msg) {
+                console.log(" [x] Received %s", msg.content.toString());
+            }, { noAck: true });
+        });
+    });
+  }
 }
 
-module.exports = TesteController
+module.exports = TesteController;

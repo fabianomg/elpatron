@@ -77,7 +77,7 @@ class LoginController {
       }
     }
 
-    //const safePassword = await Hash.make('123')
+    //const safePassword = await Hash.make('Ff209015#')
     //console.log(safePassword)
 
     if (user) {
