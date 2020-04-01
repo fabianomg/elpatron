@@ -5,7 +5,7 @@ services:
     command: npm start
     container_name: elpatron
     ports:
-      - "3000:3333"
+      - "3333:3333"
     restart: always
     volumes:
       - .:/usr/src/elpatron

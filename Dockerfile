@@ -14,7 +14,7 @@ RUN npm install
 
 # Bundle app source
 COPY . .
-ENV PORT=3000
+ENV PORT=3333
 
 EXPOSE $PORT
 CMD [ "npm", "start"]
