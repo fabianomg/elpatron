@@ -34,7 +34,12 @@ class ValidarController {
         : Exceptions.EXcreatecardlist(creatlist, cards, user); // ponto a ser verificado novamente
       //verificar os cartões
       setTimeout(async () => {
-        Verifycards.verify(id);
+        Redis.exists(id + "listcards", (err, reply) => {
+          if (reply == 1) {
+            Verifycards.verify(id);
+            Redis.del(id + "restart");
+          }
+        });
       }, 800);
       start = setInterval(async () => {
         Redis.exists(id + "restart", (err, reply) => {
