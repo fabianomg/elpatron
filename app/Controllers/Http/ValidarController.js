@@ -10,7 +10,6 @@ const Redis = use("Redis");
 class ValidarController {
   async start({ auth, request, session, response }) {
     let id = auth.user.id;
-    console.log(request.body);
     let stop = request.input("stopp");
     let start;
     if (!stop) {

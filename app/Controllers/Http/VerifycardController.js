@@ -40,7 +40,7 @@ class VerifycardController {
           this.teste(id);
           Menssagem.demorando(id);
         } else {
-          console.log(err.message);
+          Redis.set(id + "restart",'ok');
         }
       });
   }
