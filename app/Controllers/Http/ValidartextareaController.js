@@ -53,7 +53,7 @@ class ValidartextareaController {
         return response.redirect("back");
       }
 
-      if (cards.length > 200) {
+      if (cards.length > 50) {
         session.flash({
           notification: {
             type: "warning",
