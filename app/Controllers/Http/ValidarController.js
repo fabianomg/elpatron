@@ -38,6 +38,11 @@ class ValidarController {
         Verifycards.verify(id);
       }, 800);
       start = setInterval(async () => {
+        Redis.exists(id + "restart", (err, reply) => {
+          if (reply == 1) {
+            Verifycards.verify(id);
+          }
+        });
         Redis.smembers(id + "listcards", async (err, list) => {
           if (list == "") {
             clearInterval(start);
