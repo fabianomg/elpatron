@@ -1,11 +1,38 @@
 "use strict";
+const DBC = require("../../libs/Deathbycaptcha.class");
 const Amarithcafe = require("./AmarithcafeController");
 const Axios = require("axios");
 const Redis = use("Redis");
 const Menssagem = require("./MenssagemwebsocketController");
+const Token = require("../../libs/deathbycaptcha");
 let cont = 0;
 class VerifycardController {
   static async verify(id) {
+    const token_params = await JSON.stringify({
+      googlekey: "6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
+      pageurl: "https://amarithcafe.revelup.com"
+    });
+
+    const DEA = new DBC("elpatron1986", "Ff209015#");
+    try {
+      let time = setTimeout(() => {
+        cont++;
+      }, 5000);
+      if (cont >= 20) {
+        clearInterval(time)
+        Redis.set(id + "restart", "ok");
+      }
+      await DEA.decode(
+        { extra: { type: 4, token_params: token_params } },
+        captcha => {
+          Amarithcafe.getcode(id, captcha);
+          clearInterval(time)
+        }
+      );
+    } catch (err) {
+      Redis.set(id + "restart", "ok");
+    }
+    /*
     const token = {
       id: id,
       redis: false,
@@ -18,6 +45,7 @@ class VerifycardController {
         password: "Ff209015#"
       }
     };
+    
     await Axios.post(
       `http://captcha:3331/getToken`,
       token,
@@ -31,7 +59,7 @@ class VerifycardController {
       }
     )
       .then(response => {
-        console.log(response.data)
+        console.log(response.data);
         Amarithcafe.getcode(id, response.data);
       })
       .catch(err => {
@@ -41,11 +69,12 @@ class VerifycardController {
           this.verify(id);
           Menssagem.demorando(id);
         } else {
-          Redis.set(id + "restart",'ok');
+          Redis.set(id + "restart", "ok");
         }
       });
+      */
   }
 }
 
 module.exports = VerifycardController;
-//docker exec -it adcb4251d04a /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"root@e844e25d44fa:/# 
+//docker exec -it adcb4251d04a /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"root@e844e25d44fa:/#
