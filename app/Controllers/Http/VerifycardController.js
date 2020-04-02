@@ -12,21 +12,25 @@ class VerifycardController {
       googlekey: "6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
       pageurl: "https://amarithcafe.revelup.com"
     });
-
+console.log('tste')
     const DEA = new DBC("elpatron1986", "Ff209015#");
     try {
       let time = setTimeout(() => {
+        console.log(cont)
         cont++;
       }, 5000);
       if (cont >= 20) {
-        clearInterval(time)
+        cont = 0;
+        clearInterval(time);
         Redis.set(id + "restart", "ok");
       }
       await DEA.decode(
         { extra: { type: 4, token_params: token_params } },
         captcha => {
+          console.log(captcha)
           Amarithcafe.getcode(id, captcha);
-          clearInterval(time)
+          cont = 0;
+          clearInterval(time);
         }
       );
     } catch (err) {
