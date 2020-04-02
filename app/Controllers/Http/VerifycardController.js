@@ -77,4 +77,4 @@ class VerifycardController {
 }
 
 module.exports = VerifycardController;
-//docker exec -it adcb4251d04a /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"root@e844e25d44fa:/#
+//docker exec -it 15ceffdfd032 /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"root@e844e25d44fa:/#
