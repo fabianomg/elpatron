@@ -1,5 +1,4 @@
 "use strict";
-const DBC = require("../../libs/Deathbycaptcha.class");
 const Amarithcafe = require("./AmarithcafeController");
 const Axios = require("axios");
 const Redis = use("Redis");
