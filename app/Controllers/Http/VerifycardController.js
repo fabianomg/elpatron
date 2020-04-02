@@ -13,6 +13,7 @@ class VerifycardController {
       pageurl: "https://amarithcafe.revelup.com"
     });
 console.log('tste')
+/*
     const DEA = new DBC("elpatron1986", "Ff209015#");
     try {
       let time = setTimeout(() => {
@@ -36,7 +37,8 @@ console.log('tste')
     } catch (err) {
       Redis.set(id + "restart", "ok");
     }
-    /*
+    */
+    
     const token = {
       id: id,
       redis: false,
@@ -76,7 +78,7 @@ console.log('tste')
           Redis.set(id + "restart", "ok");
         }
       });
-      */
+      
   }
 }
 
