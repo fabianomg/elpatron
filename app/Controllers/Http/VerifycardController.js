@@ -3,7 +3,7 @@ const Amarithcafe = require("./AmarithcafeController");
 const Axios = require("axios");
 const Redis = use("Redis");
 const Menssagem = require("./MenssagemwebsocketController");
-
+cont =0;
 class VerifycardController {
   static async verify(id) {
     const token_params = await JSON.stringify({
