@@ -51,7 +51,7 @@ console.log('tste')
     };
     
     await Axios.post(
-      `http://captcha:3331/getToken`,
+      `http://107.178.109.212:3303/token`,
       token,
       { timeout: 200000 },
       {
