@@ -1,79 +1,86 @@
-'use strict'
+"use strict";
 
-const User = use('App/Models/User')
-const Hash = use('Hash')
-const Database = use('Database')
+const User = use("App/Models/User");
+const Hash = use("Hash");
+const Database = use("Database");
 class LoginController {
   async showLoginForm({ auth, view, response }) {
-
-
     try {
-      let logado = await auth.check()
+      let logado = await auth.check();
       if (logado) {
-
         const user = await User.query()
-          .where('username', auth.user.username)
-          .first()
-
+          .where("username", auth.user.username)
+          .first();
+        if (user ==null) {
+          session.flash({
+            notification: {
+              type: "warning",
+              message:  'o usuário  que você digitou não está cadastrado na nossa base de dados, por favor entre em contato com o administrador.',
+            },
+          });
+          return response.redirect("back");
+        }
         if (user.level == 1) {
-
-          return response.route('/admin')
+          return response.route("/admin");
         }
         if (user.level == 2) {
-
-          return response.route('/')
+          return response.route("/");
         }
       }
     } catch (error) {
-      return view.render('auth.login')
+      return view.render("auth.login");
     }
-
   }
 
   async login({ request, auth, session, response }) {
-
     // get form data
-    const { username, password, remember } = request.all()
+    const { username, password, remember } = request.all();
 
     // retrieve user base on the form data
-    const user = await User.query()
-      .where('username', username)
-      .first()
-    let captcha = await Database
-      .table('captchas')
-      .select('active')
-      .orderBy('active', 'desc')
-    if (captcha != '' && user.level == 2) {
+    const user = await User.query().where("username", username).first();
+    let captcha = await Database.table("captchas")
+      .select("active")
+      .orderBy("active", "desc");
 
+      if (user ==null) {
+        session.flash({
+          notification: {
+            type: "warning",
+            message:  'o usuário  que você digitou não está cadastrado na nossa base de dados, por favor entre em contato com o administrador.',
+          },
+        });
+        return response.redirect("back");
+      }
+
+    if (captcha != "" && user.level == 2) {
       if (captcha[0].active == 0) {
         session.flash({
           notification: {
-            type: 'warning',
-            message: `${user.username}, O Sistema está temporariamente indisponível, por favor entre em contato com o administrador.`
-          }
-        })
-        return response.redirect('back')
+            type: "warning",
+            message: `${user.username}, O Sistema está temporariamente indisponível, por favor entre em contato com o administrador.`,
+          },
+        });
+        return response.redirect("back");
       }
     }
-    if (captcha == '' && user.level == 2 ) {
+    if (captcha == "" && user.level == 2) {
       session.flash({
         notification: {
-          type: 'warning',
-          message: `${user.username}, O Sistema está temporariamente indisponível, por favor entre em contato com o administrador.`
-        }
-      })
-      return response.redirect('back')
+          type: "warning",
+          message: `${user.username}, O Sistema está temporariamente indisponível, por favor entre em contato com o administrador.`,
+        },
+      });
+      return response.redirect("back");
     }
     if (user) {
-
       if (!user.active) {
         session.flash({
           notification: {
-            type: 'warning',
-            message: `${user.username}, Você não está ativo ou está sem créditos por favor  entre em contato com o administrador.`
-          }
-        })
-        return response.redirect('back')
+            type: "warning",
+            message: `${user.username}, Você não está ativo ou está sem créditos por favor  entre em contato com o administrador.`,
+          },
+        });
+        return response.redirect("back");
       }
     }
 
@@ -82,50 +89,46 @@ class LoginController {
 
     if (user) {
       // verify password
-      const passwordVerified = await Hash.verify(password, user.password)
+      const passwordVerified = await Hash.verify(password, user.password);
 
       if (passwordVerified) {
         try {
-          await auth.check()
+          await auth.check();
           if (user.level == 1) {
             //await auth.remember(!!remember).login(user)
-            return response.route('/admin')
+            return response.route("/admin");
           }
-
         } catch (error) {
           if (user.level == 1) {
-            await auth.remember(!!remember).login(user)
-            return response.route('/admin')
+            await auth.remember(!!remember).login(user);
+            return response.route("/admin");
           }
         }
         try {
-          await auth.check()
+          await auth.check();
           if (user.level == 2) {
             //await auth.remember(!!remember).login(user)
-            return response.route('/')
+            return response.route("/");
           }
-
         } catch (error) {
           if (user.level == 2) {
-            await auth.remember(!!remember).login(user)
-            return response.route('/')
+            await auth.remember(!!remember).login(user);
+            return response.route("/");
           }
         }
-
-
       }
     }
 
     // display error message
     session.flash({
       notification: {
-        type: 'danger',
-        message: `Não foi possível verificar suas credenciais. Verifique seu username e sua senha.`
-      }
-    })
+        type: "danger",
+        message: `Não foi possível verificar suas credenciais. Verifique seu username e sua senha.`,
+      },
+    });
 
-    return response.redirect('back')
+    return response.redirect("back");
   }
 }
 
-module.exports = LoginController
+module.exports = LoginController;
