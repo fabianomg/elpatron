@@ -53,12 +53,12 @@ class ValidartextareaController {
         return response.redirect("back");
       }
 
-      if (cards.length > 50) {
+      if (cards.length > 500) {
         session.flash({
           notification: {
             type: "warning",
             message:
-              "a quantidade de cartões que pode ser verificada por vez é 50, sua lista está com mais de 50 cartões por favor reveja sua lista."
+              "a quantidade de cartões que pode ser verificada por vez é 500, sua lista está com mais de 500 cartões por favor reveja sua lista."
           }
         });
         return response.redirect("back");
