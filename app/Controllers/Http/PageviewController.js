@@ -42,7 +42,7 @@ class PageviewController {
         //let antdate = use.end.split("-").reverse().join("-")
         //var cred = isAfter(new Date(dateatual[0]), new Date(antdate))
 
-     let data  =  format(parseISO(use.end), 'dd/MM/yyyy HH:mm')
+     let data  =  format(parseISO(use.endRafi), 'dd/MM/yyyy HH:mm')
         const cred = isAfter(parseISO(use.end), new Date()); // true
 
         let msg = {
@@ -58,7 +58,7 @@ class PageviewController {
                 h: '',
                 c: 'warning',
                 md: 'Créditos Expirados:',
-                m: 'Seus créditos expiram em: ' + use.end + ', por favor entre em contato com o administrador do sistema, para obter novos créditos',
+                m: 'Seus créditos expiram em: ' + data + ', por favor entre em contato com o administrador do sistema, para obter novos créditos',
                 b: 'disabled',
                 t: 'adicione novos créditos para poder iniciar uma nova validação de cartões'
             }
