@@ -42,7 +42,7 @@ class PageviewController {
         //let antdate = use.end.split("-").reverse().join("-")
         //var cred = isAfter(new Date(dateatual[0]), new Date(antdate))
 
-     let data  =  format(parseISO(dateA), 'dd/MM/yyyy HH:mm')
+     let data  =  format(parseISO(use.end), 'dd/MM/yyyy HH:mm')
         const cred = isAfter(parseISO(use.end), new Date()); // true
 
         let msg = {

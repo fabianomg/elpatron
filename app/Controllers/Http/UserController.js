@@ -96,6 +96,7 @@ class UserController {
                     username: campos.username,
                     fullname: campos.name,
                     balance: campos.balance,
+                    senha: campos.balance,
                     start: campos.start,
                     end: campos.end,
                     active: campos.active,

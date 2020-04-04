@@ -1,12 +1,11 @@
 @if(auth.user.level == 1)
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta charset="utf-8" />
-	<title>Cadastro de usuarios</title>
+	<title>Configurações captcha</title>
 
 	<meta name="description" content="" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -128,8 +127,8 @@
 							</a>
 
 							<b class="arrow"></b>
-						</li>
-						<li class="">
+                        </li>
+                        <li class="">
 							<a href="/updatepass">
 								<i class="menu-icon fa fa-caret-right"></i>
 								Alterar senha do usuário
@@ -204,192 +203,62 @@
 					<div class="col-lg-8 col-lg-offset-2">
 						<div class="page-header">
 							<h1>
-								Cadastro de Usuários
+								Configurações do site (Proxy)
 
 							</h1>
 						</div><!-- /.page-header -->
-						@include('includes.notification')
+
 						<div class="row">
-							<div class="col-md-12">
+							@include('includes.notification')
+							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<form action="{{ route('register') }}" method="post">
+								<form action="{{ route('cadproxy') }}" method="post">
 									{{ csrfField() }}
 									<fieldset>
-										<div class="row">
-											<div class="col-md-4">
-												<label for="factive">Usuário</label>
-												<label class="block clearfix">
-													<span class="block input-icon input-icon-right">
-														<input type="text" class="form-control" id="username"
-															name="username" required placeholder="Username">
-														<i class="ace-icon fa fa-user"></i>
-													</span>
-												</label>
-											</div>
-											<div class="col-md-8">
-												<label for="fullname">Nome completo</label>
-												<label class="block clearfix">
-													<span class="block input-icon input-icon-right">
-														<input type="text" class="form-control" id="fullname"
-															name="fullname" required placeholder="Nome completo">
-														<i class="ace-icon fa fa-align-justify"></i>
-													</span>
-												</label>
-											</div>
+										<label class="block clearfix">
+											<label class="text-center" for="user">Usuário</label>
 
-										</div>
-										<!--////////////-->
-										<div class="row">
-											<div class="col-md-4">
-												<label for="factive">Senha</label>
-												<label class="block clearfix">
-													<span class="block input-icon input-icon-right">
-														<input type="text" class="form-control" id="password"
-															name="password" required placeholder="Password">
-														<i class="ace-icon fa fa-lock"></i>
-													</span>
-												</label>
-											</div>
-											<div class="col-md-8">
-												<label for="form-field-select-1">Método de cobrança
-													créditos/dias</label>
+											<span class="block input-icon input-icon-right">
+												<input type="text" id="user" name="user" class="form-control"
+													placeholder="User">
+												<i class="ace-icon fa fa-user"></i>
 
-												<select class="form-control" name="selectMetodo" id="selectMetodo">
+											</span>
+										</label>
+										<label class="block clearfix">
+											<label class="text-center" for="password">Password</label>
 
-													@if(result =='' && resultd =='')
-													<option value="">créditos/dias precisar se configurada
-														em 'Configurações' >> elpatron </option>
-													@else
-													<option value="">Selecionar Método</option>
-													@if(result[0].creditos !='')
-													<option value="1">Créditos </option>
-													@endif
+											<span class="block input-icon input-icon-right">
+												<input type="text" id="password" name="password" class="form-control"
+													placeholder="Password">
+												<i class="ace-icon fa fa-key"></i>
 
-													@if(resultd[0].dias !='')
-													<option value="2">Dias</option>
-													@endif
+											</span>
+										</label>
+										<label class="block clearfix">
+											<label class="text-center" for="creditos">Url Proxy</label>
 
-													@endif
+											<span class="block input-icon input-icon-right">
+												<input type="text" id="proxy" name="proxy" class="form-control"
+													placeholder="Proxy">
+												<i class="ace-icon fa fa-keyboard-o"></i>
 
-												</select>
-											</div>
-										</div>
-										<!--////////////-->
-										<div class="row">
-											<div class="col-md-4">
-												<div>
-													<label for="factive">Ativar Usuário</label>
+											</span>
+										</label>
 
-													<select class="form-control" id="active" required name="active">
-														<option value="">Selecione</option>
-														<option value="1">Ativo</option>
-														<option value="0">Inativo</option>
 
-													</select>
-												</div>
-											</div>
-											<!--////////////
-											<div class="col-md-8">
-												<div class="form-group" id="creditos" style='display:none;'>
-													<label for="factive">Créditos</label>
-													<label class="block clearfix">
-														<select class="form-control" id="creditos"
-															name="creditos">
-
-															@if(result =='')
-															<option value="">A quantidade de creditos precisar ser
-																configurada
-																em
-																'Configurações' => 'elpatron' </option>
-															@else
-
-															@each(user in result)
-															@if(user.creditos !='')
-															<option value="{{ user.creditos }}">{{ user.creditos }}
-															</option>
-															@endif
-															@endeach
-															@endif
-
-														</select>
-													</label>
-												</div>
-												<div class="form-group" id="dias" style='display:none;'>
-													<label for="factive">Dias</label>
-													<label class="block clearfix">
-														<select class="form-control" id="dias" required name="dias">
-
-															@if(resultd =='')
-															<option value="">A quantidade de dias precisar ser
-																configurada
-																em
-																'Configurações' => 'elpatron' </option>
-															@else
-
-															@each(user in resultd)
-															@if(user.dias !='')
-															<option value="{{ user.dias }}">{{ user.dias }}</option>
-															@endif
-															@endeach
-															@endif
-
-														</select>
-													</label>
-												</div>
-											</div>
--->
-										</div>
-										<!--////////////-->
-										<div class="row">
-											<div class="col-md-6">
-												<label for="datestart">Data de Inicio</label>
-												<div class=" bootstrap-timepicker">
-													<span class="block input-icon input-icon-right">
-														<input placeholder="Data de inico" id="datestart" required
-															name="datestart" type="datetime"
-															class="form-control dateuser">
-														<i class=" ace-icon  fa fa-calendar"></i>
-													</span>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<label for="dateend">Data de Expiração</label>
-												<div class=" bootstrap-timepicker">
-													<span class="block input-icon input-icon-right">
-														<input placeholder="data de expiração" id="dateend"
-															name="dateend" type="datetime"
-															class="form-control dateuser">
-														<i class="ace-icon  fa fa-calendar"></i>
-													</span>
-												</div>
-											</div>
-
-											<div class="col-md-8">
-												<label for="pers">campo personalizado CREDITOS</label>
-												<label class="block clearfix">
-													<span class="block input-icon input-icon-right">
-														<input type="text" class="form-control" id="pers"
-															name="pers" required placeholder="Campo personalizado Creditos">
-														<i class="ace-icon fa fa-align-justify"></i>
-													</span>
-												</label>
-											</div>
-											
-										</div>
 
 										<div class="space-4"></div>
 
 										<div class="clearfix">
 
-											<button {{Bdisable}} type="submit" class="btn-block btn btn-sm btn-success">
-												<span class="bigger-110">{{Btext}}</span>
+											<button style="margin-top:20px;" type="submit"
+												class="btn-block btn btn-sm btn-success">
+												<span class="bigger-110">Salvar</span>
 
 												<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 											</button>
-
-
-
 										</div>
 									</fieldset>
 								</form>
@@ -433,33 +302,14 @@
 		if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 	</script>
 	<script src="assets/js/bootstrap.min.js"></script>
-	<script src="assets/js/chosen.jquery.min.js"></script>
-	<script src="assets/js/moment.min.js"></script>
-	<script src="assets/js/bootstrap-datepicker.min.js " charset="UTF-8"></script>
 	<script src="assets/js/ace-elements.min.js"></script>
 	<script src="assets/js/ace.min.js"></script>
-	<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
-	<script src="assets/js/selectMetodo.js"></script>
-	<script 
-		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
-	<script
-		src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
 
 	<!-- inline scripts related to this page -->
 
-	<script type="text/javascript">
-		$('.dateuser').datetimepicker({
-            format:'YYYY-MM-DD HH:mm',
-			locale: 'pt-br'
-		});
-
-
-	</script>
 </body>
 
 </html>
-
-
 @else
 <script type="text/javascript">
 	window.location = '/logout'
