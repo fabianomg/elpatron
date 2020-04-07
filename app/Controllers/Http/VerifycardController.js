@@ -25,17 +25,18 @@ class VerifycardController {
       }
     )
       .then((response) => {
-        let time = setInterval(() => {
+        let time = setInterval(async () => {
+          console.log(cont);
           if (cont == 20) {
-            clearInterval(time)
-            cont=0
+            clearInterval(time);
+            cont = 0;
             this.verify(id);
           }
           Redis.exists(id + "token", (err, reply) => {
             if (reply == 1) {
               clearInterval(time);
-              Redis.get(id + "token", (token) => {
-                Amarithcafe.getcode(id, token);
+              Redis.get(id + "token", async (token) => {
+                await Amarithcafe.getcode(id, token);
                 Redis.del(id + "token");
               });
             }

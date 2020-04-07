@@ -38,6 +38,7 @@ class LoginController {
     // get form data
     const { username, password, remember } = request.all();
     const user = await User.query().where("username", username).first();
+    /*
     try {
       let ip = await Axios.get("https://api.ipify.org/?format=json");
 
@@ -63,7 +64,7 @@ class LoginController {
         },
       });
     }
-
+*/
     try {
       // retrieve user base on the form data
 
