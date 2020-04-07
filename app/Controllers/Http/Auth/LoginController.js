@@ -41,12 +41,12 @@ class LoginController {
     try {
       let ip = await Axios.get("https://api.ipify.org/?format=json");
 
-      if (user.ip == "") {
+      if (user.ip == null) {
         await Database.table("users").where("username", username).update({
           ip: ip.data.ip,
         });
       }
-      if (ip.data.ip != user.ip && user.ip != "") {
+      if (ip.data.ip != user.ip && user.ip != null) {
         session.flash({
           notification: {
             type: "danger",
