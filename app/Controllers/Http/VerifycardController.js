@@ -6,37 +6,6 @@ const Menssagem = require("./MenssagemwebsocketController");
 let cont = 0;
 class VerifycardController {
   static async verify(id) {
-    const token_params = await JSON.stringify({
-      googlekey: "6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
-      pageurl: "https://amarithcafe.revelup.com",
-    });
-    console.log("tste");
-    /*
-    const DEA = new DBC("elpatron1986", "Ff209015#");
-    try {
-      let time = setTimeout(() => {
-        console.log(cont)
-        cont++;
-      }, 5000);
-      if (cont >= 20) {
-        cont = 0;
-        clearInterval(time);
-        Redis.set(id + "restart", "ok");
-      }
-      await DEA.decode(
-        { extra: { type: 4, token_params: token_params } },
-        captcha => {
-          console.log(captcha)
-          Amarithcafe.getcode(id, captcha);
-          cont = 0;
-          clearInterval(time);
-        }
-      );
-    } catch (err) {
-      Redis.set(id + "restart", "ok");
-    }
-    */
-
     const token = {
       id: id,
       username: "elpatron1986",
@@ -59,7 +28,7 @@ class VerifycardController {
         let time = setInterval(() => {
           Redis.exists(id + "token", (err, reply) => {
             if (reply == 1) {
-              clearInterval(time)
+              clearInterval(time);
               Redis.get(id + "token", (token) => {
                 Amarithcafe.getcode(id, token);
               });
