@@ -3,15 +3,15 @@ const Amarithcafe = require("./AmarithcafeController");
 const Axios = require("axios");
 const Redis = use("Redis");
 const Menssagem = require("./MenssagemwebsocketController");
-let cont =0;
+let cont = 0;
 class VerifycardController {
   static async verify(id) {
     const token_params = await JSON.stringify({
       googlekey: "6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
-      pageurl: "https://amarithcafe.revelup.com"
+      pageurl: "https://amarithcafe.revelup.com",
     });
-console.log('tste')
-/*
+    console.log("tste");
+    /*
     const DEA = new DBC("elpatron1986", "Ff209015#");
     try {
       let time = setTimeout(() => {
@@ -36,31 +36,38 @@ console.log('tste')
       Redis.set(id + "restart", "ok");
     }
     */
-    
+
     const token = {
-      googlekey: "6Ld4hsgUAAAAACpJsfH-QTkIIcs0NAUE1VzDZ8Xq",
-      pageurl: "https://amarithcafe.revelup.com",
+      id: id,
       username: "elpatron1986",
-      password: "Ff209015#"
+      password: "Ff209015#",
     };
-    
+
     await Axios.post(
-      `http://107.178.109.212:3303/token`,
+      `http://107.180.91.120:3001/token`,
       token,
       { timeout: 200000 },
       {
         headers: {
           "User-Agent":
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0",
-          Accept: "application/json"
-        }
+          Accept: "application/json",
+        },
       }
     )
-      .then(response => {
-        console.log(response.data);
-        Amarithcafe.getcode(id, response.data);
+      .then((response) => {
+        let time = setInterval(() => {
+          Redis.exists(id + "token", (err, reply) => {
+            if (reply == 1) {
+              clearInterval(time)
+              Redis.get(id + "token", (token) => {
+                Amarithcafe.getcode(id, token);
+              });
+            }
+          });
+        }, 5000);
       })
-      .catch(err => {
+      .catch((err) => {
         cont++;
         let e = err.message.indexOf("exceeded");
         if (e != -1 && cont <= 1) {
@@ -70,7 +77,6 @@ console.log('tste')
           Redis.set(id + "restart", "ok");
         }
       });
-      
   }
 }
 
