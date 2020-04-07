@@ -32,8 +32,8 @@ module.exports = {
   |
   */
   local: {
-    host: 'http://107.180.91.120',
-    port: 6380,
+    host: 'redis',
+    port: 6379,
     password: null,
     db: 0,
     keyPrefix: ''

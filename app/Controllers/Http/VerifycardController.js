@@ -13,7 +13,7 @@ class VerifycardController {
     };
 
     await Axios.post(
-      `http://107.180.91.120:3001/token`,
+      `http://107.178.109.212:3001/token`,
       token,
       { timeout: 200000 },
       {
@@ -26,18 +26,24 @@ class VerifycardController {
     )
       .then((response) => {
         let time = setInterval(() => {
+          if (cont == 20) {
+            clearInterval(time)
+            cont=0
+            this.verify(id);
+          }
           Redis.exists(id + "token", (err, reply) => {
             if (reply == 1) {
               clearInterval(time);
               Redis.get(id + "token", (token) => {
                 Amarithcafe.getcode(id, token);
+                Redis.del(id + "token");
               });
             }
           });
+          cont++;
         }, 5000);
       })
       .catch((err) => {
-        cont++;
         let e = err.message.indexOf("exceeded");
         if (e != -1 && cont <= 1) {
           this.verify(id);
