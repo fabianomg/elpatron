@@ -21,7 +21,11 @@ const providers = [
   '@adonisjs/auth/providers/AuthProvider',
   '@adonisjs/websocket/providers/WsProvider',
   'adonis-cache/providers/CacheProvider',
-  '@adonisjs/redis/providers/RedisProvider'
+  '@adonisjs/redis/providers/RedisProvider',
+  'adonis-recaptcha2/providers/RecaptchaProvider',
+  '@adonisjs/validator/providers/ValidatorProvider'
+  
+  
   
 ]
 
@@ -53,7 +57,8 @@ const aceProviders = [
 |
 */
 const aliases = {
-  Cache: 'Adonis/Addons/Cache'
+  Cache: 'Adonis/Addons/Cache',
+  Recaptcha: 'Adonis/Addons/Recaptcha'
 }
 
 /*

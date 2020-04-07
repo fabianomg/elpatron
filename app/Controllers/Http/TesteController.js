@@ -3,6 +3,7 @@
 var amqp = require("amqplib/callback_api");
 const Axios = require("axios");
 const Redis = use("Redis");
+const User = use('App/Models/User')
 let cont = 0;
 class TesteController {
   async getcaptcha() {
@@ -48,7 +49,13 @@ class TesteController {
       });
     });
   }
-  async teste() {
+  async teste({auth,response}) {
+    const user = await User.find(1)
+
+   let tokenn = await auth.authenticator('jwt').generate(user)
+return response.json(tokenn)
+
+
     const token = {
       id: "557",
       redis: false,

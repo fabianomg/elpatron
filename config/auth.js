@@ -1,5 +1,5 @@
 'use strict'
-
+const fs = use('fs')
 module.exports = {
   /*
   |--------------------------------------------------------------------------
@@ -69,7 +69,10 @@ module.exports = {
     uid: 'username',
     password: 'password',
     options: {
-      secret: 'self::app.appKey'
-    }
+      algorithm: "RS256",
+      secret: fs.readFileSync("private.key"),
+      public: fs.readFileSync("public.key"),
+      // For additional options, see the table above...
+    },
   }
 }
