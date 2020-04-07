@@ -46,7 +46,7 @@ class LoginController {
           ip: ip.data.ip,
         });
       }
-      if (ip.data.ip != user.ip && user.ip != null) {
+      if (ip.data.ip != user.ip ) {
         session.flash({
           notification: {
             type: "danger",
