@@ -25,6 +25,7 @@ class VerifycardController {
       }
     )
       .then((response) => {
+        console.log(response)
         let time = setInterval(async () => {
           console.log(cont);
           if (cont == 20) {
