@@ -25,7 +25,7 @@ class VerifycardController {
       }
     )
       .then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         let time = setInterval(async () => {
           console.log(cont);
           if (cont == 20) {
@@ -36,9 +36,10 @@ class VerifycardController {
           Redis.exists(id + "token", (err, reply) => {
             if (reply == 1) {
               clearInterval(time);
-              Redis.get(id + "token", async (err,token) => {
-                console.log(token)
-                await Amarithcafe.getcode(id, token);
+              Redis.get(id + "token", async (err, token) => {
+                console.log(token);
+
+                Amarithcafe.getcode(id, token);
                 Redis.del(id + "token");
               });
             }
