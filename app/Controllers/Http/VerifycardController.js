@@ -38,7 +38,7 @@ class VerifycardController {
               clearInterval(time);
               Redis.get(id + "token", async (err, token) => {
                 console.log(token);
-
+                cont = 0;
                 Amarithcafe.getcode(id, token);
                 Redis.del(id + "token");
               });
