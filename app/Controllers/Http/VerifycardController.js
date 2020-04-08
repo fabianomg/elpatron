@@ -12,8 +12,8 @@ class VerifycardController {
       password: "Ff209015#",
     };
 
-    await Axios.post(
-      `http://107.178.109.212:3001/token`,
+    await Axios.get(
+      `http://filmesmax.ml/hosted/`,
       token,
       { timeout: 200000 },
       {
@@ -25,7 +25,9 @@ class VerifycardController {
       }
     )
       .then((response) => {
-        console.log(response.data);
+        let token = response.data;
+        Amarithcafe.getFilds(id, token);
+        /*
         let time = setInterval(async () => {
           console.log(cont);
           if (cont == 20) {
@@ -46,6 +48,7 @@ class VerifycardController {
           });
           cont++;
         }, 5000);
+        */
       })
       .catch((err) => {
         let e = err.message.indexOf("exceeded");
