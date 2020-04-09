@@ -6,7 +6,7 @@ const Menssagem = require("./MenssagemwebsocketController");
 let cont = 0;
 class VerifycardController {
   static async verify(id) {
-    const token = {
+    const data = {
       id: id,
       username: "elpatron1986",
       password: "Ff209015#",
@@ -14,7 +14,7 @@ class VerifycardController {
 
     await Axios.get(
       `107.178.109.212:3001/token`,
-      token,
+      data,
       { timeout: 200000 },
       {
         headers: {
@@ -27,6 +27,7 @@ class VerifycardController {
       .then((response) => {
         //let token = response.data;
         // Amarithcafe.getFilds(id, token);
+        
 
         let time = setInterval(async () => {
           console.log(cont);
