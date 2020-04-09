@@ -25,7 +25,7 @@ class VerifycardController {
       }
     )
       .then((response) => {
-        let token = response.data;
+        //let token = response.data;
         // Amarithcafe.getFilds(id, token);
 
         let time = setInterval(async () => {
