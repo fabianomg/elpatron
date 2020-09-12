@@ -40,7 +40,7 @@
     "lucid-mongo": "^3.1.6",
     "moment": "^2.24.0",
     "mysql": "^2.18.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "random-string": "^0.2.0",
     "random-words": "^1.1.0",
     "request": "^2.88.2",
