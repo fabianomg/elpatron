@@ -34,7 +34,7 @@
     "adonis-recaptcha": "0.0.3",
     "adonis-recaptcha2": "^1.2.1",
     "amqplib": "^0.5.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "date-fns": "^2.9.0",
     "date-fns-tz": "^1.0.10",
     "lucid-mongo": "^3.1.6",
