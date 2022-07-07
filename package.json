@@ -38,7 +38,7 @@
     "date-fns": "^2.9.0",
     "date-fns-tz": "^1.0.10",
     "lucid-mongo": "^3.1.6",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.0",
     "random-string": "^0.2.0",
